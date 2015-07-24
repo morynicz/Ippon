@@ -1,0 +1,23 @@
+<head>
+</head>
+
+<body>
+
+  <div class="form">
+    <%= form_for(@player) do |p| %>
+      <div class="field">
+        <%= p.label :name %>
+        <%= p.text_field :name %>
+        <%= p.label :surname %>
+        <%= p.text_field :surname %>
+        <%= p.label :club %>
+        <%= p.text_field :club %>
+        <%= p.label :rank %>
+        <%= p.text_field :rank %>
+      </div>
+      <div class="actions">
+      <%=p.submit "Create" %>
+    </div>
+    <% end %>
+    </div>
+  </body>

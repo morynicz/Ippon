@@ -1,0 +1,13 @@
+<%= form_for(@player) do |p| %>
+    <div class="filed">
+      <%= p.label :name %><br>
+      <%= p.text_area :name %><br>
+      <%= p.label :surname %><br>
+      <%= p.text_area :surname %><br>
+      <%= p.label :club %><br>
+      <%= p.text_area :club %><br>
+      <%= p.label :rank %><br>
+      <%= p.text_area :rank %>
+      <%= p.submit %>
+    </div>
+    <% end %>

@@ -1,0 +1,39 @@
+<div class="player_list">
+  <table>
+
+  <div class="form">
+    <%= form_for(@player) do |p| %>
+      <div class="field">
+        <tr>
+        <th><%= p.label :name %></th>
+        <th><%= p.label :surname %></th>
+        <th><%= p.label :club %></th>
+        <th><%= p.label :rank %></th>
+        <th><%= p.label :action %>
+      </tr>
+      <tr>
+        <td><%= p.text_field :name %></td>
+        <td><%= p.text_field :surname %></td>
+        <td><%= p.text_field :rank %></td>
+        <td><%= p.text_field :club %></td>
+        <td><div class="actions">
+        <%=p.submit :create %>
+      </div></tr>
+      </tr>
+      </div>
+
+    <% end %>
+    </div>
+  <% @players.each do |p| %>
+  <div class="player_row">
+  <tr>
+    <td><%= p.name %></td>
+    <td><%= p.surname %></td>
+    <td><%= p.club %></td>
+    <td><%= p.rank %></td>
+    <td><div class="actions"><%= link_to :edit, edit_player_path(p) %></div></td>
+  </tr>
+  <% end %>
+</table>
+  <%= link_to 'New player', 'players/new' %>
+</div>
