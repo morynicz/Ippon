@@ -1,0 +1,32 @@
+<div class="item_list">
+  <table>
+
+      <div class="form">
+        <%= form_for(@rank) do |r| %>
+          <div class="field">
+            <tr>
+              <th><%= r.label :name %></th>
+              <th><%= r.label :is_dan %></th>
+              <th><%= r.label :action %></th>
+            <th></th>
+          </tr>
+          <tr>
+            <td><%= r.text_field :name %></td>
+            <td><%= r.text_field :is_dan %></td>
+            <td><div class="actions">
+            <%=r.submit :create %>
+          </div></tr>
+          </div>
+
+        <% end %>
+        </div>
+      <% @ranks.each do |r| %>
+      <div class="item_row">
+      <tr>
+        <td><%= r.name %></td>
+        <td><%= r.is_dan %></td>
+        <td><div class="actions"><%= link_to :edit, edit_rank_path(r) %></div></td>
+      </tr>
+      <% end %>
+    </table>
+    </div>

@@ -55,6 +55,10 @@ Rails.application.routes.draw do
   #   end
   resources :players
   root 'players#index'
+  resources :tournaments
+  resources :locations
+  resources :ranks
+
 
 #  get '/players/:id/edit' => 'players#edit', as: :edit_player
 #  patch '/players/:id' => 'players#update'

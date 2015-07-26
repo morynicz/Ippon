@@ -1,0 +1,2 @@
+class FinalFightsController < ApplicationController
+end

@@ -1,0 +1,2 @@
+module FinalFightsHelper
+end
