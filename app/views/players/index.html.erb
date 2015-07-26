@@ -16,7 +16,7 @@
         <td><%= p.text_field :name %></td>
         <td><%= p.text_field :surname %></td>
         <td><%= p.text_field :club %></td>
-        <td><%= p.collection_select :rank, Rank.order(:name),:id,:name, include_blank: false %></td>
+        <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
         <td><div class="actions">
         <%=p.submit :create %>
       </div></tr>
@@ -30,9 +30,8 @@
     <td><%= p.name %></td>
     <td><%= p.surname %></td>
     <td><%= p.club %></td>
-    <td><%= p.rank %></td>
+    <td><%= Rank.find(p.rank_id).name %></td>
     <td><div class="actions"><%= link_to :edit, edit_player_path(p) %></div></td>
-    <td><div class="actions"><%= p.submit :destroy %>
   </tr>
   <% end %>
 </table>

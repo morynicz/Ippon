@@ -4,7 +4,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.string :name
       t.string :surname
       t.string :club
-      t.integer :rank
+      t.references :rank
       t.timestamps null: false
     end
   end
