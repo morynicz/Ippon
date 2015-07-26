@@ -40,8 +40,10 @@ ActiveRecord::Schema.define(version: 20150726161154) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "fight_id"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -53,7 +55,7 @@ ActiveRecord::Schema.define(version: 20150726161154) do
     t.string   "name"
     t.string   "surname"
     t.string   "club"
-    t.integer  "rank"
+    t.integer  "rank_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
