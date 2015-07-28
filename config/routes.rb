@@ -55,8 +55,9 @@ Rails.application.routes.draw do
   #   end
   resources :players
   root 'players#index'
-  resources :tournaments
-  resources :locations
+  resources :tournaments do
+    resources :locations
+  end
   resources :ranks
 
 

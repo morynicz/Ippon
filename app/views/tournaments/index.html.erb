@@ -1,0 +1,16 @@
+<div class="item_list">
+  <table>
+  <tr>
+    <th>Name</th>
+    <th colspan="2">Action</th>
+  </tr>
+  <% @tournaments.each do |t| %>
+  <div class="item_row">
+  <tr>
+    <td><%= t.name %></td>
+    <td><div class="actions"><%= link_to :edit, edit_tournament_path(t) %></div></td>
+  </tr>
+  <% end %>
+</table>
+</div>
+<%= link_to 'New tournament', '/tournaments/new' %>

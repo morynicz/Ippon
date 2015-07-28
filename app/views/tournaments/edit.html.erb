@@ -1,0 +1,53 @@
+<div class="form">
+  <%= form_for(@tournament) do |t| %>
+  <div class="field">
+    <table>
+      <tr>
+        <th><%= t.label :name %></th>
+        <th><%= t.label :place %></th>
+        <th><%= t.label :final_fight_length %></th>
+        <th><%= t.label :group_fight_length %></th>
+      </tr>
+      <tr>
+        <td><%= t.text_field :name %></td>
+        <td><%= t.text_field :place %></td>
+        <td><%= t.text_field :final_fight_len %></td>
+        <td><%= t.text_field :group_fight_len %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="actions">
+    <%=t.submit "Create" %>
+  </div>
+  <% end %>
+</div>
+
+<div class="item_list">
+  <div class="form">
+
+    <table>
+      <%= form_for [@tournament,@location] do |l| %>
+      <div class="field">
+        <tr>
+          <th><%= l.label :name %></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td><%= l.text_field :name %></td>
+          <td><div class="actions">
+            <%=l.submit :create %>
+          </div>
+        </tr>
+      </div>
+      <% end %>
+    </div>
+    <% @locations.each do |l| %>
+    <div class="item_row">
+      <tr>
+        <td><%= l.name %></td>
+        <td><div class="actions"><%= link_to :edit, edit_tournament_location_path(@tournament,l) %></div></td>
+      </tr>
+      <% end %>
+    </div>
+  </table>
+</div>
