@@ -33,6 +33,14 @@ class LocationsController < ApplicationController
     end
   end
 
+  def destroy
+    @location = Location.find(params[:id])
+    tournament_id = @location.tournament_id
+    @location.destroy
+    flash[:success] = :location_deleted
+    redirect_to "/tournaments/#{tournament_id}/edit"
+  end
+
   private
   def location_params
     params.require(:location).permit(:name,:tournament_id)

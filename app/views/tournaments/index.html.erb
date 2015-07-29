@@ -9,6 +9,8 @@
   <tr>
     <td><%= t.name %></td>
     <td><div class="actions"><%= link_to :edit, edit_tournament_path(t) %></div></td>
+    <td><div class="actions"><%= link_to "delete", t, method: :delete,
+                                  data: { confirm: "You sure?" } %>
   </tr>
   <% end %>
 </table>

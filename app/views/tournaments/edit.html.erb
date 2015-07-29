@@ -46,6 +46,8 @@
       <tr>
         <td><%= l.name %></td>
         <td><div class="actions"><%= link_to :edit, edit_tournament_location_path(@tournament,l) %></div></td>
+        <td><div class="actions"><%= link_to "delete", tournament_location_path(@tournament,l), method: :delete,
+                                      data: { confirm: "You sure?" } %></div></td>
       </tr>
       <% end %>
     </div>

@@ -9,8 +9,7 @@
         <th><%= p.label :surname %></th>
         <th><%= p.label :club %></th>
         <th><%= p.label :rank %></th>
-        <th><%= p.label :action %></th>
-        <th></th>
+        <th colspan="2"><%= p.label :action %></th>
       </tr>
       <tr>
         <td><%= p.text_field :name %></td>
@@ -32,6 +31,9 @@
     <td><%= p.club %></td>
     <td><%= Rank.find(p.rank_id).name %></td>
     <td><div class="actions"><%= link_to :edit, edit_player_path(p) %></div></td>
+    <td><div class="actions"><%= link_to "delete", p, method: :delete,
+                                  data: { confirm: "You sure?" } %>
+</div></td>
   </tr>
   <% end %>
 </table>

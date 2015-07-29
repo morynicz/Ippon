@@ -36,6 +36,12 @@ class TournamentsController < ApplicationController
     end
   end
 
+  def destroy
+    Tournament.find(params[:id]).destroy
+    flash[:success] = :tournament_deleted
+    redirect_to tournaments_url
+  end
+
   private
   def tournament_params
     params.require(:tournament).permit(:name,:final_fight_len,:group_fight_len,:place)
