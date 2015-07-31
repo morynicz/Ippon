@@ -32,9 +32,10 @@
     <td><%= Rank.find(p.rank_id).name %></td>
     <td><div class="actions"><%= link_to :edit, edit_player_path(p) %></div></td>
     <td><div class="actions"><%= link_to "delete", p, method: :delete,
-                                  data: { confirm: "You sure?" } %>
-</div></td>
+                                  data: { confirm: "You sure?" } %></div></td>
   </tr>
   <% end %>
+  </div>
+
 </table>
 </div>

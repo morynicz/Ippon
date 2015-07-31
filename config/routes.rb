@@ -53,7 +53,9 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  resources :players
+  resources :players do
+    resources :participations
+  end
   root 'players#index'
   resources :tournaments do
     resources :locations

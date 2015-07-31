@@ -21,6 +21,8 @@ class PlayersController < ApplicationController
 
   def edit
     @player = Player.find(params[:id])
+    @participations = @player.participations
+    @participation = Participation.new
   end
 
   def update

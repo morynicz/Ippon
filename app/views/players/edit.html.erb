@@ -1,13 +1,53 @@
-<%= form_for(@player) do |p| %>
-    <div class="filed">
-      <%= p.label :name %><br>
-      <%= p.text_area :name %><br>
-      <%= p.label :surname %><br>
-      <%= p.text_area :surname %><br>
-      <%= p.label :club %><br>
-      <%= p.text_area :club %><br>
-      <%= p.label :rank %><br>
-      <%= p.text_area :rank %>
-      <%= p.submit %>
+<div class="item_list">
+  <table>
+    <div class="form">
+      <%= form_for(@player) { |p| %>
+        <div class="field">
+          <tr>
+            <th><%= p.label :name %></th>
+            <th><%= p.label :surname %></th>
+            <th><%= p.label :club %></th>
+            <th><%= p.label :rank %></th>
+            <th></th>
+          </tr>
+          <tr>
+            <td><%= p.text_area :name %></td>
+            <td><%= p.text_area :surname %></td>
+            <td><%= p.text_area :club %></td>
+            <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
+          </tr>
+          <% } %>
+        </div>
+      </div>
+    </table>
+  </div>
+
+  <div class="item_list">
+    <%= form_for([@player,@participation]) do |pa| %>
+    <table>
+      <tr>
+        <th><%= pa.label :tournament %></th>
+        <th><%= pa.label :action %></th>
+      </tr>
+      <tr>
+        <td><%= pa.collection_select(:tournament_id, Tournament.order(:id),:id, :name, include_blank: false) %></td>
+        <td><%= pa.submit :assign %></td>
+        <% end %>
+      </tr>
+
+      <%= @participations.each { |p| %>
+        <%= link_to "debug", player_participation_path(@player,p.tournament_id,p) %>
+        <div class="item_row">
+          <tr>
+            <td><%= Tournament.find(p.tournament_id).name %></td>
+            <td>
+              <div class="actions">
+                <%= link_to "delete", player_participation_path(@player,p.tournament_id,p), method: :delete,data: { confirm: "You sure?" } %>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+        </div>
+
+      </table>
     </div>
-    <% end %>

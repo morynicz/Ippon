@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player_id: 
+  tournament_id: 
+  is_participating: false
+
+two:
+  player_id: 
+  tournament_id: 
+  is_participating: false
