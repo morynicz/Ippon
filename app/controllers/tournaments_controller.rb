@@ -1,4 +1,6 @@
 class TournamentsController < ApplicationController
+  include TournamentUtils
+
   def index
     @tournament = Tournament.new
     @tournaments = Tournament.all
@@ -24,6 +26,9 @@ class TournamentsController < ApplicationController
 
     @location = Location.new
     @locations = @tournament.locations
+    @players = @tournament.players
+
+    @groups, @four_team_groups, @three_team_groups, @two_team_groups, @groups_length, @finals_length=process_tournament(@players.size,@tournament.group_fight_len,@tournament.final_fight_len,1,@tournament.locations.size)
   end
 
   def update

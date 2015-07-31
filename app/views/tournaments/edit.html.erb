@@ -53,3 +53,42 @@
     </div>
   </table>
 </div>
+<div class="sum_up">
+  <div> Players: <%= @players.size %> Locations: <%= @locations.size %></div>
+</div>
+<div class="suggestion">
+  <div> Suggested groups number: <%= @groups %></div>
+  <% unless 0 == @four_team_groups  %>
+  <div> Suggested 4 player groups: <%= @four_team_groups %> </div>
+  <% end %>
+  <% unless 0 == @three_team_groups  %>
+  <div> Suggested 3 player groups: <%= @three_team_groups %> </div>
+  <% end %>
+  <% unless 0 == @two_team_groups  %>
+  <div> Suggested 2 player groups: <%= @two_team_groups %> </div>
+  <% end %>
+  <div>Anticipated group phase length: <%= @groups_length %></div>
+  <div>Anticipated final phase length: <%= @finals_length %></div>
+
+</div>
+<div class="item_list">
+<table>
+  <tr>
+  <th><%= :name %></th>
+  <th><%= :surname %></th>
+  <th><%= :club %></th>
+  <th><%= :rank %></th>
+  <th colspan="1"><%=  :action %></th>
+</tr>
+<% @players.each do |p| %>
+<div class="item_row">
+<tr>
+  <td><%= p.name %></td>
+  <td><%= p.surname %></td>
+  <td><%= p.club %></td>
+  <td><%= Rank.find(p.rank_id).name %></td>
+  <td><div class="actions"><%= link_to :edit, edit_player_path(p) %></div></td>
+</tr>
+<% end %>
+</table>
+</div>
