@@ -35,7 +35,7 @@
         <% end %>
       </tr>
 
-      <%= @participations.each { |p| %>
+      <% @participations.each { |p| %>
         <div class="item_row">
           <tr>
             <td><%= Tournament.find(p.tournament_id).name %></td>
