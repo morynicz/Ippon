@@ -36,7 +36,6 @@
       </tr>
 
       <%= @participations.each { |p| %>
-        <%= link_to "debug", player_participation_path(@player,p.tournament_id,p) %>
         <div class="item_row">
           <tr>
             <td><%= Tournament.find(p.tournament_id).name %></td>
