@@ -7,7 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+  <div class="header">
+    <span class="header_link"><%= link_to :players ,'/players' %></span>
+    <span class="header_link"><%= link_to :tournaments ,'/tournaments' %></span>
+  </div>
 <%= yield %>
 
 </body>
