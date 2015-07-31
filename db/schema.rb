@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150726161154) do
+ActiveRecord::Schema.define(version: 20150731154936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "fight_states", force: :cascade do |t|
+    t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,13 +30,22 @@ ActiveRecord::Schema.define(version: 20150726161154) do
   end
 
   create_table "final_fights", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "previous_aka_fight_id"
+    t.integer  "previous_shiro_fight_id"
+    t.integer  "fight_id"
+    t.integer  "tournament_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
+  add_index "final_fights", ["previous_aka_fight_id"], name: "index_final_fights_on_previous_aka_fight_id", using: :btree
+  add_index "final_fights", ["previous_shiro_fight_id"], name: "index_final_fights_on_previous_shiro_fight_id", using: :btree
+
   create_table "group_fights", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "fight_id"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "groups", force: :cascade do |t|
@@ -47,9 +57,21 @@ ActiveRecord::Schema.define(version: 20150726161154) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
+
+  create_table "participations", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "participations", ["player_id"], name: "index_participations_on_player_id", using: :btree
+  add_index "participations", ["tournament_id"], name: "index_participations_on_tournament_id", using: :btree
 
   create_table "players", force: :cascade do |t|
     t.string   "name"
@@ -69,10 +91,13 @@ ActiveRecord::Schema.define(version: 20150726161154) do
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
+    t.string   "place"
     t.integer  "final_fight_len"
     t.integer  "group_fight_len"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
+  add_foreign_key "participations", "players"
+  add_foreign_key "participations", "tournaments"
 end
