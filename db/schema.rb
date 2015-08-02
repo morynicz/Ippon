@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731154936) do
+ActiveRecord::Schema.define(version: 20150802160338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,16 @@ ActiveRecord::Schema.define(version: 20150731154936) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  create_table "group_memebers", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "player_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "group_memebers", ["group_id"], name: "index_group_memebers_on_group_id", using: :btree
+  add_index "group_memebers", ["player_id"], name: "index_group_memebers_on_player_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -98,6 +108,8 @@ ActiveRecord::Schema.define(version: 20150731154936) do
     t.datetime "updated_at",      null: false
   end
 
+  add_foreign_key "group_memebers", "groups"
+  add_foreign_key "group_memebers", "players"
   add_foreign_key "participations", "players"
   add_foreign_key "participations", "tournaments"
 end

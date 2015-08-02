@@ -53,23 +53,6 @@
     </div>
   </table>
 </div>
-<div class="sum_up">
-  <div> Players: <%= @players.size %> Locations: <%= @locations.size %></div>
-</div>
-<div class="suggestion">
-  <div> Suggested groups number: <%= @groups %></div>
-  <% unless 0 == @four_team_groups  %>
-  <div> Suggested 4 player groups: <%= @four_team_groups %> </div>
-  <% end %>
-  <% unless 0 == @three_team_groups  %>
-  <div> Suggested 3 player groups: <%= @three_team_groups %> </div>
-  <% end %>
-  <% unless 0 == @two_team_groups  %>
-  <div> Suggested 2 player groups: <%= @two_team_groups %> </div>
-  <% end %>
-  <div>Anticipated group phase length: <%= @groups_length %></div>
-  <div>Anticipated final phase length: <%= @finals_length %></div>
-
 </div>
 <div class="item_list">
 <table>
@@ -92,3 +75,46 @@
 <% end %>
 </table>
 </div>
+
+<div class="sum_up">
+  <div> Players: <%= @players.size %> Locations: <%= @locations.size %></div>
+</div>
+<div class="suggestion">
+  <div> Suggested groups number: <%= @groups_no %></div>
+  <% unless 0 == @four_team_groups  %>
+  <div> Suggested 4 player groups: <%= @four_team_groups %> </div>
+  <% end %>
+  <% unless 0 == @three_team_groups  %>
+  <div> Suggested 3 player groups: <%= @three_team_groups %> </div>
+  <% end %>
+  <% unless 0 == @two_team_groups  %>
+  <div> Suggested 2 player groups: <%= @two_team_groups %> </div>
+  <% end %>
+  <div>Finals fights number: <%= @finals_fights %> </div>
+  <div>Prefinals fights number: <%= @pre_finals_fights %> </div>
+  <div>Anticipated group phase length: <%= @groups_length %></div>
+  <div>Anticipated final phase length: <%= @finals_length %></div>
+<% if 0==@groups.size %>
+<%= link_to "generate", generate_path(@tournament,groups: @groups_no, finals_no: @finals_fights,prefinals: @pre_finals_fights,two_g: @two_team_groups, three_g: @three_team_groups,four_g: @four_team_groups), method: :patch %>
+<% else %>
+<div class="item_list">
+  <table>
+    <div class="item_row">
+      <tr>
+        <th><%= :group_name %></th>
+      </tr>
+      <% @groups.each { |g| %>
+        <tr><td>Group <%= g.name %></td></tr>
+        <% g.players.each { |p| %>
+          <tr>
+            <td><%= p.name %></td>
+            <td><%= p.surname %></td>
+            <td><%= p.club %></td>
+            <td><%= Rank.find(p.rank_id).name %></td>
+          </tr>
+        <% } %>
+      <% } %>
+    </table>
+  </div>
+</div>
+<% end %>
