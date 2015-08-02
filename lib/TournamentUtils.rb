@@ -20,7 +20,7 @@ module TournamentUtils
         i+= 1
       end
       groups = alg_table[i][gi]
-      final_fights = (alg_table[i][fi] > 7 ) ? 7 : alg_table[i][fi]
+      finals_fights = (alg_table[i][fi] > 7 ) ? 7 : alg_table[i][fi]
       pre_finals_fights = (alg_table[i][fi] > 7 ) ? alg_table[i][fi] - 7 : 0
 
       four_team_groups = (teams_number > 3) ? teams_number - groups * 3 : 0
@@ -32,8 +32,6 @@ module TournamentUtils
     end
     two_team_groups = (teams_number > 1) ? groups - four_team_groups - three_team_groups : 0
 
-    
-
     groups_length = ((four_team_groups * 6  + three_team_groups * 3 + two_team_groups) * players_number_per_team * group_fight_length) / locations
     groups_length += pre_finals_fights * players_number_per_team * final_fight_length
 
@@ -41,6 +39,6 @@ module TournamentUtils
       finals_length = (((finals_fights - 3) / locations) + 3) * final_fight_length * players_number_per_team
     end
 
-    return groups, four_team_groups, three_team_groups, two_team_groups, groups_length, finals_length
+    return groups, four_team_groups, three_team_groups, two_team_groups, groups_length, finals_length, pre_finals_fights,finals_fights
   end
 end

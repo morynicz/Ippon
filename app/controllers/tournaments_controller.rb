@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/TournamentUtils.rb"
+
 class TournamentsController < ApplicationController
   include TournamentUtils
 
