@@ -3,4 +3,5 @@ class Group < ActiveRecord::Base
   has_many :fights
   has_many :group_members
   has_many :players, through: :group_members
+  belongs_to :location
 end
