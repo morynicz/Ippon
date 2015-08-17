@@ -16,7 +16,7 @@ module TournamentUtils
       alg_table = [[5,1,0],[9,2,3],[13,3,5],[17,4,7],[25,6,11],[37,8,15],[49,12,21],[65,16,31]]
       i=0
 
-      while (i < alg_table.size - 1) && teams_number > alg_table[i][ti]
+      while (i < alg_table.size - 1) && teams_number >= alg_table[i][ti]
         i+= 1
       end
       groups = alg_table[i][gi]
@@ -40,5 +40,9 @@ module TournamentUtils
     end
 
     return groups, four_team_groups, three_team_groups, two_team_groups, groups_length, finals_length, pre_finals_fights,finals_fights
+  end
+
+  def generate_group_fights(players)
+    return players.combination(2)
   end
 end

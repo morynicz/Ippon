@@ -9,6 +9,10 @@ class TournamentsController < ApplicationController
 
   end
 
+  def show
+
+  end
+
   def new
     @tournament = Tournament.new
   end
@@ -31,7 +35,7 @@ class TournamentsController < ApplicationController
     @players = @tournament.players
     @groups = @tournament.groups
 
-    @groups_no, @four_team_groups, @three_team_groups, @two_team_groups, @groups_length, @finals_length, @pre_finals_fights,@finals_fights=process_tournament(@players.size,@tournament.group_fight_len,@tournament.final_fight_len,1,@tournament.locations.size)
+    @groups_no, @four_team_groups, @three_team_groups, @two_team_groups, @groups_length, @finals_length, @pre_finals_fights,@finals_fights=process_tournament(@players.size,@tournament.group_fight_len,@tournament.final_fight_len,1,(@tournament.locations.empty?)?1:@tournament.locations.size)
   end
 
   def update
@@ -61,8 +65,7 @@ class TournamentsController < ApplicationController
     four_g = params[:four_g]
     group_arr=[[1,0],[2,two_g.to_i],[3,three_g.to_i],[4,four_g.to_i]]
 
-    letters = Array("a".."z")
-    puts letters
+    letters = Array("A".."Z")
     puts group_arr
     0.upto(group_no.to_i - 1) {|i|
       @tournament.groups.create(name: "#{letters[i]}")
@@ -77,16 +80,51 @@ class TournamentsController < ApplicationController
       puts"G #{g[0]} #{g[1]}"
       unless 0 == g[1]
         g[1].times {
+          it=1
           group = groups.shift
           puts "n: #{group.name}"
           puts "Outer"
           g[0].times {
             puts "Inner"
-            group.players << players.pop
+            play = players.pop
+            group.players << play
+            member = GroupMember.find_by(player_id: play.id,group_id: group.id)
+            member.position = "#{group.name}#{it}"
+            member.save
+            it += 1
           }
           puts "G #{group.name} end"
         }
       end
+    }
+
+    groups = @tournament.groups.to_ary
+    locations =@tournament.locations.to_ary
+    li=0
+    puts "ls: #{locations.size}"
+    groups.each {|gr|
+      puts "G #{gr.name}"
+      loc = locations[li]
+      li+=1
+      li = li%locations.size
+      players = gr.players.to_ary
+      fig = generate_group_fights(players)
+      fig.each{|a,s|
+        puts "#{a.name} vs #{s.name}"
+        fight = Fight.new
+        fight.aka_id = a.id
+        fight.shiro_id = s.id
+        fight.location_id = loc.id
+        fight.fight_state_id = FightState.all.first
+        fight.aka_points = 0
+        fight.shiro_points = 0
+        fight.save
+        gf = GroupFight.new
+        gf.fight_id = fight.id
+        gf.tournament_id = @tournament.id
+        gf.group_id = gr.id
+        gf.save
+      }
     }
 
     puts "g#{group_no} f#{finals} p#{prefinals} 2: #{two_g} 3: #{three_g} 4: #{four_g}"

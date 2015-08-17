@@ -100,20 +100,38 @@
 <div class="item_list">
   <table>
     <div class="item_row">
+      <thead>
       <tr>
-        <th><%= :group_name %></th>
+        <th colspan="5"><%= :group_name %></th>
       </tr>
+    </thead>
+    <tbody>
       <% @groups.each { |g| %>
-        <tr><td>Group <%= g.name %></td></tr>
-        <% g.players.each { |p| %>
+        <tr>
+          <td colspan="5" rowspan="1">Group <%= g.name %> <%=g.group_members.count%></td>
+        </tr>
+        <% g.group_members.each { |m| %>
+          <% p = m.player %>
           <tr>
+            <td><%= m.position%></td>
             <td><%= p.name %></td>
             <td><%= p.surname %></td>
             <td><%= p.club %></td>
             <td><%= Rank.find(p.rank_id).name %></td>
           </tr>
         <% } %>
+        <% g.group_fights.each { |gf|%>
+          <tr>
+            <% f = Fight.find(gf.fight_id) %>
+            <td><%= GroupMember.find_by(player_id: f.aka.id,group_id: g.id).position%></td>
+            <td><%=f.aka.name%> <%=f.aka.surname%></td>
+            <td><%= GroupMember.find_by(player_id: f.shiro.id,group_id: g.id).position%></td>
+            <td><%=f.shiro.name%> <%=f.shiro.surname%></td>
+            <td><%=f.location.name%></td>
+          </tr>
+        <%}%>
       <% } %>
+    </tbody>
     </table>
   </div>
 </div>
