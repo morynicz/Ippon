@@ -36,6 +36,7 @@ class LocationsController < ApplicationController
   def destroy
     @location = Location.find(params[:id])
     tournament_id = @location.tournament_id
+    @location.fights.destroy_all
     @location.destroy
     flash[:success] = :location_deleted
     redirect_to "/tournaments/#{tournament_id}/edit"
