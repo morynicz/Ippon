@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150802160338) do
+ActiveRecord::Schema.define(version: 20150817095511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,9 +25,16 @@ ActiveRecord::Schema.define(version: 20150802160338) do
   create_table "fights", force: :cascade do |t|
     t.integer  "aka_points"
     t.integer  "shiro_points"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "aka_id"
+    t.integer  "shiro_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "location_id"
+    t.integer  "fight_state_id"
   end
+
+  add_index "fights", ["fight_state_id"], name: "index_fights_on_fight_state_id", using: :btree
+  add_index "fights", ["location_id"], name: "index_fights_on_location_id", using: :btree
 
   create_table "final_fights", force: :cascade do |t|
     t.integer  "previous_aka_fight_id"
@@ -38,33 +45,42 @@ ActiveRecord::Schema.define(version: 20150802160338) do
     t.datetime "updated_at",              null: false
   end
 
-  add_index "final_fights", ["previous_aka_fight_id"], name: "index_final_fights_on_previous_aka_fight_id", using: :btree
-  add_index "final_fights", ["previous_shiro_fight_id"], name: "index_final_fights_on_previous_shiro_fight_id", using: :btree
+  add_index "final_fights", ["fight_id"], name: "index_final_fights_on_fight_id", using: :btree
+  add_index "final_fights", ["tournament_id"], name: "index_final_fights_on_tournament_id", using: :btree
 
   create_table "group_fights", force: :cascade do |t|
     t.integer  "fight_id"
     t.integer  "tournament_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "group_id"
   end
 
-  create_table "group_memebers", force: :cascade do |t|
+  add_index "group_fights", ["fight_id"], name: "index_group_fights_on_fight_id", using: :btree
+  add_index "group_fights", ["group_id"], name: "index_group_fights_on_group_id", using: :btree
+  add_index "group_fights", ["tournament_id"], name: "index_group_fights_on_tournament_id", using: :btree
+
+  create_table "group_members", force: :cascade do |t|
     t.integer  "group_id"
     t.integer  "player_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "position"
   end
 
-  add_index "group_memebers", ["group_id"], name: "index_group_memebers_on_group_id", using: :btree
-  add_index "group_memebers", ["player_id"], name: "index_group_memebers_on_player_id", using: :btree
+  add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
+  add_index "group_members", ["player_id"], name: "index_group_members_on_player_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
-    t.integer  "fight_id"
-    t.integer  "tournament_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "tournament_id"
+    t.integer  "location_id"
   end
+
+  add_index "groups", ["location_id"], name: "index_groups_on_location_id", using: :btree
+  add_index "groups", ["tournament_id"], name: "index_groups_on_tournament_id", using: :btree
 
   create_table "locations", force: :cascade do |t|
     t.string   "name"
@@ -72,6 +88,8 @@ ActiveRecord::Schema.define(version: 20150802160338) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  add_index "locations", ["tournament_id"], name: "index_locations_on_tournament_id", using: :btree
 
   create_table "participations", force: :cascade do |t|
     t.integer  "player_id"
@@ -108,8 +126,18 @@ ActiveRecord::Schema.define(version: 20150802160338) do
     t.datetime "updated_at",      null: false
   end
 
-  add_foreign_key "group_memebers", "groups"
-  add_foreign_key "group_memebers", "players"
+  add_foreign_key "fights", "fight_states"
+  add_foreign_key "fights", "locations"
+  add_foreign_key "final_fights", "fights"
+  add_foreign_key "final_fights", "tournaments"
+  add_foreign_key "group_fights", "fights"
+  add_foreign_key "group_fights", "groups"
+  add_foreign_key "group_fights", "tournaments"
+  add_foreign_key "group_members", "groups"
+  add_foreign_key "group_members", "players"
+  add_foreign_key "groups", "locations"
+  add_foreign_key "groups", "tournaments"
+  add_foreign_key "locations", "tournaments"
   add_foreign_key "participations", "players"
   add_foreign_key "participations", "tournaments"
 end
