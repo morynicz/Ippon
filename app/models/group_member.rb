@@ -1,4 +1,4 @@
-class GroupMemeber < ActiveRecord::Base
+class GroupMember < ActiveRecord::Base
   belongs_to :group
   belongs_to :player
 end
