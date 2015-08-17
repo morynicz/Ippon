@@ -1,3 +1,4 @@
+<%= javascript_include_tag "time_calculator" %>
 <div class="form">
   <%= form_for(@tournament) do |t| %>
   <div class="field">
@@ -75,11 +76,42 @@
 <% end %>
 </table>
 </div>
+<% if 0==@groups.size %>
+<div>
+  <div>Players number:
+    <input type="number" id="teams_number" class="to_calculate" value="<%= @players.size %>"/>
+  </div>
+  <div>finals fights lenght
+    <input type="number" id="finals_time" class="to_calculate" value="<%= @tournament.final_fight_len %>"/>
+  </div>
+  <div>groups fights length
+    <input type="number" id="groups_time" class="to_calculate" value="<%= @tournament.group_fight_len %>"/>
+  </div>
+  <div>locations: <span id="locations"> <%= @locations.size %> </span>
+  </div>
+  <div>4 players groups
+    <input type="number" id="four_team_groups" class="to_calculate" value="<%= @four_team_groups %>"/>
+  </div>
+  <div>3 players groups
+    <input type="number" id="three_team_groups" class="to_calculate" value="<%= @three_team_groups %>"/>
+  </div>
+  <div>2 players groups
+    <input type="number" id="two_team_groups" class="to_calculate" value="<%= @two_team_groups %>"/>
+  </div>
+  <div>finals fights number:
+    <input type="number" id="finals" class="to_calculate" value="<%= @finals_fights %>"/>
+  </div>
+  <div>pre finals fights number:
+    <input type="number" id="prefinals" class="to_calculate" value="<%= @pre_finals_fights %>"/>
+  </div>
+</div>
+<div> Finals lenght: <span id="finals_length"><%= @groups_length %></span></div>
+<div> Groups length: <span id="groups_length"><%= @finals_length %></span></div>
 
+<a href="" id="gen_link" data-method="PATCH">Generate!</a>
+<% else %>
 <div class="sum_up">
   <div> Players: <%= @players.size %> Locations: <%= @locations.size %></div>
-</div>
-<div class="suggestion">
   <div> Suggested groups number: <%= @groups_no %></div>
   <% unless 0 == @four_team_groups  %>
   <div> Suggested 4 player groups: <%= @four_team_groups %> </div>
@@ -94,9 +126,8 @@
   <div>Prefinals fights number: <%= @pre_finals_fights %> </div>
   <div>Anticipated group phase length: <%= @groups_length %></div>
   <div>Anticipated final phase length: <%= @finals_length %></div>
-<% if 0==@groups.size %>
-<%= link_to "generate", generate_path(@tournament,groups: @groups_no, finals_no: @finals_fights,prefinals: @pre_finals_fights,two_g: @two_team_groups, three_g: @three_team_groups,four_g: @four_team_groups), method: :patch %>
-<% else %>
+</div>
+
 <div class="item_list">
   <table>
     <div class="item_row">
@@ -136,3 +167,4 @@
   </div>
 </div>
 <% end %>
+<a href="<%=tournament_path(@tournament)%>" id="hi" style="visibility: hidden;">a</a>
