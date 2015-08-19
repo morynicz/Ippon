@@ -66,9 +66,18 @@ class TournamentsController < ApplicationController
     group_arr=[[1,0],[2,two_g.to_i],[3,three_g.to_i],[4,four_g.to_i]]
 
     letters = Array("A".."Z")
+    locations =@tournament.locations.to_ary
+    li=0
     puts group_arr
     0.upto(group_no.to_i - 1) {|i|
-      @tournament.groups.create(name: "#{letters[i]}")
+      loc = locations[li]
+      li+=1
+      li = li%locations.size
+      gid = @tournament.groups.create(name: "#{letters[i]}", location_id: loc)
+      gr = Group.find_by_id(gid)
+      puts "location #{loc.id}"
+      gr.location_id = loc.id
+      gr.save
     }
 
     players = @tournament.players.to_ary
@@ -99,14 +108,10 @@ class TournamentsController < ApplicationController
     }
 
     groups = @tournament.groups.to_ary
-    locations =@tournament.locations.to_ary
-    li=0
+
     puts "ls: #{locations.size}"
     groups.each {|gr|
       puts "G #{gr.name}"
-      loc = locations[li]
-      li+=1
-      li = li%locations.size
       players = gr.players.to_ary
       fig = generate_group_fights(players)
       fig.each{|a,s|
@@ -114,8 +119,8 @@ class TournamentsController < ApplicationController
         fight = Fight.new
         fight.aka_id = a.id
         fight.shiro_id = s.id
-        fight.location_id = loc.id
-        fight.fight_state_id = FightState.all.first
+        fight.location_id = gr.location.id
+        fight.fight_state_id = FightState.find_by_name!("Planned").id
         fight.aka_points = 0
         fight.shiro_points = 0
         fight.save

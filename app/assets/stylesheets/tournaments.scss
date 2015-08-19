@@ -1,3 +1,41 @@
 // Place all the styles related to the Tournaments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+table {
+    border-collapse: collapse;
+}
+
+th {
+  border: 2px solid black;
+}
+
+td {
+  border: 1px solid black;
+}
+
+.position {
+  font-weight: bold;
+}
+
+.group {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+tr.spacer {
+  height: 1em;
+}
+
+table.fights {
+  margin-top: 10px;
+  width: 100%;
+}
+
+table.players {
+  width: 100%;
+}
+
+div.group-view {
+  display: inline-block;
+}
+
