@@ -74,7 +74,7 @@ class TournamentsController < ApplicationController
       loc = locations[li]
       li+=1
       li = li%locations.size
-      gid = @tournament.groups.create(name: "#{letters[i]}", location_id: loc)
+      gid = @tournament.groups.create(name: "#{letters[i]}")
       gr = Group.find_by_id(gid)
       puts "location #{loc.id}"
       gr.location_id = loc.id

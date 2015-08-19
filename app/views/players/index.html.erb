@@ -16,7 +16,7 @@
         <td><%= p.text_field :surname %></td>
         <td><%= p.text_field :club %></td>
         <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
-        <td><div class="actions">
+        <td colspan="2"><div class="actions">
         <%=p.submit :create %>
       </div></tr>
       </div>
