@@ -10,7 +10,8 @@ class TournamentsController < ApplicationController
   end
 
   def show
-
+    @tournament = Tournament.find(params[:id])
+    @groups = @tournament.groups
   end
 
   def new

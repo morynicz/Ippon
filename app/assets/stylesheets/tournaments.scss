@@ -39,3 +39,14 @@ div.group-view {
   display: inline-block;
 }
 
+tr.Planned {
+  background-color: grey;
+}
+
+tr.Started {
+  background-color: yelow;
+}
+
+tr.Finnished {
+  background-color: pink;
+}
