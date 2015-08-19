@@ -14,7 +14,7 @@ class FightsController < ApplicationController
     @tournament= @group_fight.tournament
     #get the tournament
     if @fight.update_attributes(fight_params)
-      redirect_to "/tournaments/#{@tournament.id}"
+      redirect_to "/tournaments/#{@tournament.id}/edit"
     else
       render 'edit'
     end
