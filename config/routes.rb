@@ -64,6 +64,10 @@ Rails.application.routes.draw do
 
   patch '/tournaments/:id/generate/:groups/:finals_no/:prefinals/:two_g/:three_g/:four_g' => 'tournaments#generate', as: :generate
 
+  get '/fights/:id/edit' => 'fights#edit', as: :edit_fight
+  patch 'fights/:id' => 'fights#update'
+
+  get '/fights/:id' => 'fights#show', as: :fight
 #  get '/players/:id/edit' => 'players#edit', as: :edit_player
 #  patch '/players/:id' => 'players#update'
 

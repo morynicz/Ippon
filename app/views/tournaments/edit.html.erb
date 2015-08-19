@@ -175,6 +175,8 @@
                   <thead>
                     <tr>
                       <th><%= :aka %></th>
+                      <th><%= :aka_pts %></th>
+                      <th><%= :shiro_pts %></th>
                       <th><%= :shiro %></th>
                       <th><%= :state %></th>
                     </tr>
@@ -184,7 +186,10 @@
                         <% f = Fight.find(gf.fight_id) %>
                         <tr class='<%="#{f.fight_state.name}"%>'>
                         <td><span class="position"><%= GroupMember.find_by(player_id: f.aka.id,group_id: g.id).position%></span> <%=truncate(f.aka.name+" "+f.aka.surname,length: 25)%></td>
+                        <td><%=f.aka_points%></td>
+                        <td><%=f.shiro_points%></td>
                         <td><span class="position"><%= GroupMember.find_by(player_id: f.shiro.id,group_id: g.id).position%></span> <%=truncate(f.shiro.name+" "+f.shiro.surname, length:25)%></td>
+                        <td><%=link_to f.fight_state.name , edit_fight_path(f)%></td>
                       </tr>
                       <% } %>
                     </tbody>
