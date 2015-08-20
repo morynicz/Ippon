@@ -29,10 +29,10 @@ $(document).on("input",".to_calculate", function () {
     console.log("l: "+ locations);
 
     groups_length = ((four_team_groups * 6 + three_team_groups * 3 + two_team_groups) * players_number_per_team * group_fight_length) / locations;
-    groups_length += pre_finals_fights * players_number_per_team * final_fight_length;
+    groups_length += pre_finals_fights * players_number_per_team * final_fight_length / locations;
 
     if (finals_fights !== 0) {
-        finals_length = (((finals_fights - 3) / locations) + 3) * final_fight_length * players_number_per_team;
+        finals_length = ((finals_fights - 3)/((locations >1)?2:1)+ 3) * final_fight_length * players_number_per_team;
     }
 
     $("#finals_length").html(finals_length);
