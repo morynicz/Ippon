@@ -37,6 +37,8 @@ $(document).on("input",".to_calculate", function () {
 
     $("#finals_length").html(finals_length);
     $("#groups_length").html(groups_length);
+    $("#calculated_teams_number").html(4*four_team_groups+3*three_team_groups+2*two_team_groups)
+    $("#number_of_groups").html(four_team_groups+three_team_groups+two_team_groups)
 
     $("a#generate_groups").attr("href",root+"/generate/"+(four_team_groups+three_team_groups+two_team_groups)+"/"+finals_fights+"/"+pre_finals_fights+"/"+two_team_groups+"/"+three_team_groups+"/"+four_team_groups);
     console.log("r "+root);

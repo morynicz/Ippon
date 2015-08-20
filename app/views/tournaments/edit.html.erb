@@ -79,30 +79,33 @@
   <% if 0==@groups.size %>
   <div>
     <div>Players number:
-      <input type="number" id="teams_number" class="to_calculate" value="<%= @players.size %>"/>
+      <span id="teams_number"> <%= @players.size %> </span>
+    </div>
+    <div>Players from groups:
+      <span id="calculated_teams_number" class="to_calculate">1</span>
     </div>
     <div>finals fights lenght
-      <input type="number" id="finals_time" class="to_calculate" value="<%= @tournament.final_fight_len %>"/>
+      <input type="number" min="0" id="finals_time" class="to_calculate" value="<%= @tournament.final_fight_len %>"/>
     </div>
     <div>groups fights length
-      <input type="number" id="groups_time" class="to_calculate" value="<%= @tournament.group_fight_len %>"/>
+      <input type="number" min="0" id="groups_time" class="to_calculate" value="<%= @tournament.group_fight_len %>"/>
     </div>
     <div>locations: <span id="locations"> <%= @locations.size %> </span>
     </div>
     <div>4 players groups
-      <input type="number" id="four_team_groups" class="to_calculate" value="<%= @four_team_groups %>"/>
+      <input type="number" min="0" id="four_team_groups" class="to_calculate" value="<%= @four_team_groups %>"/>
     </div>
     <div>3 players groups
-      <input type="number" id="three_team_groups" class="to_calculate" value="<%= @three_team_groups %>"/>
+      <input type="number" min="0" id="three_team_groups" class="to_calculate" value="<%= @three_team_groups %>"/>
     </div>
     <div>2 players groups
-      <input type="number" id="two_team_groups" class="to_calculate" value="<%= @two_team_groups %>"/>
+      <input type="number" min="0" id="two_team_groups" class="to_calculate" value="<%= @two_team_groups %>"/>
     </div>
     <div>finals fights number:
-      <input type="number" id="finals" class="to_calculate" value="<%= @finals_fights %>"/>
+      <input type="number" min="0" id="finals" class="to_calculate" value="<%= @finals_fights %>"/>
     </div>
     <div>pre finals fights number:
-      <input type="number" id="prefinals" class="to_calculate" value="<%= @pre_finals_fights %>"/>
+      <input type="number" min="0" id="prefinals" class="to_calculate" value="<%= @pre_finals_fights %>"/>
     </div>
   </div>
   <div> Finals lenght: <span id="finals_length"><%= @groups_length %></span></div>
