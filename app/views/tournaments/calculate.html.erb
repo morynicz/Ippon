@@ -1,0 +1,53 @@
+<%= javascript_include_tag "time_calculator" %>
+<%= javascript_include_tag "group_calculator" %>
+
+<div class="time_calculation">
+  <div>finals fights lenght
+    <input type="number" min="0" id="finals_time" class="to_calculate" value="1"/>
+  </div>
+  <div>groups fights length
+    <input type="number" min="0" id="groups_time" class="to_calculate" value="1"/>
+  </div>
+  <div>locations: <input type="number" min="1" id="locations" class="to_calculate" value="1"/>
+  </div>
+  <div>4 players groups
+    <input type="number" min="0" id="four_team_groups" class="to_calculate" value="0"/>
+  </div>
+  <div>3 players groups
+    <input type="number" min="0" id="three_team_groups" class="to_calculate" value="0"/>
+  </div>
+  <div>2 players groups
+    <input type="number" min="0" id="two_team_groups" class="to_calculate" value="0"/>
+  </div>
+  <div>Players from groups:
+    <span id="calculated_teams_number" class="to_calculate">1</span>
+  </div>
+  <div>Number of groups:
+    <span id="number_of_groups" class="to_calculate">1</span>
+  </div>
+  <div>finals fights number:
+    <input type="number" min="0" id="finals" class="to_calculate" value="0"/>
+  </div>
+  <div>pre finals fights number:
+    <input type="number" min="0" id="prefinals" class="to_calculate" value="0"/>
+  </div>
+  <div> Finals lenght: <span id="finals_length">0</span></div>
+  <div> Groups length: <span id="groups_length">0</span></div>
+</div>
+<div class="group_calculation">
+  <div>Players number:
+    <input type="number" min="0" id="teams_number" class="to_calculate" value="1"/>
+  </div>
+  <div> Groups:
+    <span id="calculated_groups" class="to_calculate">0</span>
+  </div>
+  <div>4 players groups
+    <span id="calculated_four_team_groups" class="to_calculate">0</span>
+  </div>
+  <div>3 players groups
+    <span id="calculated_three_team_groups" class="to_calculate">0</span>
+  </div>
+  <div>2 players groups
+    <span id="calculated_two_team_groups" class="to_calculate">0</span>
+  </div>
+</div>

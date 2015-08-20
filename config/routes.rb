@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   resources :ranks
 
   patch '/tournaments/:id/generate/:groups/:finals_no/:prefinals/:two_g/:three_g/:four_g' => 'tournaments#generate', as: :generate
+  get '/calculate' => 'tournaments#calculate', as: :calculate
 
   get '/fights/:id/edit' => 'fights#edit', as: :edit_fight
   patch 'fights/:id' => 'fights#update'
