@@ -117,7 +117,9 @@ class TournamentsController < ApplicationController
     puts "ls: #{locations.size}"
     groups.each {|gr|
       puts "G #{gr.name}"
-      players = gr.players.to_ary
+      players = gr.players.to_ary.sort { |p,q|
+        GroupMember.find_by(player_id: p.id,group_id: gr.id).id <=>  GroupMember.find_by(player_id: q.id,group_id: gr.id).id
+      }
       fig = generate_group_fights(players)
       fig.each{|a,s|
         puts "#{a.name} vs #{s.name}"

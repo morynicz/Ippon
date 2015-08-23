@@ -43,6 +43,12 @@ module TournamentUtils
   end
 
   def generate_group_fights(players)
-    return players.combination(2)
+    if 4 == players.size
+      return [[players[0],players[1]],[players[2],players[1]],[players[2],players[3]],[players[0],players[3]],[players[0],players[2]],[players[1],players[3]]]
+    elsif 3 == players.size
+      return [[players[0],players[1]],[players[2],players[1]],[players[2],players[0]]]
+    else
+      return players.combination(2)
+    end
   end
 end
