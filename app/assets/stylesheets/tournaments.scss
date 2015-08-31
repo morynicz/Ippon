@@ -37,6 +37,12 @@ table.players {
 
 div.group-view {
   display: inline-block;
+  vertical-align: top;
+}
+
+div.group-player-view {
+  display: inline-block;
+  vertical-align: top;
 }
 
 tr.Planned {
@@ -54,3 +60,14 @@ tr.Finished {
 div.time_calculation, div.group_calculation {
     display: inline-block;
 }
+
+td.locations {
+  vertical-align: top;
+}
+// .group-view > table {
+//     width: 100%;
+// }
+//
+// .group-view {
+//   width: 100%;
+// }

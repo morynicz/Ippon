@@ -1,29 +1,21 @@
 <div class="item_list">
   <table>
-
-  <div class="form">
     <%= form_for(@location) do |l| %>
-      <div class="field">
-        <tr>
-        <th><%= l.label :name %></th>
-        <th></th>
-      </tr>
-      <tr>
-        <td><%= l.text_field :name %></td>
-        <td><div class="actions">
+    <tr>
+      <th><%= l.label :name %></th>
+      <th></th>
+    </tr>
+    <tr>
+      <td><%= l.text_field :name %></td>
+      <td><div class="actions">
         <%= l.submit :create %>
       </div></tr>
-      </div>
-
-    <% end %>
-    </div>
-    <div class="item_row">
+      <% end %>
       <% @locations.each do |l| %>
       <tr>
         <td><%= l.name %></td>
         <td><div class="actions"><%= link_to :edit, edit_location_path(l) %></div></td>
       </tr>
       <% end %>
-    </div>
-  </table>
-</div>
+    </table>
+  </div>

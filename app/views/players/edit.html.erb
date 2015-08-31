@@ -1,24 +1,20 @@
 <div class="item_list">
   <table>
-    <div class="form">
-      <%= form_for(@player) { |p| %>
-        <div class="field">
-          <tr>
-            <th><%= p.label :name %></th>
-            <th><%= p.label :surname %></th>
-            <th><%= p.label :club %></th>
-            <th><%= p.label :rank %></th>
-            <th></th>
-          </tr>
-          <tr>
-            <td><%= p.text_area :name %></td>
-            <td><%= p.text_area :surname %></td>
-            <td><%= p.text_area :club %></td>
-            <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
-          </tr>
-          <% } %>
-        </div>
-      </div>
+    <%= form_for(@player) { |p| %>
+      <tr>
+        <th><%= p.label :name %></th>
+        <th><%= p.label :surname %></th>
+        <th><%= p.label :club %></th>
+        <th><%= p.label :rank %></th>
+        <th></th>
+      </tr>
+      <tr>
+        <td><%= p.text_area :name %></td>
+        <td><%= p.text_area :surname %></td>
+        <td><%= p.text_area :club %></td>
+        <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
+      </tr>
+      <% } %>
     </table>
   </div>
 
@@ -36,17 +32,14 @@
       </tr>
 
       <% @participations.each { |p| %>
-        <div class="item_row">
-          <tr>
-            <td><%= Tournament.find(p.tournament_id).name %></td>
-            <td>
-              <div class="actions">
-                <%= link_to "delete", player_participation_path(@player,p.tournament_id,p), method: :delete,data: { confirm: "You sure?" } %>
-              </div>
-            </td>
-          </tr>
-          <% } %>
-        </div>
-
+        <tr>
+          <td><%= Tournament.find(p.tournament_id).name %></td>
+          <td>
+            <div class="actions">
+              <%= link_to "delete", player_participation_path(@player,p.tournament_id,p), method: :delete,data: { confirm: "You sure?" } %>
+            </div>
+          </td>
+        </tr>
+        <% } %>
       </table>
     </div>

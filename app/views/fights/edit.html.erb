@@ -1,27 +1,26 @@
-<table>
-
-    <div class="form">
-      <%= form_for(@fight) do |f| %>
-        <div class="field">
-          <tr>
-            <th><%= f.label :aka %></th>
-            <th><%= f.label :aka_points%></th>
-            <th><%= f.label :shiro_points%></th>
-            <th><%= f.label :shiro %></th>
-            <th><%= f.label :state %></th>
-          <th></th>
-        </tr>
-        <tr>
-          <td> <%=truncate(@fight.aka.name+" "+@fight.aka.surname,length: 25)%></td>
-          <td> <%=f.number_field :aka_points %></td>
-          <td> <%=f.number_field :shiro_points %></td>
-          <td> <%=truncate(@fight.shiro.name+" "+@fight.shiro.surname, length:25)%></td>
-          <td><%= f.collection_select :fight_state_id, FightState.order(:id),:id,:name, include_blank: false %></td>
-          <td><div class="actions">
-          <%=f.submit :create %>
-        </div></tr>
+<div class="form">
+  <%= form_for(@fight) do |f| %>
+  <table>
+    <tr>
+      <th><%= f.label :aka %></th>
+      <th><%= f.label :aka_points%></th>
+      <th><%= f.label :shiro_points%></th>
+      <th><%= f.label :shiro %></th>
+      <th><%= f.label :state %></th>
+      <th></th>
+    </tr>
+    <tr>
+      <td> <%=truncate(@fight.aka.name+" "+@fight.aka.surname,length: 25)%></td>
+      <td> <%=f.number_field :aka_points %></td>
+      <td> <%=f.number_field :shiro_points %></td>
+      <td> <%=truncate(@fight.shiro.name+" "+@fight.shiro.surname, length:25)%></td>
+      <td><%= f.collection_select :fight_state_id, FightState.order(:id),:id,:name, include_blank: false %></td>
+      <td>
+        <div class="actions">
+        <%=f.submit :create %>
         </div>
-
-      <% end %>
-      </div>
-    </table>
+      </td>
+    </tr>
+  </table>
+  <% end %>
+</div>

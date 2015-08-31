@@ -1,30 +1,26 @@
-<head>
-</head>
-
-<body>
-
-  <div class="form">
-    <%= form_for(@tournament) do |t| %>
-      <div class="field">
-        <table>
-          <tr>
-            <th><%= t.label :name %></th>
-            <th><%= t.label :place %></th>
-            <th><%= t.label :final_fight_length %></th>
-            <th><%= t.label :group_fight_length %></th>
-          </tr>
-          <tr>
-            <td><%= t.text_field :name %></td>
-            <td><%= t.text_field :place %></td>
-            <td><%= t.text_field :final_fight_len %></td>
-            <td><%= t.text_field :group_fight_len %></td>
-          </tr>
-        </table>
-      </div>
-      <div class="actions">
-      <%=t.submit "Create" %>
-      </div>
-    <% end %>
-    </div>
-
-  </body>
+<div class="form">
+  <%= form_for(@tournament) do |t| %>
+  <table>
+    <thead>
+      <tr>
+        <th><%= t.label :name %></th>
+        <th><%= t.label :place %></th>
+        <th><%= t.label :final_fight_length %></th>
+        <th><%= t.label :group_fight_length %></th>
+        <th><%= t.label :action %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= t.text_field :name %></td>
+        <td><%= t.text_field :place %></td>
+        <td><%= t.text_field :final_fight_len %></td>
+        <td><%= t.text_field :group_fight_len %></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="actions">
+    <%=t.submit "Create" %>
+  </div>
+  <% end %>
+</div>

@@ -5,13 +5,12 @@
     <th colspan="3">Action</th>
   </tr>
   <% @tournaments.each do |t| %>
-  <div class="item_row">
   <tr>
     <td><%= t.name %></td>
     <td><div class="actions"><%= link_to :show, tournament_path(t) %></div></td>
     <td><div class="actions"><%= link_to :edit, edit_tournament_path(t) %></div></td>
     <td><div class="actions"><%= link_to "delete", t, method: :delete,
-                                  data: { confirm: "You sure?" } %>
+                                  data: { confirm: "You sure?" } %></div></td>
   </tr>
   <% end %>
 </table>
