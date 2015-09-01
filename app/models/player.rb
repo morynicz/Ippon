@@ -4,4 +4,8 @@ class Player < ActiveRecord::Base
   belongs_to :rank
   has_many :participations, dependent: :destroy
   has_many :tournaments, through: :participations
+
+  def full_credentials
+    return "#{name} #{surname} #{club} #{Rank.find(rank_id).name}"
+  end
 end

@@ -1,74 +1,82 @@
-  <div class="item_list">
-        <% @groups.each { |g| %>
-          <div class="group-view">
-            <div class="group-view">
-          <table>
-            <thead>
-              <tr>
-                <th><%= :group_name %></th>
-                <th><%= :group_location %></th>
-              </tr>
-            </thead>
-            <tbody>
-          <tr class="group">
-            <td class="group">Group <%= g.name %></td>
-            <td class="group"><%= g.location.name %></td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <table class="players">
-                <thead>
-                  <tr>
-                    <th><%= :position %> </th>
-                    <th><%= :name %></th>
-                    <th><%= :surname %></th>
-                    <th><%= :club %></th>
-                    <th><%= :rank %></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% g.group_members.each { |m| %>
-                    <% p = m.player %>
-                    <tr>
-                      <td><%= m.position%></td>
-                      <td><%= truncate(p.name, length: 25) %></td>
-                      <td><%= truncate(p.surname, length: 25) %></td>
-                      <td><%= truncate(p.club, length: 25) %></td>
-                      <td><%= Rank.find(p.rank_id).name %></td>
-                    </tr>
-                    <% } %>
-                  </tbody>
-                </table>
-              </td>
+  <table class="locations">
+    <tr>
+      <% @locations.each {|l| %>
+        <td><%=l.name%></td>
+        <%}%>
+      </tr>
+      <tr>
+        <% @locations.each {|l| %>
+          <td class="locations">
+              <% l.groups.each {|g|%>
+                <div class="group-player-view">
+                  <table>
+                    <tbody>
+                      <tr class="group">
+                        <td class="group"><b>Group <%= g.name %></b></td>
+                      </tr>
+                      <tr>
+                        <td colspan="1">
+                          <table class="players">
+                            <thead>
+                              <tr>
+                                <th><%= :pos %> </th>
+                                <th><%= :name %></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% g.group_members.each { |m| %>
+                                <% p = m.player %>
+                                <tr>
+                                  <td><%= m.position%></td>
+                                  <td><%= truncate(p.name + " " + p.surname, length: 25) %></td>
+                                </tr>
+                                <% } %>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                <%}%>
+                </td>
+            <%}%>
             </tr>
-              </tbody>
-            </table>
-          </div>
-            <div class="group-view">
-            <table class="fights">
-              <thead>
-                <tr>
-                  <th><%= :aka %></th>
-                  <th><%= :aka_pts %></th>
-                  <th><%= :shiro_pts %></th>
-                  <th><%= :shiro %></th>
-                  <th><%= :status %></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% g.group_fights.each { |gf|%>
-                  <% f = Fight.find(gf.fight_id) %>
-                  <tr class='<%="#{f.fight_state.name}"%>'>
-                    <td><span class="position"><%= GroupMember.find_by(player_id: f.aka.id,group_id: g.id).position%></span> <%=truncate(f.aka.name+" "+f.aka.surname,length: 25)%></td>
-                    <td><%=f.aka_points%></td>
-                    <td><%=f.shiro_points%></td>
-                    <td><span class="position"><%= GroupMember.find_by(player_id: f.shiro.id,group_id: g.id).position%></span> <%=truncate(f.shiro.name+" "+f.shiro.surname, length:25)%></td>
-                    <td><%=f.fight_state.name%></td>
-                  </tr>
-                  <% } %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-              <% } %>
-        </div>
+            <tr>
+              <% @locations.each {|l| %>
+                <td class="locations">
+
+              <div class="group-fight-view">
+                <table class="fights">
+                  <thead>
+                    <tr>
+                      <th><%= :aka %></th>
+                      <th><%= :aka_pts %></th>
+                      <th><%= :shiro_pts %></th>
+                      <th><%= :shiro %></th>
+                      <th><%= :status %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% l.groups.each {|g|%>
+                      <tr><td colspan="5">Group <%= g.name %> </td></tr>
+                    <% g.group_fights.each { |gf|%>
+                      <% f = Fight.find(gf.fight_id) %>
+                      <tr class='<%="#{f.fight_state.name}"%>'>
+                        <td><span class="position"><%= GroupMember.find_by(player_id: f.aka.id,group_id: g.id).position%></span> <%=truncate(f.aka.name+" "+f.aka.surname,length: 25)%></td>
+                        <td><%=f.aka_points%></td>
+                        <td><%=f.shiro_points%></td>
+                        <td><span class="position"><%= GroupMember.find_by(player_id: f.shiro.id,group_id: g.id).position%></span> <%=truncate(f.shiro.name+" "+f.shiro.surname, length:25)%></td>
+                        <td><%=f.fight_state.name%></td>
+                      </tr>
+                      <% } %>
+                      <tr class="spacer"/>
+                                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+
+              </td>
+              <%}%>
+            </tr>
+          </table>
