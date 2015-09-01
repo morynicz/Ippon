@@ -21,12 +21,13 @@ class LocationsController < ApplicationController
 
   def edit
     @location = Location.find(params[:id])
+    @tournament = Tournament.find(params[:tournament_id])
   end
 
   def update
     @location = Location.find(params[:id])
 
-    if @location.update_attributes(loaction_params)
+    if @location.update_attributes(location_params)
       redirect_to "/tournaments/#{@location.tournament_id}/edit"
     else
       render 'edit'
