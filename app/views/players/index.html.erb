@@ -1,6 +1,6 @@
 <div class="item_list">
+  <%= form_for(@player) do |p| %>
   <table>
-    <%= form_for(@player) do |p| %>
     <tr>
       <th><%= p.label :name %></th>
       <th><%= p.label :surname %></th>
@@ -16,7 +16,6 @@
       <td colspan="2"><div class="actions">
         <%=p.submit :create %>
       </div></td></tr>
-      <% end %>
       <% @players.each do |p| %>
       <tr>
         <td><%= p.name %></td>
@@ -29,4 +28,5 @@
       </tr>
       <% end %>
     </table>
+    <% end %>
   </div>

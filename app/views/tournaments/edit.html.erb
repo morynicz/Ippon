@@ -31,34 +31,34 @@
 </div>
 
 <div class="item_list">
-  <div class="form">
-
+    <%= form_for [@tournament,@location] do |l| %>
     <table>
-      <%= form_for [@tournament,@location] do |l| %>
         <tr>
           <th><%= l.label :name %></th>
-          <th></th>
+          <th colspan="2"><%= l.label :actions %></th>
         </tr>
+        <% if 0==@groups.size %>
         <tr>
           <td><%= l.text_field :name %></td>
-          <td><div class="actions">
+          <td colspan="2"><div class="actions">
             <%=l.submit :create %>
-          </div>
+          </div></td>
         </tr>
-      <% end %>
-    </div>
+        <% end %>
     <% @locations.each do |l| %>
-    <div class="item_row">
       <tr>
         <td><%= l.name %></td>
         <td><div class="actions"><%= link_to :edit, edit_tournament_location_path(@tournament,l) %></div></td>
-        <td><div class="actions"><%= link_to "delete", tournament_location_path(@tournament,l), method: :delete,
-        data: { confirm: "You sure?" } %></div></td>
+        <td>
+          <% if 0==@groups.size %>
+          <div class="actions"><%= link_to "delete", tournament_location_path(@tournament,l), method: :delete,
+        data: { confirm: "You sure?" } %></div>
+          <% end %>
+      </td>
       </tr>
       <% end %>
-    </div>
   </table>
-</div>
+  <% end %>
 </div>
 <div class="item_list">
   <table>
@@ -76,7 +76,6 @@
       </tr>
     <% end %>
     <% @players.each do |p| %>
-    <div class="item_row">
       <tr>
         <td><%= p.name %></td>
         <td><%= p.surname %></td>

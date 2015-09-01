@@ -1,6 +1,6 @@
 <div class="item_list">
+  <%= form_for(@rank) do |r| %>
   <table>
-    <%= form_for(@rank) do |r| %>
     <tr>
       <th><%= r.label :name %></th>
       <th><%= r.label :is_dan %></th>
@@ -20,6 +20,6 @@
         <td><%= r.is_dan %></td>
         <td><div class="actions"><%= link_to :edit, edit_rank_path(r) %></div></td>
       </tr>
-      <% end %>
     </table>
+    <% end %>
   </div>

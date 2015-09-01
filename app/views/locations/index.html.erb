@@ -1,6 +1,6 @@
 <div class="item_list">
+  <%= form_for(@location) do |l| %>
   <table>
-    <%= form_for(@location) do |l| %>
     <tr>
       <th><%= l.label :name %></th>
       <th></th>
@@ -10,7 +10,6 @@
       <td><div class="actions">
         <%= l.submit :create %>
       </div></tr>
-      <% end %>
       <% @locations.each do |l| %>
       <tr>
         <td><%= l.name %></td>
@@ -18,4 +17,5 @@
       </tr>
       <% end %>
     </table>
+    <% end %>
   </div>

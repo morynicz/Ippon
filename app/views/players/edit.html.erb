@@ -1,6 +1,6 @@
 <div class="item_list">
-  <table>
-    <%= form_for(@player) { |p| %>
+  <%= form_for(@player) { |p| %>
+    <table>
       <tr>
         <th><%= p.label :name %></th>
         <th><%= p.label :surname %></th>
@@ -13,9 +13,10 @@
         <td><%= p.text_area :surname %></td>
         <td><%= p.text_area :club %></td>
         <td><%= p.collection_select :rank_id, Rank.order(:id),:id,:name, include_blank: false %></td>
+        <td><%= p.submit %></td>
       </tr>
-      <% } %>
     </table>
+    <% } %>
   </div>
 
   <div class="item_list">

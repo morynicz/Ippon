@@ -1,6 +1,6 @@
 <div class="item_list">
+  <%= form_for(@fight_state) do |f| %>
   <table>
-    <%= form_for(@fight_state) do |f| %>
     <tr>
       <th><%= f.label :name %></th>
       <th></th>
@@ -10,7 +10,6 @@
       <td><div class="actions">
         <%=f.submit :create %>
       </div></tr>
-      <% end %>
       <% @fight_states.each do |f| %>
       <tr>
         <td><%= f.name %></td>
@@ -18,4 +17,5 @@
       </tr>
       <% end %>
     </table>
+    <% end %>
   </div>
