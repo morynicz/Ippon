@@ -37,8 +37,11 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.find(params[:id])
 
     @location = Location.new
+    @participation = Participation.new
+
     @locations = @tournament.locations
     @players = @tournament.players
+    @not_participants = Player.all - @players
     @groups = @tournament.groups
 
     @groups_no, @four_team_groups, @three_team_groups, @two_team_groups, @groups_length, @finals_length, @pre_finals_fights,@finals_fights=process_tournament(@players.size,@tournament.group_fight_len,@tournament.final_fight_len,1,(@tournament.locations.empty?)?1:@tournament.locations.size)

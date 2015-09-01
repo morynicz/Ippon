@@ -11,3 +11,4 @@ Rails.application.config.assets.version = '1.0'
 # Rails.application.config.assets.precompile += %w( search.js )
 Rails.application.config.assets.precompile += %w( time_calculator.js )
 Rails.application.config.assets.precompile += %w( group_calculator.js )
+Rails.application.config.assets.precompile += %w( participation_adder.js )

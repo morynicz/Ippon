@@ -1,4 +1,5 @@
 <%= javascript_include_tag "time_calculator" %>
+<%= javascript_include_tag "participation_adder" %>
 <div class="form">
   <%= form_for(@tournament) do |t| %>
     <table>
@@ -68,6 +69,12 @@
       <th><%= :rank %></th>
       <th colspan="1"><%=  :action %></th>
     </tr>
+    <% if 0==@groups.size %>
+      <tr >
+        <td colspan="4"><select id="participant"><%= options_from_collection_for_select(@not_participants,:id,:full_credentials) %></select></td>
+        <td><a id="participant_link" href="" data-method="PUT">Add</a></td>
+      </tr>
+    <% end %>
     <% @players.each do |p| %>
     <div class="item_row">
       <tr>
@@ -209,4 +216,4 @@
           </table>
         </div>
         <% end %>
-        <a href="<%=tournament_path(@tournament)%>" id="hi" style="visibility: hidden;">a</a>
+        <a href="<%=tournament_path(@tournament)%>" id="hi" style="visibility: hidden;"><%=@tournament.id%></a>

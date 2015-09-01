@@ -20,6 +20,14 @@ class ParticipationsController < ApplicationController
     end
   end
 
+  def create_new
+    @player = Player.find(params[:player_id])
+    @tournament = Tournament.find(params[:tournament_id])
+    @tournament.players << @player
+
+    redirect_to "/tournaments/#{@tournament.id}/edit"
+  end
+
   def destroy
     @participation = Participation.find(params[:id])
     player_id = @participation.player_id

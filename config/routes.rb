@@ -56,6 +56,9 @@ Rails.application.routes.draw do
   resources :players do
     resources :participations
   end
+
+  put '/participations/create_new/:player_id/:tournament_id' => 'participations#create_new', as: :create_new_participation
+
   root 'players#index'
   resources :tournaments do
     resources :locations
