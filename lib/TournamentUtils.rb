@@ -8,29 +8,38 @@ module TournamentUtils
     two_team_groups = 0
     finals_length = 0
 
-    unless teams_number == 17
-      ti = 0
-      gi = 1
-      fi = 2
+    alg_table= [[1,0,1,0],[2,0,2,1],[4,1,0,0],[8,2,4,3],[16,4,8,7],[24,6,12,11],[32,8,16,15],[48,12,24,23],[64,16,32,31],[96,24,48,37],[128,32,64,63],[192,48,96,81]]
 
-      alg_table = [[5,1,0],[9,2,3],[13,3,5],[17,4,7],[25,6,11],[37,8,15],[49,12,21],[65,16,31]]
-      i=0
+    i=0
+    ni = 0
+    gi = 1
+    fi = 2
+    ffi = 3
 
-      while (i < alg_table.size - 1) && teams_number >= alg_table[i][ti]
-        i+= 1
-      end
-      groups = alg_table[i][gi]
-      finals_fights = (alg_table[i][fi] > 7 ) ? 7 : alg_table[i][fi]
-      pre_finals_fights = (alg_table[i][fi] > 7 ) ? alg_table[i][fi] - 7 : 0
-
-      four_team_groups = (teams_number > 3) ? teams_number - groups * 3 : 0
-      three_team_groups = (teams_number > 2 ) ? groups - four_team_groups : 0
-    else
-      groups = 6
-      four_team_groups = 0
-      three_team_groups = 5
+    while (i < alg_table.size) && ( teams_number > alg_table[i][ni])
+      i+= 1
     end
-    two_team_groups = (teams_number > 1) ? groups - four_team_groups - three_team_groups : 0
+
+    groups = alg_table[i][gi]
+    finalists = alg_table[i][fi]
+    final_fight_no = alg_table[i][ffi]
+
+    garr = Array.new(groups,0)
+
+    j=0
+    teams_number.times {
+      garr[j] += 1
+      j += 1
+      j = j % groups
+      puts "gi: #{j} garr: #{garr}"
+    }
+
+    four_team_groups = garr.count(4)
+    three_team_groups = garr.count(3)
+    two_team_groups = garr.count(2)
+
+    finals_fights = (alg_table[i][ffi] > 7 ) ? 7 : alg_table[i][ffi]
+    pre_finals_fights = (alg_table[i][ffi] > 7 ) ? alg_table[i][ffi] - 7 : 0
 
     groups_length = ((four_team_groups * 6  + three_team_groups * 3 + two_team_groups) * players_number_per_team * group_fight_length) / locations
     groups_length += pre_finals_fights * players_number_per_team * final_fight_length / locations
