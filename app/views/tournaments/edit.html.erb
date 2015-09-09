@@ -26,7 +26,6 @@
       </tr>
     </tbody>
     </table>
-  </div>
   <% end %>
 </div>
 
@@ -82,7 +81,7 @@
       <tr>
         <% if 0!=@groups.size %>
           <% gids = [] %>
-          <% @tournament.groups.each { |g| gids << g.id}; %>
+          <% @tournament.groups.each { |g| gids << g.id;}; %>
           <td><%= GroupMember.where({player_id: p.id, group_id: gids}).take.position%></td>
         <% end %>
         <td><%= p.name %></td>
