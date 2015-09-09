@@ -1,9 +1,9 @@
 var g_teams_number = 0;
 var g_finals_fights = 0;
-var  g_pre_finals_fights = 0;
-var  g_four_team_groups = 0;
-var  g_three_team_groups = 0;
-var  g_two_team_groups = 0;
+var g_pre_finals_fights = 0;
+var g_four_team_groups = 0;
+var g_three_team_groups = 0;
+var g_two_team_groups = 0;
 
 $(document).on("input",".to_calculate", function () {
   g_read_values();
@@ -59,10 +59,8 @@ $("#calculated_number_of_fights").html(g_number_of_fights);
 
 $("#calculated_final_fights_number").html(g_finals_fights);
 $("#calculated_pre_final_fights_number").html(g_pre_finals_fights);
-
-
 });
 
 function g_read_values(){
-  g_teams_number = parseInt($("#teams_number").val(),10)||0;
+  g_teams_number = parseInt($("#teams_number").val(),10)|| 0;
 }
