@@ -72,48 +72,52 @@ class TournamentsController < ApplicationController
     two_g = params[:two_g]
     three_g = params[:three_g]
     four_g = params[:four_g]
-    group_arr=[[1,0],[2,two_g.to_i],[3,three_g.to_i],[4,four_g.to_i]]
+    #no_of_members,no_of_groups,no_of_fights
+    group_no_arr=[[1,0,0],[2,two_g.to_i,1],[3,three_g.to_i,3],[4,four_g.to_i,6]]
 
     letters = Array("A".."Z")
     locations =@tournament.locations.to_ary
     li=0
-    puts group_arr
-    0.upto(group_no.to_i - 1) {|i|
-      loc = locations[li]
-      li+=1
-      li = li%locations.size
-      gid = @tournament.groups.create(name: "#{letters[i]}")
-      gr = Group.find_by_id(gid)
-      puts "location #{loc.id}"
-      gr.location_id = loc.id
-      gr.save
+
+    group_no_arr.reverse!
+
+    locs = Array.new(locations.size,0)
+    loc_str =[]
+    locs.size.times {
+      loc_str << []
     }
+
+    group_no_arr.each {|g|
+      g[1].times {
+        inx = locs.index(locs.min)
+        locs[inx] += g[2];
+        loc_str[inx] << g[0];
+        puts "locs: #{locs}"
+        puts "loc_str: #{loc_str}"
+      }
+    }
+
+    name_i=0;
 
     players = @tournament.players.to_ary
     players.shuffle!
-    group_arr.reverse!
-    groups = @tournament.groups.to_ary
 
-    group_arr.each {|g|
-      puts"G #{g[0]} #{g[1]}"
-      unless 0 == g[1]
-        g[1].times {
-          it=1
-          group = groups.shift
-          puts "n: #{group.name}"
-          puts "Outer"
-          g[0].times {
-            puts "Inner"
-            play = players.pop
-            group.players << play
-            member = GroupMember.find_by(player_id: play.id,group_id: group.id)
-            member.position = "#{group.name}#{it}"
-            member.save
-            it += 1
-          }
-          puts "G #{group.name} end"
+    0.upto(loc_str.size - 1) { |ln|
+      loc = locations[ln]
+      puts "loc: #{loc.name} lo: #{ln}"
+      loc_str[ln].each {|l|
+        puts "l: #{l}"
+        gid = @tournament.groups.create({location_id: loc.id, name: "#{letters[name_i]}"})
+        name_i+=1
+        gr = Group.find_by_id(gid)
+        1.upto(l){|it|
+          play = players.pop
+          gr.players << play
+          member = GroupMember.find_by(player_id: play.id,group_id: gr.id)
+          member.position = "#{gr.name}#{it}"
+          member.save
         }
-      end
+      }
     }
 
     groups = @tournament.groups.to_ary
