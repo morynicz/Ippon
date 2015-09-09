@@ -30,7 +30,7 @@ FightState.create(name: 'Finished')
   }
 }
 
-1.upto(30+rng.rand(30)) {|p|
+1.upto(60+rng.rand(60)) {|p|
   pl = Player.create(name: "Na#{p}",surname: "Su#{p}",club: "Cl#{p}",rank_id: Rank.all.sample.id )
   ts = Tournament.all.to_ary
   ts.shuffle!
