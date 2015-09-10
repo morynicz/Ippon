@@ -1,0 +1,12 @@
+<%= form_for([@tournament,@location]) { |l|%>
+<table>
+  <tr>
+    <th><%=l.label :name %></th>
+    <th><%=l.label :action%></th>
+  </tr>
+  <tr>
+    <td><%=l.text_field :name %></td>
+    <td><%=l.submit %></td>
+  </tr>
+</table>
+<% } %>
