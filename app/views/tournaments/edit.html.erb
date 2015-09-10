@@ -77,7 +77,7 @@
         <td><a id="participant_link" href="" data-method="PUT">Add</a></td>
       </tr>
     <% end %>
-    <% @players.each do |p| %>
+    <% @players.sort_by(&:surname).each do |p| %>
       <tr>
         <% if 0!=@groups.size %>
           <% gids = [] %>

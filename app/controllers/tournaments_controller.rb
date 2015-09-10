@@ -33,6 +33,12 @@ class TournamentsController < ApplicationController
 
   end
 
+  def players
+    @tournament = Tournament.find(params[:id])
+    @players = @tournament.players
+    @groups = @tournament.groups
+  end
+
   def edit
     @tournament = Tournament.find(params[:id])
 

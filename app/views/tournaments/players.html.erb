@@ -1,0 +1,26 @@
+<div class="item_list">
+  <table>
+    <tr>
+      <% if 0!=@groups.size %>
+        <th><%= :position %></th>
+      <% end %>
+      <th><%= :name %></th>
+      <th><%= :surname %></th>
+      <th><%= :club %></th>
+      <th><%= :rank %></th>
+    </tr>
+    <% @players.sort_by(&:surname).each do |p| %>
+      <tr>
+        <% if 0!=@groups.size %>
+          <% gids = [] %>
+          <% @tournament.groups.each { |g| gids << g.id;}; %>
+          <td><%= GroupMember.where({player_id: p.id, group_id: gids}).take.position%></td>
+        <% end %>
+        <td><%= p.name %></td>
+        <td><%= p.surname %></td>
+        <td><%= p.club %></td>
+        <td><%= Rank.find(p.rank_id).name %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>

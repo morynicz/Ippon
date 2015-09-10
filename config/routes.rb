@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
   patch '/tournaments/:id/generate/:groups/:finals_no/:prefinals/:two_g/:three_g/:four_g' => 'tournaments#generate', as: :generate
   get '/calculate' => 'tournaments#calculate', as: :calculate
+  get 'tournaments/:id/players' => 'tournaments#players', as: :tournament_players
 
   get '/fights/:id/edit' => 'fights#edit', as: :edit_fight
   patch 'fights/:id' => 'fights#update'
