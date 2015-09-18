@@ -5,7 +5,7 @@
     <th colspan="4">Action</th>
   </tr>
   <% @tournaments.each do |t| %>
-  <tr>
+  <tr class="<%= t.status %>" >
     <td><%= t.name %></td>
     <td><div class="actions"><%= link_to :edit, edit_tournament_path(t) %></div></td>
     <td><div class="actions"><%= link_to :show, tournament_path(t) %></div></td>

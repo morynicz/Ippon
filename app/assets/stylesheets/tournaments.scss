@@ -45,15 +45,15 @@ div.group-player-view {
   vertical-align: top;
 }
 
-tr.Planned {
+tr.Planned, tr.preparing{
   background-color: white;
 }
 
-tr.Started {
+tr.Started, tr.group_phase {
   background-color: yellow;
 }
 
-tr.Finished {
+tr.Finished, tr.finished {
   background-color: green;
 }
 

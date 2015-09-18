@@ -24,7 +24,7 @@ FightState.create(name: 'Started')
 FightState.create(name: 'Finished')
 
 1.upto(3+rng.rand(5)) { |t|
-  to = Tournament.create(name: "To#{t}",place: "Pl#{t}",final_fight_len: 6,group_fight_len: 3)
+  to = Tournament.create(name: "To#{t}",place: "Pl#{t}",final_fight_len: 6,group_fight_len: 3,status: :preparing)
   1.upto(1+rng.rand(3)) {|l|
     to.locations.create(name: "Lo#{l}")
   }
