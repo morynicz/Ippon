@@ -24,19 +24,21 @@ module TournamentUtils
     finalists = alg_table[i][fi]
     final_fight_no = alg_table[i][ffi]
 
-    garr = Array.new(groups,0)
+    if groups > 0
+      garr = Array.new(groups,0)
 
-    j=0
-    teams_number.times {
-      garr[j] += 1
-      j += 1
-      j = j % groups
-      puts "gi: #{j} garr: #{garr}"
-    }
+      j=0
+      teams_number.times {
+        garr[j] += 1
+        j += 1
+        j = j % groups
+        puts "gi: #{j} garr: #{garr}"
+      }
 
-    four_team_groups = garr.count(4)
-    three_team_groups = garr.count(3)
-    two_team_groups = garr.count(2)
+      four_team_groups = garr.count(4)
+      three_team_groups = garr.count(3)
+      two_team_groups = garr.count(2)
+    end
 
     finals_fights = (alg_table[i][ffi] > 7 ) ? 7 : alg_table[i][ffi]
     pre_finals_fights = (alg_table[i][ffi] > 7 ) ? alg_table[i][ffi] - 7 : 0
