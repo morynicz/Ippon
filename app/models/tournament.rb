@@ -7,4 +7,6 @@ class Tournament < ActiveRecord::Base
   has_many :participations, dependent: :destroy
   has_many :players, through: :participations
   has_many :groups, dependent: :destroy
+
+  enum status: [:preparing, :group_phase, :pre_finals, :finals, :finished]
 end

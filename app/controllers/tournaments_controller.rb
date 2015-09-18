@@ -21,7 +21,7 @@ class TournamentsController < ApplicationController
 
   def create
     @tournament = Tournament.new(tournament_params)
-
+    @tournament.status = :preparing
     if @tournament.save
       redirect_to "/tournaments/#{@tournament.id}/edit"
     else
@@ -153,6 +153,8 @@ class TournamentsController < ApplicationController
       }
     }
 
+    @tournament.status = :group_phase
+    @tournament.save
     puts "g#{group_no} f#{finals} p#{prefinals} 2: #{two_g} 3: #{three_g} 4: #{four_g}"
     redirect_to edit_tournament_path(@tournament)
   end

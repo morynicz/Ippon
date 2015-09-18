@@ -36,7 +36,7 @@
           <th><%= l.label :name %></th>
           <th colspan="2"><%= l.label :actions %></th>
         </tr>
-        <% if 0==@groups.size %>
+        <% if @tournament.preparing? %>
         <tr>
           <td><%= l.text_field :name %></td>
           <td colspan="2"><div class="actions">
@@ -49,7 +49,7 @@
         <td><%= l.name %></td>
         <td><div class="actions"><%= link_to :edit, edit_tournament_location_path(@tournament,l) %></div></td>
         <td>
-          <% if 0==@groups.size %>
+          <% if @tournament.preparing? %>
           <div class="actions"><%= link_to "delete", tournament_location_path(@tournament,l), method: :delete,
         data: { confirm: "You sure?" } %></div>
           <% end %>
@@ -62,7 +62,7 @@
 <div class="item_list">
   <table>
     <tr>
-      <% if 0!=@groups.size %>
+      <% if !@tournament.preparing? %>
         <th><%= :position %></th>
       <% end %>
       <th><%= :name %></th>
@@ -71,7 +71,7 @@
       <th><%= :rank %></th>
       <th colspan="1"><%=  :action %></th>
     </tr>
-    <% if 0==@groups.size %>
+    <% if @tournament.preparing? %>
       <tr >
         <td colspan="4"><select id="participant"><%= options_from_collection_for_select(@not_participants,:id,:full_credentials) %></select></td>
         <td><a id="participant_link" href="" data-method="PUT">Add</a></td>
@@ -79,7 +79,7 @@
     <% end %>
     <% @players.sort_by(&:surname).each do |p| %>
       <tr>
-        <% if 0!=@groups.size %>
+        <% if !@tournament.preparing? %>
           <% gids = [] %>
           <% @tournament.groups.each { |g| gids << g.id;}; %>
           <td><%= GroupMember.where({player_id: p.id, group_id: gids}).take.position%></td>
@@ -93,7 +93,7 @@
       <% end %>
     </table>
   </div>
-  <% if 0==@groups.size %>
+  <% if @tournament.preparing? %>
   <div>
     <div>Players number:
       <span id="teams_number"> <%= @players.size %> </span>
