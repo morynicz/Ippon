@@ -7,9 +7,9 @@
       <tr>
         <th><%= t.label :name %></th>
         <th><%= t.label :place %></th>
-        <th><%= t.label :final_fight_length %></th>
-        <th><%= t.label :group_fight_length %></th>
-        <th><%= t.label :action %></th>
+        <th><%= t.label :final_fight_len %></th>
+        <th><%= t.label :group_fight_len %></th>
+        <th><%= :action %></th>
       </tr>
     </thead>
     <tbody>
@@ -34,7 +34,7 @@
     <table>
         <tr>
           <th><%= l.label :name %></th>
-          <th colspan="2"><%= l.label :actions %></th>
+          <th colspan="2"><%= :actions %></th>
         </tr>
         <% if @tournament.preparing? %>
         <tr>
