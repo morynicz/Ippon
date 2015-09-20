@@ -128,7 +128,14 @@
   <div> Finals lenght: <span id="finals_length"><%= @groups_length %></span></div>
   <div> Groups length: <span id="groups_length"><%= @finals_length %></span></div>
 
+  <% if @tournament.players.empty? %>
+  <p>Add some players to this tournament </p>
+  <% elsif @tournament.locations.empty? %>
+  <p>Add some locations to this tournament</p>
+  <% else %>
   <a href="" id="gen_link" data-method="PATCH">Generate!</a>
+  <% end %>
+
   <% else %>
   <div class="sum_up">
     <div> Players: <%= @players.size %> Locations: <%= @locations.size %></div>
