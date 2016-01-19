@@ -1,0 +1,29 @@
+{
+  "name": "ippon",
+  "version": "2.0.0",
+  "description": "App for kendo tournaments",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morynicz/tournament-service.git"
+  },
+  "keywords": [
+    "kendo",
+    "tournament"
+  ],
+  "author": "Michał Orynicz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/morynicz/tournament-service/issues"
+  },
+  "homepage": "https://github.com/morynicz/tournament-service#readme",
+  "dependencies": {
+    "bower": "^1.7.2"
+  }
+}
