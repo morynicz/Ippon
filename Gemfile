@@ -45,6 +45,12 @@ gem 'sass', '3.2.19'
 #Use bower for frontend dependencies
 gem 'bower-rails'
 
+#templates
+gem 'angular-rails-templates'
+
+#sprockets 3 don't play with angular :/
+gem 'sprockets', '~> 2.12.4'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
