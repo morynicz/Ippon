@@ -188,7 +188,6 @@ DEPENDENCIES
   bower-rails
   byebug
   capybara
-  coffee-rails (~> 4.1.0)
   database_cleaner
   factory_girl_rails (~> 4.0)
   jbuilder (~> 2.0)
