@@ -1,4 +1,4 @@
-angular.module('ippon',['templates', 'ngRoute', 'controllers']);
+angular.module('ippon',['templates', 'ngRoute', 'ngResource', 'controllers']);
 
 angular.module('ippon').config(['$routeProvider',
 function($routeProvider) {
@@ -8,4 +8,4 @@ function($routeProvider) {
   });
 }]);
 
-angular.module('controllers', []);
+angular.module('controllers', ['ngResource']);
