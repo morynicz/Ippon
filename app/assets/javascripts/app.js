@@ -5,6 +5,10 @@ function($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'Home/_index.html',
     controller: 'HomePageController'
+  })
+  .when('/clubs', {
+    templateUrl: 'Clubs/_index.html',
+    controller: 'ClubsController'
   });
 }]);
 
