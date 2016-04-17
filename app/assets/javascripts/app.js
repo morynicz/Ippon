@@ -2,14 +2,15 @@ angular.module('ippon',[
 	'templates',
 	'ui.router',
 	'ngResource',
-	'Devise'
+	'Devise',
+	'pascalprecht.translate'
 ]);
 
 angular.module('ippon').config([
 	'$stateProvider',
 	'$urlRouterProvider',
-	function($stateProvider, $urlRouterProvider) {
-
+	'$translateProvider',
+	function($stateProvider, $urlRouterProvider, $translateProvider) {
 		$stateProvider.state('home',{
 			url: '/home',
 			templateUrl: 'Home/_index.html',
@@ -52,4 +53,23 @@ angular.module('ippon').config([
 		});;
 
 		$urlRouterProvider.otherwise('home');
+
+		$translateProvider.translations('en', {
+			CLUBS: "Clubs",
+			HOME: "Ippon Home Page",
+			HOME_TEXT: "Here shall be some links",
+			BUTTON_TEXT_EN: "English",
+			BUTTON_TEXT_PL: "Polish"
+		})
+		.translations('pl', {
+			CLUBS: "Kluby",
+			HOME: "Strona domowa Ippon",
+			HOME_TEXT: "Tu pojawią się linki",
+			BUTTON_TEXT_EN: "Angielski",
+			BUTTON_TEXT_PL: "Polski"
+		});
+
+		$translateProvider.useSanitizeValueStrategy('escape');
+		$translateProvider.preferredLanguage('en');
+
 	}]);

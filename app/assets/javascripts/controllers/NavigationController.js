@@ -1,5 +1,8 @@
-angular.module('ippon').controller('NavigationController',['$scope', 'Auth',
-function($scope, Auth) {
+angular.module('ippon').controller('NavigationController',[
+  '$scope',
+  'Auth',
+  '$translate',
+function($scope, Auth, $tranlsate) {
   $scope.signedIn = Auth.isAuthenticated;
   $scope.logout = Auth.logout;
 
@@ -14,4 +17,8 @@ function($scope, Auth) {
   $scope.$on('devise:logout', function(e,user) {
     $scope.user = {};
   });
+
+  $scope.changeLanguage = function(langKey) {
+    $tranlsate.use(langKey);
+  };
 }]);

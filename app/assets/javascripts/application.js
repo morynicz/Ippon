@@ -18,4 +18,5 @@
 //= require angular-rails-templates
 //= require angular-devise
 //= require bootstrap-sass-official/assets/javascripts/bootstrap
+//= require angular-translate/angular-translate
 //= require_tree .
