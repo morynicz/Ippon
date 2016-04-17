@@ -1,4 +1,8 @@
 <div  ng-app="ippon">
+  <div ng-controller="NavigationController">
+    <button ng-click="changeLanguage('pl')" translate="BUTTON_TEXT_PL"></button>
+    <button ng-click="changeLanguage('en')" translate="BUTTON_TEXT_EN"></button>
+  </div>
   <div class="view-container">
     <div ng-include="'nav/_nav.html'"></div>
     <div ui-view class="view-frame animate-view"></div>
