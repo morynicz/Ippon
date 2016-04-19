@@ -47,4 +47,76 @@ describe ClubsController do
       end
     end
   end
+
+  describe "show" do
+    before do
+      xhr :get, :show, format: :json, id: club_id
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the club exists" do
+      let(:club) {
+        Club.create!(name: "ShowingClub", city: "CityOfShows", description: "They are quite revealing")
+      }
+      let(:club_id){club.id}
+
+      it{expect(response.status).to eq(200)}
+      it{expect(results["id"]).to eq(recipe.id)}
+      it{expect(results["name"]).to eq(recipe.name)}
+      it{expect(results["city"]).to eq(recipe.city)}
+      it{expect(results["description"]).to eq(recipe.description)}
+    end
+
+    context "when club doesn't exist" do
+      let(:club_id) {-9999}
+      it{expect(response.status).to eq(404)}
+    end
+  end
+
+  describe "create" do
+    before do
+      xhr :post, :create, format: :json, club: {
+        name: "CreatedClub",
+        city: "CreativeCity",
+        description: "Sooo creative"
+      }
+      end
+
+      it {expect(response.status).to eq(201)}
+      it {expect(Club.last.name).to eq("CreatedClub")}
+      it {expect(Club.last.city).to eq("CreativeCity")}
+      it {expect(Club.last.description).to eq("Sooo creative")}
+  end
+
+  describe "update" do
+    let(:club) {
+      Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
+    }
+
+    before do
+      xhr :put, :update, format: :json, id: club.id, club: {
+        name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
+      }
+      club.reload
+    end
+
+    it{expect(response.status).to eq(204)}
+    it{expect(club.name).to eq("ClubUpdateYo")}
+    it{expect(club.city).to eq("FutureCity")}
+    it{expect(club.description).to eq("So up to date that in the future")}
+  end
+
+  describe "destroy" do
+    before do
+      xhr :delete, :destroy, format: :json, id: club_id
+    end
+
+    let(:club_id) {
+      Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
+    }
+
+    it{expect(response.status).to eq(204)}
+    it{expect(Club.find_by_id(club_id)).to be_nil}
+  end
 end
