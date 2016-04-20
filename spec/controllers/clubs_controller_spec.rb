@@ -90,21 +90,35 @@ describe ClubsController do
   end
 
   describe "update" do
-    let(:club) {
-      Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
-    }
-
-    before do
-      xhr :put, :update, format: :json, id: club.id, club: {
-        name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
+    context "when the club exists" do
+      let(:club) {
+        Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
       }
-      club.reload
+
+      before do
+        xhr :put, :update, format: :json, id: club.id, club: {
+          name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
+        }
+        club.reload
+      end
+
+      it{expect(response.status).to eq(204)}
+      it{expect(club.name).to eq("ClubUpdateYo")}
+      it{expect(club.city).to eq("FutureCity")}
+      it{expect(club.description).to eq("So up to date that in the future")}
     end
 
-    it{expect(response.status).to eq(204)}
-    it{expect(club.name).to eq("ClubUpdateYo")}
-    it{expect(club.city).to eq("FutureCity")}
-    it{expect(club.description).to eq("So up to date that in the future")}
+    context "when the club doesn't exist" do
+      before do
+        xhr :put, :update, format: :json, id: club_id, club: {
+          name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
+        }
+      end
+
+      let(:club_id) {-9999}
+      it{expect(response.status).to eq(404)}
+    end
+
   end
 
   describe "destroy" do
@@ -112,11 +126,18 @@ describe ClubsController do
       xhr :delete, :destroy, format: :json, id: club_id
     end
 
-    let(:club_id) {
-      Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
-    }
+    context "when the club exists" do
+      let(:club_id) {
+        Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
+      }
 
-    it{expect(response.status).to eq(204)}
-    it{expect(Club.find_by_id(club_id)).to be_nil}
+      it{expect(response.status).to eq(204)}
+      it{expect(Club.find_by_id(club_id)).to be_nil}
+    end
+
+    context "when the club doesn't exist" do
+      let(:club_id) {-9999}
+      it{expect(response.status).to eq(404)}
+    end
   end
 end
