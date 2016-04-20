@@ -62,10 +62,10 @@ describe ClubsController do
       let(:club_id){club.id}
 
       it{expect(response.status).to eq(200)}
-      it{expect(results["id"]).to eq(recipe.id)}
-      it{expect(results["name"]).to eq(recipe.name)}
-      it{expect(results["city"]).to eq(recipe.city)}
-      it{expect(results["description"]).to eq(recipe.description)}
+      it{expect(results["id"]).to eq(club.id)}
+      it{expect(results["name"]).to eq(club.name)}
+      it{expect(results["city"]).to eq(club.city)}
+      it{expect(results["description"]).to eq(club.description)}
     end
 
     context "when club doesn't exist" do
