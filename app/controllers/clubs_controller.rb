@@ -6,7 +6,7 @@ class ClubsController < ApplicationController
   def create
     @club = Club.new(params.require(:club).permit(:name, :city, :description))
     @club.save
-    render 'index', status: 201
+    render 'show', status: 201
   end
 
   def new
