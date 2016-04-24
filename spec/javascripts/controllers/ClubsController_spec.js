@@ -35,7 +35,7 @@ describe('ClubsController', function() {
     httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('controller initialization', function(){
+  describe('index', function(){
     var clubs = [
       {
         id: 2,
