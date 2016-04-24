@@ -19,7 +19,6 @@ class ClubsController < ApplicationController
   end
 
   def destroy
-    puts 'destroy?'
     club = Club.find(params[:id])
     club.destroy
     head :no_content
