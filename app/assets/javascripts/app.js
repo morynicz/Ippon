@@ -1,4 +1,9 @@
-angular.module('ippon',['templates', 'ngRoute', 'ngResource', 'controllers']);
+angular.module('ippon',[
+	'templates',
+	'ngRoute',
+	'ngResource',
+	'controllers',
+]);
 
 angular.module('ippon').config([
 	'$routeProvider',
