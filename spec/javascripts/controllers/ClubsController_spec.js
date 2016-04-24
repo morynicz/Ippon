@@ -4,10 +4,17 @@ describe('ClubsController', function() {
   var location = null;
   var routeParams = null;
   var resource = null;
-
   var httpBackend = null;
+  var clubId = 42;
 
-  var setupController = function(results) {
+  var fakeClub = {
+    id: clubId,
+    name: "FakinClub",
+    city: "Fakeville",
+    description: "They are far from being real"
+  };
+
+  var setupController = function(clubExists, clubId, results) {
     return inject(function($location, $routeParams, $rootScope, $resource, $httpBackend, $controller) {
       scope = $rootScope.$new();
       location = $location;
@@ -15,9 +22,16 @@ describe('ClubsController', function() {
       routeParams = $routeParams;
       httpBackend = $httpBackend;
 
+      var request = null;
+
       if(results) {
-        var request = new RegExp("clubs");
+        request = new RegExp("clubs");
         httpBackend.expectGET(request).respond(results);
+      } else if (clubId) {
+        routeParams.clubId = clubId;
+        request = new RegExp("clubs/" + clubId);
+        results = (clubExists)?[200, fakeClub]:[404];
+        httpBackend.expectGET(request).respond(results[0], results[1]);
       }
 
       ctrl = $controller('ClubsController', {
@@ -52,11 +66,30 @@ describe('ClubsController', function() {
     ];
 
     beforeEach(function(){
-      setupController(clubs);
+      setupController(false,false,clubs);
       httpBackend.flush();
     });
     it('calls the back-end', function() {
       expect(scope.clubs).toEqualData(clubs);
+    });
+  });
+
+  describe('show',function(){
+    describe('club is found', function() {
+      beforeEach(setupController(true,42,false));
+      it('loads the given club', function() {
+        httpBackend.flush();
+        expect(scope.club).toEqualData(fakeClub);
+      });
+    });
+
+    describe('club is not found', function() {
+      beforeEach(setupController(false,42,false));
+      it('loads given club', function() {
+        httpBackend.flush();
+        expect(scope.club).toBe(null);
+        //flash about error
+      });
     });
   });
 });
