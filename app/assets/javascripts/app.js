@@ -17,10 +17,18 @@ angular.module('ippon').config([
 	    templateUrl: 'Clubs/_index.html',
 	    controller: 'ClubsController'
 	  })
+	  .when('/clubs/new', {
+	    templateUrl: 'Clubs/_form.html',
+	    controller: 'ClubsController'
+	  })
 	  .when('/clubs/:clubId', {
 	    templateUrl: 'Clubs/_show.html',
 	    controller: 'ClubsController'
 	  })
+	  .when('/clubs/:clubId/edit', {
+	    templateUrl: 'Clubs/_form.html',
+	    controller: 'ClubsController'
+	  });
 	}]);
 
 angular.module('controllers', ['ngResource']);

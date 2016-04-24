@@ -1,0 +1,42 @@
+<form class="form-horizontal" role="form" class="edit-user">
+  <div class="form-group" ng-class="{'has-warning has-feedback':errors.name}">
+    <label
+      for="name"
+      class="col-md-2 control-label col-md-offset-2">
+      Name
+    </label>
+    <div class="col-md-5">
+      <input type="text" name="name" class="form-control" placeholder="Osom club" ng-model="club.name">
+    </div>
+  </div>
+  <div class="form-group" ng-class="{'has-warning has-feedback':errors.name}">
+    <label
+      for="city"
+      class="col-md-2 control-label col-md-offset-2">
+      City
+    </label>
+    <div class="col-md-5">
+      <textarea name="city" class="form-control" ng-model='club.city' placeholder="Club city">
+      </textarea>
+    </div>
+  </div>
+  <div class="form-group" ng-class="{'has-warning has-feedback':errors.name}">
+    <label
+      for="description"
+      class="col-md-2 control-label col-md-offset-2">
+      Description
+    </label>
+    <div class="col-md-5">
+      <textarea name="description" class="form-control" ng-model='club.description' placeholder="New club from Club city">
+      </textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-3">
+      <button class="btn btn-default" ng-click="cancel()"> Cancel</button>
+    </div>
+    <div class="col-md-4 text-right">
+      <button class="btn btn-primary" ng-click="save()"> Save </button>
+    </div>
+  </div>
+</section>

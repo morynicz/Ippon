@@ -5,6 +5,13 @@ function($scope,$routeParams,$location,$resource){
     {
       clubId: "@id",
       format: "json"
+    }, {
+      'save' : {
+        method: 'PUT'
+      },
+      'create': {
+        method: 'POST'
+      }
     });
 
 
@@ -25,6 +32,14 @@ function($scope,$routeParams,$location,$resource){
     });
   }
 
+  $scope.index = function() {
+    $location.path(controllerRoot);
+  }
+
+  $scope.newClub = function(recipeId) {
+    $location.path(controllerRoot +"new");
+  }
+
   $scope.view = function(clubId) {
     return $location.path(controllerRoot + clubId);
   }
@@ -41,4 +56,24 @@ function($scope,$routeParams,$location,$resource){
     }
   };
 
+  $scope.save = function() {
+    var onError = function(_httpResponse) {
+      //TODO flash.error
+    }
+
+    if($scope.club.id) {
+      $scope.club.$save((function() {
+        $location.path(controllerRoot + $scope.club.id);
+      }), onError)
+    } else {
+      club.create($scope.club, (function(newClub) {
+        $location.path(controllerRoot + newClub.id);
+      }), onError);
+    }
+  };
+
+  $scope["delete"] = function() {
+    $scope.club.$delete();
+    $scope.index();
+  }
 }]);

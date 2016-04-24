@@ -92,4 +92,68 @@ describe('ClubsController', function() {
       });
     });
   });
+
+  describe('create', function() {
+    var newClub = {
+      id: 64,
+      name: 'Storm Club',
+      city: 'Crab City',
+      description: 'Very marine club'
+    };
+
+    beforeEach(function() {
+      setupController(false, false, false);
+      var request = new RegExp("\/clubs");
+      httpBackend.expectGET(request).respond([]);
+      httpBackend.expectPOST(request).respond(201, newClub);
+    });
+
+    it('post to the backend', function() {
+      scope.club.name = newClub.name;
+      scope.club.city = newClub.city;
+      scope.club.description = newClub.description;
+      scope.save();
+      httpBackend.flush();
+      expect(location.path()).toBe("/clubs/" + newClub.id);
+    });
+  });
+
+  describe('update', function() {
+    var updatedClub = {
+      name: "Updated Club",
+      city: "Updated Town",
+      description: "Updated as hell"
+    };
+
+    beforeEach(function() {
+      setupController(true, 42,false);
+      httpBackend.flush();
+      var request = new RegExp("clubs/");
+      httpBackend.expectPUT(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope.club.name = updatedClub.name;
+      scope.club.city = updatedClub.city;
+      scope.club.describe = updatedClub.description;
+      scope.save();
+      httpBackend.flush();
+      expect(location.path()).toBe("/clubs/" + scope.club.id);
+    });
+  });
+
+  describe('delete', function() {
+    beforeEach(function() {
+      setupController(true,42,false);
+      httpBackend.flush();
+      var request = new RegExp("clubs/" + scope.club.id);
+      httpBackend.expectDELETE(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope["delete"]();
+      httpBackend.flush();
+      expect(location.path()).toBe("/clubs/");
+    });
+  });
 });
