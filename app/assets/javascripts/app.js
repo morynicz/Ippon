@@ -1,34 +1,42 @@
 angular.module('ippon',[
 	'templates',
-	'ngRoute',
+	'ui.router',
 	'ngResource',
 	'controllers',
 ]);
 
 angular.module('ippon').config([
-	'$routeProvider',
-	function($routeProvider) {
+	'$stateProvider',
+	'$urlRouterProvider',
+	function($stateProvider, $urlRouterProvider) {
 
-	  $routeProvider.when('/', {
-	    templateUrl: 'Home/_index.html',
-	    controller: 'HomePageController'
-	  })
-	  .when('/clubs', {
+		$stateProvider.state('home',{
+			url: '/home',
+			templateUrl: 'Home/_index.html',
+			controller: 'HomePageController'
+		})
+	  .state('clubs', {
+			url: '/clubs',
 	    templateUrl: 'Clubs/_index.html',
 	    controller: 'ClubsController'
 	  })
-	  .when('/clubs/new', {
+	  .state('clubs_new',{
+			url: '/clubs/new',
 	    templateUrl: 'Clubs/_form.html',
 	    controller: 'ClubsController'
 	  })
-	  .when('/clubs/:clubId', {
+	  .state('clubs_show',{
+			url: '/clubs/:clubId',
 	    templateUrl: 'Clubs/_show.html',
 	    controller: 'ClubsController'
 	  })
-	  .when('/clubs/:clubId/edit', {
+	  .state('clubs_edit', {
+			url: '/clubs/:clubId/edit',
 	    templateUrl: 'Clubs/_form.html',
 	    controller: 'ClubsController'
 	  });
+
+		$urlRouterProvider.otherwise('home');
 	}]);
 
-angular.module('controllers', ['ngResource']);
+angular.module('controllers', ['ngResource', 'ui.router']);

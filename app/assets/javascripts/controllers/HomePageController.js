@@ -1,4 +1,4 @@
-angular.module('controllers').controller('HomePageController',['$scope','$routeParams',
-function($scope,$routeParams){
+angular.module('controllers').controller('HomePageController',['$scope','$stateParams',
+function($scope,$stateParams){
 
 }]);

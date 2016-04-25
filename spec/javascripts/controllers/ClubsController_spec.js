@@ -2,7 +2,7 @@ describe('ClubsController', function() {
   var scope = null;
   var ctrl = null;
   var location = null;
-  var routeParams = null;
+  var stateParams = null;
   var resource = null;
   var httpBackend = null;
   var clubId = 42;
@@ -15,11 +15,11 @@ describe('ClubsController', function() {
   };
 
   var setupController = function(clubExists, clubId, results) {
-    return inject(function($location, $routeParams, $rootScope, $resource, $httpBackend, $controller) {
+    return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller) {
       scope = $rootScope.$new();
       location = $location;
       resource = $resource;
-      routeParams = $routeParams;
+      stateParams = $stateParams;
       httpBackend = $httpBackend;
 
       var request = null;
@@ -28,7 +28,7 @@ describe('ClubsController', function() {
         request = new RegExp("clubs");
         httpBackend.expectGET(request).respond(results);
       } else if (clubId) {
-        routeParams.clubId = clubId;
+        stateParams.clubId = clubId;
         request = new RegExp("clubs/" + clubId);
         results = (clubExists)?[200, fakeClub]:[404];
         httpBackend.expectGET(request).respond(results[0], results[1]);
