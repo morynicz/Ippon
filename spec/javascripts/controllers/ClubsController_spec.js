@@ -2,10 +2,11 @@ describe('ClubsController', function() {
   var scope = null;
   var ctrl = null;
   var location = null;
-  var routeParams = null;
+  var stateParams = null;
   var resource = null;
   var httpBackend = null;
   var clubId = 42;
+  var state;
 
   var fakeClub = {
     id: clubId,
@@ -14,21 +15,29 @@ describe('ClubsController', function() {
     description: "They are far from being real"
   };
 
-  var setupController = function(clubExists, clubId, results) {
-    return inject(function($location, $routeParams, $rootScope, $resource, $httpBackend, $controller) {
+  var setupController = function(clubExists, clubId, results, stateName) {
+    return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
       scope = $rootScope.$new();
       location = $location;
       resource = $resource;
-      routeParams = $routeParams;
+      stateParams = $stateParams;
       httpBackend = $httpBackend;
 
+      state = $state;
+
+      $templateCache.put('Clubs/_index.html','');
+      $templateCache.put('Clubs/_show.html','');
+      $templateCache.put('Clubs/_form.html','');
+
+      state.go(stateName);
+      $rootScope.$apply();
       var request = null;
 
       if(results) {
         request = new RegExp("clubs");
         httpBackend.expectGET(request).respond(results);
       } else if (clubId) {
-        routeParams.clubId = clubId;
+        stateParams.clubId = clubId;
         request = new RegExp("clubs/" + clubId);
         results = (clubExists)?[200, fakeClub]:[404];
         httpBackend.expectGET(request).respond(results[0], results[1]);
@@ -36,9 +45,9 @@ describe('ClubsController', function() {
 
       ctrl = $controller('ClubsController', {
         $scope: scope,
-        $location: location
+        $location: location,
+        $state: state
       });
-
     });
   };
 
@@ -66,7 +75,7 @@ describe('ClubsController', function() {
     ];
 
     beforeEach(function(){
-      setupController(false,false,clubs);
+      setupController(false,false,clubs,'clubs');
       httpBackend.flush();
     });
     it('calls the back-end', function() {
@@ -76,7 +85,7 @@ describe('ClubsController', function() {
 
   describe('show',function(){
     describe('club is found', function() {
-      beforeEach(setupController(true,42,false));
+      beforeEach(setupController(true,42,false,'clubs_show'));
       it('loads the given club', function() {
         httpBackend.flush();
         expect(scope.club).toEqualData(fakeClub);
@@ -84,7 +93,7 @@ describe('ClubsController', function() {
     });
 
     describe('club is not found', function() {
-      beforeEach(setupController(false,42,false));
+      beforeEach(setupController(false,42,false,'clubs_show'));
       it('loads given club', function() {
         httpBackend.flush();
         expect(scope.club).toBe(null);
@@ -102,9 +111,8 @@ describe('ClubsController', function() {
     };
 
     beforeEach(function() {
-      setupController(false, false, false);
+      setupController(false, false, false, 'clubs_new');
       var request = new RegExp("\/clubs");
-      httpBackend.expectGET(request).respond([]);
       httpBackend.expectPOST(request).respond(201, newClub);
     });
 
@@ -113,8 +121,10 @@ describe('ClubsController', function() {
       scope.club.city = newClub.city;
       scope.club.description = newClub.description;
       scope.save();
+      scope.$apply();
       httpBackend.flush();
-      expect(location.path()).toBe("/clubs/" + newClub.id);
+      expect('#' + location.path()).toBe(state.href('clubs_show'));
+      expect(state.is('clubs_show')).toBe(true);
     });
   });
 
@@ -126,7 +136,7 @@ describe('ClubsController', function() {
     };
 
     beforeEach(function() {
-      setupController(true, 42,false);
+      setupController(true, 42,false,'clubs_edit');
       httpBackend.flush();
       var request = new RegExp("clubs/");
       httpBackend.expectPUT(request).respond(204);
@@ -138,13 +148,14 @@ describe('ClubsController', function() {
       scope.club.describe = updatedClub.description;
       scope.save();
       httpBackend.flush();
-      expect(location.path()).toBe("/clubs/" + scope.club.id);
+      expect('#'+location.path()).toBe(state.href('clubs_show',{clubId: scope.club.id}));
+      expect(state.is('clubs_show')).toBe(true);
     });
   });
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,42,false);
+      setupController(true,42,false,'clubs_show');
       httpBackend.flush();
       var request = new RegExp("clubs/" + scope.club.id);
       httpBackend.expectDELETE(request).respond(204);
@@ -152,8 +163,9 @@ describe('ClubsController', function() {
 
     it('posts to the backend', function() {
       scope["delete"]();
+      scope.$apply();
       httpBackend.flush();
-      expect(location.path()).toBe("/clubs/");
+      expect('#'+ location.path()).toBe(state.href('clubs'));
     });
   });
 });

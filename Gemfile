@@ -51,6 +51,9 @@ gem 'angular-rails-templates'
 #sprockets 3 don't play with angular :/
 gem 'sprockets'
 
+#csrf
+gem 'angular_rails_csrf'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
