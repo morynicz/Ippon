@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+ - 2.1
+ - jruby
+ - rbx
+
+install:
+ - npm install bower
+
+script: bundle exec bower:install
