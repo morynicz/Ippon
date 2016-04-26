@@ -21,20 +21,26 @@ function($scope, $stateParams, $location, $resource, $state){
 
 
 
-  if($stateParams.clubId) {
-    club.get({
-      clubId: $stateParams.clubId
-    }, function(club) {
-      $scope.club = club;
-    }, function(httpResponse) {
-      $scope.club = null;
-      //flash.error = 'There is no club with Id + $routeParams.clubId'
-    });
+  if($state.is('clubs_show') || $state.is('clubs_edit')) {
+    if(!$stateParams.clubId) {
+      $state.go('clubs');
+    } else {
+      club.get({
+        clubId: $stateParams.clubId
+      }, function(club) {
+        $scope.club = club;
+      }, function(httpResponse) {
+        $scope.club = null;
+        //flash.error = 'There is no club with Id + $routeParams.clubId'
+      });
+    }
   } else {
+    if($state.is('clubs')){
+      club.query(function(results) {
+        return $scope.clubs = results;
+      });
+    }
     $scope.club = {};
-    club.query(function(results) {
-      return $scope.clubs = results;
-    });
   }
 
   $scope.index = function() {
