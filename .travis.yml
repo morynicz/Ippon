@@ -6,5 +6,4 @@ install:
  - npm install
  - npm install -g bower
 
-script: bundle install
-script: rake bower:install
+script: bundle install; rake bower:install
