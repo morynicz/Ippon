@@ -8,4 +8,4 @@ install:
 
 before_script: bundle install; rake bower:install
 
-script: RAILS_ENV=test rake db:create; RAILS_ENV=test rake db:migrate; RAILS_ENV=test rake spec; RAILS_ENV=test rake teaspoon
+script: RAILS_ENV=test rake db:create && RAILS_ENV=test rake db:migrate && RAILS_ENV=test rake spec&& RAILS_ENV=test rake teaspoon
