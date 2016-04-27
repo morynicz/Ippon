@@ -49,7 +49,7 @@ gem 'bower-rails'
 gem 'angular-rails-templates'
 
 #sprockets 3 don't play with angular :/
-gem 'sprockets', '~> 2.12.4'
+gem 'sprockets'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
