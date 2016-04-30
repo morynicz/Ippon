@@ -1,4 +1,5 @@
 class ClubsController < ApplicationController
+  before_filter :authenticate_user!, only: [:create, :update, :destroy]
   def index
     @clubs = Club.all
   end

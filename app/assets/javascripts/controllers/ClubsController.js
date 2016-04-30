@@ -4,7 +4,8 @@ angular.module('ippon').controller('ClubsController',[
   '$location',
   '$resource',
   '$state',
-function($scope, $stateParams, $location, $resource, $state){
+  'Auth',
+function($scope, $stateParams, $location, $resource, $state, Auth){
   var controllerRoot = "/clubs/";
   var club = $resource(controllerRoot + ':clubId',
     {
@@ -91,4 +92,6 @@ function($scope, $stateParams, $location, $resource, $state){
     $scope.club.$delete();
     $scope.index();
   }
+
+  $scope.signedIn = Auth.isAuthenticated;
 }]);
