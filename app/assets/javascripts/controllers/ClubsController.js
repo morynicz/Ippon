@@ -1,4 +1,4 @@
-angular.module('controllers').controller('ClubsController',[
+angular.module('ippon').controller('ClubsController',[
   '$scope',
   '$stateParams',
   '$location',

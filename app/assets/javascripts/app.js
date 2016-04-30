@@ -2,7 +2,6 @@ angular.module('ippon',[
 	'templates',
 	'ui.router',
 	'ngResource',
-	'controllers',
 	'Devise'
 ]);
 
@@ -54,5 +53,3 @@ angular.module('ippon').config([
 
 		$urlRouterProvider.otherwise('home');
 	}]);
-
-	angular.module('controllers', ['ngResource', 'ui.router']);
