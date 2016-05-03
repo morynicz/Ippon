@@ -74,31 +74,56 @@ describe ClubsController do
     end
   end
 
+  def prepare_create
+    xhr :post, :create, format: :json, club: {
+      name: "CreatedClub",
+      city: "CreativeCity",
+      description: "Sooo creative"
+    }
+  end
+
   describe "create" do
-    before do
-      xhr :post, :create, format: :json, club: {
-        name: "CreatedClub",
-        city: "CreativeCity",
-        description: "Sooo creative"
-      }
+    context "when the user is not authorized" do
+      before do
+        prepare_create
+      end
+
+      it{expect(response.status).to eq(401)}
+    end
+
+    context "when the user is authorized" do
+      before do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in FactoryGirl.create(:user)
+
+        prepare_create
       end
 
       it {expect(response.status).to eq(201)}
       it {expect(Club.last.name).to eq("CreatedClub")}
       it {expect(Club.last.city).to eq("CreativeCity")}
       it {expect(Club.last.description).to eq("Sooo creative")}
+    end
+  end
+
+  def prepare_update(clubid, club)
+    xhr :put, :update, format: :json, id: clubid, club: club
   end
 
   describe "update" do
-    context "when the club exists" do
+    let(:update_club_hash) {{
+      name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
+    }}
+    context "when the club exists and user is authorized" do
       let(:club) {
         Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
       }
 
       before do
-        xhr :put, :update, format: :json, id: club.id, club: {
-          name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
-        }
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in FactoryGirl.create(:user)
+
+        prepare_update(club.id, update_club_hash)
         club.reload
       end
 
@@ -108,36 +133,57 @@ describe ClubsController do
       it{expect(club.description).to eq("So up to date that in the future")}
     end
 
-    context "when the club doesn't exist" do
+    context "when the club doesn't exist and user is authorized" do
       before do
-        xhr :put, :update, format: :json, id: club_id, club: {
-          name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
-        }
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in FactoryGirl.create(:user)
+
+        prepare_update(club_id,update_club_hash)
       end
 
       let(:club_id) {-9999}
       it{expect(response.status).to eq(404)}
     end
 
+    context "when user is not authorized" do
+      before do
+        prepare_update(club_id,update_club_hash)
+      end
+
+      let(:club_id) {-9999}
+      it{expect(response.status).to eq(401)}
+    end
+  end
+
+  def prepare_destroy
+    xhr :delete, :destroy, format: :json, id: club_id
   end
 
   describe "destroy" do
-    before do
-      xhr :delete, :destroy, format: :json, id: club_id
-    end
+    puts "dupa"
 
-    context "when the club exists" do
-      let(:club_id) {
-        Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
-      }
+    let(:club_id) {
+      Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
+    }
 
-      it{expect(response.status).to eq(204)}
-      it{expect(Club.find_by_id(club_id)).to be_nil}
-    end
+    context "when the user is authorized" do
+      before do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in FactoryGirl.create(:user)
 
-    context "when the club doesn't exist" do
-      let(:club_id) {-9999}
-      it{expect(response.status).to eq(404)}
+        prepare_destroy
+      end
+
+      context "when the club exists" do
+
+        it{expect(response.status).to eq(204)}
+        it{expect(Club.find_by_id(club_id)).to be_nil}
+      end
+
+      context "when the club doesn't exist" do
+        let(:club_id) {-9999}
+        it{expect(response.status).to eq(404)}
+      end
     end
   end
 end

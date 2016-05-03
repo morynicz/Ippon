@@ -67,6 +67,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'teaspoon-jasmine'
   gem 'phantomjs'
+  gem 'faker'
 end
 
 group :development do
