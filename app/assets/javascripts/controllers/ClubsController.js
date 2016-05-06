@@ -19,6 +19,11 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         method: 'POST'
       }
     });
+  var admins = $resource(controllerRoot + ':clubId' + '/admins',
+    {
+      clubId: "@id",
+      format: "json"
+    });
 
 
 
@@ -34,6 +39,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         $scope.club = null;
         //flash.error = 'There is no club with Id + $routeParams.clubId'
       });
+      admins.query({clubId: $stateParams.clubId},
+        function(results) {
+          return $scope.admins = results;
+        });
     }
   } else {
     if($state.is('clubs')){

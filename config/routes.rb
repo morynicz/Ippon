@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   resources :clubs, only: [:index, :show, :create, :update, :destroy]
+  get 'clubs/:id/admins' => 'clubs#admins'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
