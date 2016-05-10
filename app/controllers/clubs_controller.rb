@@ -1,18 +1,11 @@
 class ClubsController < ApplicationController
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
 
   def authorize_user
-    #head :unauthorized
     user = current_user
     club = Club.find(params[:id])
-
     head :unauathorized unless ClubAdmin.exists?(club_id: club.id, user_id: user.id)
-  end
-
-  def admins
-    club = Club.find(params[:id])
-    @admins = ClubAdmin.where(club_id: club.id).collect {|ca| User.find(ca.user_id)}
   end
 
   def index
@@ -23,7 +16,6 @@ class ClubsController < ApplicationController
     @club = Club.new(params.require(:club).permit(:name, :city, :description))
     @club.save
 
-    puts "new club id #{@club.id}"
     add_admin_for_club(@club.id, current_user.id)
     render 'show', status: 201
   end
@@ -39,12 +31,46 @@ class ClubsController < ApplicationController
 
   def destroy
     club = Club.find(params[:id])
+    admins = ClubAdmin.where(club_id: club.id)
+    for admin in admins
+      admin.destroy
+    end
     club.destroy
     head :no_content
   end
 
   def show
     @club = Club.find(params[:id])
+  end
+
+  def admins
+    club = Club.find(params[:id])
+    if user_signed_in? && ClubAdmin.exists?(club_id: club.id, user_id: current_user.id)
+      @admins = ClubAdmin.where(club_id: club.id).collect {|ca| User.find(ca.user_id)}
+      @users = User.all - @admins
+    else
+      @admins = []
+      @users = []
+    end
+  end
+
+  def add_admin
+    user_id = params[:user_id]
+    club_id = params[:id]
+    if User.exists?(user_id) && Club.exists?(club_id) && !ClubAdmin.exists?(club_id: club_id, user_id: user_id)
+      add_admin_for_club(club_id,user_id)
+    end
+    head :no_content
+  end
+
+  def delete_admin
+    user_id = params[:user_id]
+    club_id = params[:id]
+    if User.exists?(user_id) && Club.exists?(club_id) && (ClubAdmin.where(club_id: club_id).size > 1)
+      admin= ClubAdmin.find_by(club_id: club_id, user_id: user_id)
+      admin.destroy
+    end
+    head :no_content
   end
 
   def add_admin_for_club(club_id, user_id)

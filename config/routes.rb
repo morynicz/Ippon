@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   resources :clubs, only: [:index, :show, :create, :update, :destroy]
   get 'clubs/:id/admins' => 'clubs#admins'
+  post 'clubs/:id/admins/:user_id' => 'clubs#add_admin'
+  delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

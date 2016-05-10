@@ -19,10 +19,29 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         method: 'POST'
       }
     });
-  var admins = $resource(controllerRoot + ':clubId' + '/admins',
+  var admins = $resource(controllerRoot + ':clubId' + '/admins/' + ':adminId',
     {
-      clubId: "@id",
+      clubId: "@clubId",
       format: "json"
+    },{
+      'query_admins' : {
+        method: 'GET',
+        isArray: false
+      },
+      'create' : {
+        method: 'POST',
+        params: {
+          clubId: "@clubId",
+          adminId: "@adminId"
+        }
+      },
+      'delete' : {
+        method: 'DELETE',
+        params: {
+          clubId: "@clubId",
+          adminId: "@adminId"
+        }
+      }
     });
 
 
@@ -39,9 +58,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         $scope.club = null;
         //flash.error = 'There is no club with Id + $routeParams.clubId'
       });
-      admins.query({clubId: $stateParams.clubId},
+      admins.query_admins({clubId: $stateParams.clubId},
         function(results) {
-          return $scope.admins = results;
+          $scope.admins = results.admins;
+          $scope.users = results.users;
         });
     }
   } else {
@@ -103,4 +123,33 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   }
 
   $scope.signedIn = Auth.isAuthenticated;
+
+  $scope.addAdmin = function(userId) {
+    admins.create(
+      {
+        adminId: userId,
+        clubId: $scope.club.id
+      },function(result) {
+        admins.query_admins({clubId: $stateParams.clubId},
+          function(results) {
+            $scope.admins = results.admins;
+            $scope.users = results.users;
+          });
+      });
+
+  }
+
+  $scope.deleteAdmin = function(userId) {
+    admins.delete({
+      adminId: userId,
+      clubId: $scope.club.id
+    }, function(result){
+      admins.query_admins({clubId: $stateParams.clubId},
+        function(results) {
+          $scope.admins = results.admins;
+          $scope.users = results.users;
+        });
+    });
+
+  }
 }]);
