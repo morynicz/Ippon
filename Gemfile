@@ -68,6 +68,7 @@ group :development, :test do
   gem 'teaspoon-jasmine'
   gem 'phantomjs'
   gem 'faker'
+  gem 'test_after_commit'
 end
 
 group :development do

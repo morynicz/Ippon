@@ -48,6 +48,16 @@ describe ClubsController do
     end
   end
 
+  def prepare_user(authenticated = false, authorized = false, club_id = nil)
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+
+    if authenticated
+      user = FactoryGirl.create(:user)
+      sign_in user
+      ClubAdmin.create(club_id: club_id, user_id: user.id) if authorized
+    end
+  end
+
   describe "show" do
     before do
       xhr :get, :show, format: :json, id: club_id
@@ -85,17 +95,16 @@ describe ClubsController do
   describe "create" do
     context "when the user is not authorized" do
       before do
+        prepare_user
         prepare_create
       end
-
+      puts "#{User.all} "
       it{expect(response.status).to eq(401)}
     end
 
     context "when the user is authorized" do
       before do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in FactoryGirl.create(:user)
-
+        prepare_user(true, false)
         prepare_create
       end
 
@@ -106,8 +115,8 @@ describe ClubsController do
     end
   end
 
-  def prepare_update(clubid, club)
-    xhr :put, :update, format: :json, id: clubid, club: club
+  def prepare_update(club_id, club)
+    xhr :put, :update, format: :json, id: club_id, club: club
   end
 
   describe "update" do
@@ -120,9 +129,7 @@ describe ClubsController do
       }
 
       before do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in FactoryGirl.create(:user)
-
+        prepare_user(true,true,club.id)
         prepare_update(club.id, update_club_hash)
         club.reload
       end
@@ -135,9 +142,7 @@ describe ClubsController do
 
     context "when the club doesn't exist and user is authorized" do
       before do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in FactoryGirl.create(:user)
-
+        prepare_user(true,true)
         prepare_update(club_id,update_club_hash)
       end
 
@@ -147,6 +152,7 @@ describe ClubsController do
 
     context "when user is not authorized" do
       before do
+        prepare_user(true,false)
         prepare_update(club_id,update_club_hash)
       end
 
@@ -155,26 +161,22 @@ describe ClubsController do
     end
   end
 
-  def prepare_destroy
+  def prepare_destroy(club_id)
     xhr :delete, :destroy, format: :json, id: club_id
   end
 
   describe "destroy" do
-    puts "dupa"
-
     let(:club_id) {
       Club.create!(name: "End of the line club", city: "City of the end", description: "They are finished")
     }
 
     context "when the user is authorized" do
-      before do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in FactoryGirl.create(:user)
-
-        prepare_destroy
-      end
 
       context "when the club exists" do
+        before do
+          preapre_user(true,true,club_id)
+          prepare_destroy(club_id)
+        end
 
         it{expect(response.status).to eq(204)}
         it{expect(Club.find_by_id(club_id)).to be_nil}
@@ -182,6 +184,12 @@ describe ClubsController do
 
       context "when the club doesn't exist" do
         let(:club_id) {-9999}
+
+        before do
+          prepare_user(true,false)
+          prepare_destroy(club_id)
+        end
+
         it{expect(response.status).to eq(404)}
       end
     end

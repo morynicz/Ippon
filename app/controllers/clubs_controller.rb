@@ -1,6 +1,10 @@
 class ClubsController < ApplicationController
-  before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!, :derp, only: [:create]
   before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
+
+  def derp
+    puts "derp: #{user_signed_in?}"
+  end
 
   def authorize_user
     user = current_user
@@ -13,10 +17,13 @@ class ClubsController < ApplicationController
   end
 
   def create
+    puts "create: #{user_signed_in?}"
     @club = Club.new(params.require(:club).permit(:name, :city, :description))
+    @club.creator = current_user
     @club.save
 
-    add_admin_for_club(@club.id, current_user.id)
+    puts "#{@club.id} #{@club.name} #{@club.creator}"
+    #add_admin_for_club(@club.id, current_user.id)
     render 'show', status: 201
   end
 
