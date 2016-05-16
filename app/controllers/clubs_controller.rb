@@ -31,12 +31,14 @@ class ClubsController < ApplicationController
   end
 
   def update
+    puts "update: #{user_signed_in?}"
     club = Club.find(params[:id])
     club.update_attributes(params.require(:club).permit(:name, :city, :description))
     head :no_content
   end
 
   def destroy
+    puts "destroy: #{user_signed_in?}"
     club = Club.find(params[:id])
     admins = ClubAdmin.where(club_id: club.id)
     for admin in admins
