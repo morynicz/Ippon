@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe ClubsController do
   render_views
+
+  def prepare_user(authenticated = false, authorized = false, club_id = nil)
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+
+    if authenticated
+      user = FactoryGirl.create(:user)
+      sign_in user
+      ClubAdmin.create(club_id: club_id, user_id: user.id) if authorized
+    end
+  end
+
   describe "index" do
     before do
       Club.create!(name: 'Ryushinkai', city: 'Wrocław', description: 'Debeściaki');
@@ -45,16 +56,6 @@ describe ClubsController do
       it "should include 'HurHurHur' description" do
         expect(results.map(&extract_description)).to include('HurHurHur')
       end
-    end
-  end
-
-  def prepare_user(authenticated = false, authorized = false, club_id = nil)
-    @request.env["devise.mapping"] = Devise.mappings[:user]
-
-    if authenticated
-      user = FactoryGirl.create(:user)
-      sign_in user
-      ClubAdmin.create(club_id: club_id, user_id: user.id) if authorized
     end
   end
 
