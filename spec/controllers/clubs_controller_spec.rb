@@ -3,14 +3,12 @@ require 'spec_helper'
 describe ClubsController do
   render_views
 
-  def prepare_user(authenticated = false, authorized = false, club_id = nil)
-    @request.env["devise.mapping"] = Devise.mappings[:user]
+  def authorize_user(club_id)
+    ClubAdmin.create(club_id: club_id, user_id: current_user.id)
+  end
 
-    if authenticated
-      user = FactoryGirl.create(:user)
-      sign_in user
-      ClubAdmin.create(club_id: club_id, user_id: user.id) if authorized
-    end
+  before(:each) do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
   end
 
   describe "index" do
@@ -96,20 +94,16 @@ describe ClubsController do
   describe "create" do
     context "when the user is not authenticated" do
       before do
-        prepare_user
         prepare_create
       end
-      puts "cre un #{User.all} "
       it{expect(response.status).to eq(401)}
     end
 
-    context "when the user is authenticated" do
+    context "when the user is authenticated", authenticated: true do
       before do
-        prepare_user(true, false)
         prepare_create
       end
 
-      puts "cre au #{User.all} "
       it {expect(response.status).to eq(201)}
       it {expect(Club.last.name).to eq("CreatedClub")}
       it {expect(Club.last.city).to eq("CreativeCity")}
@@ -130,14 +124,13 @@ describe ClubsController do
         Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
       }
 
-      context "when the user is authorized" do
+      context "when the user is authorized", authenticated: true do
         before do
-          prepare_user(true,true,club.id)
+          authorize_user(club.id)
           prepare_update(club.id, update_club_hash)
           club.reload
         end
 
-        puts "up au #{User.all} "
         it{expect(response.status).to eq(204)}
         it{expect(club.name).to eq("ClubUpdateYo")}
         it{expect(club.city).to eq("FutureCity")}
@@ -146,13 +139,11 @@ describe ClubsController do
 
       context "when the user isn't authorized" do
         before do
-          prepare_user(true,false,club.id)
           prepare_update(club.id, update_club_hash)
           club.reload
         end
 
-        puts "up unau #{User.all} "
-        it{expect(response.status).to eq(500)}
+        it{expect(response.status).to eq(401)}
         it{expect(club.name).to eq("UpdatedClub")}
         it{expect(club.city).to eq("DateUpCity")}
         it{expect(club.description).to eq("They are up to date")}
@@ -175,10 +166,8 @@ describe ClubsController do
 
       context "when user is not authorized" do
         before do
-          prepare_user(true,false)
           prepare_update(club_id,update_club_hash)
         end
-        puts "up noc unau #{User.all} "
         it{expect(response.status).to eq(401)}
       end
     end
@@ -195,23 +184,20 @@ describe ClubsController do
 
     context "when the club exists" do
 
-      context "when the user is authorized" do
+      context "when the user is authorized", authenticated: true do
         before do
-          prepare_user(true,true,club.id)
+          authorize_user(club.id)
           prepare_destroy(club.id)
         end
-        puts "des au #{User.all} "
         it{expect(response.status).to eq(204)}
         it{expect(Club.find_by_id(club.id)).to be_nil}
       end
 
       context "when the user is not authorized" do
         before do
-          prepare_user(true,false)
           prepare_destroy(club.id)
         end
-        puts "des unau #{User.all} "
-        it{expect(response.status).to eq(500)}
+        it{expect(response.status).to eq(401)}
         it{expect(Club.exists?(club.id)).to be true}
       end
     end
@@ -230,11 +216,10 @@ describe ClubsController do
 
       context "when the user is not authorized" do
         before do
-          prepare_user(true,false)
           prepare_destroy(club_id)
         end
 
-        it{expect(response.status).to eq(500)}
+        it{expect(response.status).to eq(401)}
       end
     end
   end
