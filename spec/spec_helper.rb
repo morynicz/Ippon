@@ -5,7 +5,6 @@ require 'rspec/rails'
 
 #from tutorial
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'capybara/rails'
 
 #Devise
@@ -91,7 +90,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.include Devise::TestHelpers, type: :controller
 
