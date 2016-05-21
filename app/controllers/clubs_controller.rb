@@ -1,15 +1,15 @@
 class ClubsController < ApplicationController
-  before_filter :authenticate_user!, :derp, only: [:create]
+  before_filter :authenticate_user!, only: :create
   before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
 
-  def derp
-    puts "derp: #{user_signed_in?}"
-  end
-
   def authorize_user
-    user = current_user
-    club = Club.find(params[:id])
-    head :unauathorized unless ClubAdmin.exists?(club_id: club.id, user_id: user.id)
+    if user_signed_in?
+      user = current_user
+      club = Club.find(params[:id])
+      head :unauthorized unless ClubAdmin.exists?(club_id: club.id, user_id: user.id)
+    else
+      head :unauthorized
+    end
   end
 
   def index
@@ -17,28 +17,35 @@ class ClubsController < ApplicationController
   end
 
   def create
-    puts "create: #{user_signed_in?}"
-    @club = Club.new(params.require(:club).permit(:name, :city, :description))
-    @club.creator = current_user
-    @club.save
+    if user_signed_in?
 
-    puts "#{@club.id} #{@club.name} #{@club.creator}"
-    #add_admin_for_club(@club.id, current_user.id)
-    render 'show', status: 201
+      @club = Club.new(params.require(:club).permit(:name, :city, :description))
+      @club.creator = current_user
+      if @club.valid?
+        @club.save
+
+        render 'show', status: 201
+      else
+        head :unprocessable_entity
+      end
+    else
+      head :unauthorized
+    end
   end
 
   def new
   end
 
   def update
-    puts "update: #{user_signed_in?}"
     club = Club.find(params[:id])
-    club.update_attributes(params.require(:club).permit(:name, :city, :description))
-    head :no_content
+    if club.update_attributes(params.require(:club).permit(:name, :city, :description))
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
   end
 
   def destroy
-    puts "destroy: #{user_signed_in?}"
     club = Club.find(params[:id])
     admins = ClubAdmin.where(club_id: club.id)
     for admin in admins
