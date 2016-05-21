@@ -70,44 +70,32 @@ describe ClubsController do
       }
       let(:club_id){club.id}
 
-      it{expect(response.status).to eq(200)}
-      it{expect(results["id"]).to eq(club.id)}
-      it{expect(results["name"]).to eq(club.name)}
-      it{expect(results["city"]).to eq(club.city)}
-      it{expect(results["description"]).to eq(club.description)}
+      it "should return 200 status" do
+        expect(response.status).to eq(200)
+      end
+
+      it "should return result with correct id" do
+        expect(results["id"]).to eq(club.id)
+      end
+
+      it "should return result with correct name" do
+        expect(results["name"]).to eq(club.name)
+      end
+
+      it "should return result with correct city" do
+        expect(results["city"]).to eq(club.city)
+      end
+
+      it "should return result with correct description" do
+        expect(results["description"]).to eq(club.description)
+      end
     end
 
     context "when club doesn't exist" do
       let(:club_id) {-9999}
-      it{expect(response.status).to eq(404)}
-    end
-  end
-
-  def prepare_create
-    xhr :post, :create, format: :json, club: {
-      name: "CreatedClub",
-      city: "CreativeCity",
-      description: "Sooo creative"
-    }
-  end
-
-  describe "create" do
-    context "when the user is not authenticated" do
-      before do
-        prepare_create
+      it "should respond with 404 status" do
+        expect(response.status).to eq(404)
       end
-      it{expect(response.status).to eq(401)}
-    end
-
-    context "when the user is authenticated", authenticated: true do
-      before do
-        prepare_create
-      end
-
-      it {expect(response.status).to eq(201)}
-      it {expect(Club.last.name).to eq("CreatedClub")}
-      it {expect(Club.last.city).to eq("CreativeCity")}
-      it {expect(Club.last.description).to eq("Sooo creative")}
     end
   end
 
@@ -116,38 +104,76 @@ describe ClubsController do
   end
 
   describe "update" do
-    let(:update_club_hash) {{
-      name: "ClubUpdateYo", city: "FutureCity", description: "So up to date that in the future"
-    }}
+    let(:update_club_attrs) {
+      FactoryGirl::attributes_for(:club)
+    }
+    let(:club_attrs) {
+      FactoryGirl::attributes_for(:club)
+    }
     context "when the club exists" do
       let(:club) {
-        Club.create!(name: "UpdatedClub", city: "DateUpCity", description: "They are up to date")
+        Club.create!(club_attrs)
       }
 
       context "when the user is authorized", authenticated: true do
         before do
           authorize_user(club.id)
-          prepare_update(club.id, update_club_hash)
+          prepare_update(club.id, update_club_attrs)
           club.reload
         end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            expect(response.status).to eq(204)
+          end
 
-        it{expect(response.status).to eq(204)}
-        it{expect(club.name).to eq("ClubUpdateYo")}
-        it{expect(club.city).to eq("FutureCity")}
-        it{expect(club.description).to eq("So up to date that in the future")}
+          it "should update club name" do
+            expect(club.name).to eq(update_club_attrs[:name])
+          end
+
+          it "should update club city" do
+            expect(club.city).to eq(update_club_attrs[:city])
+          end
+
+          it "should update club description" do
+            expect(club.description).to eq(update_club_attrs[:description])
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_club_attrs) {
+            {
+              name: '',
+              city: ''
+            }
+          }
+
+          it "should not update club attributes" do
+            expect(club.name).to eq(club_attrs[:name])
+            expect(club.city).to eq(club_attrs[:city])
+            expect(club.description).to eq(club_attrs[:description])
+          end
+
+          it "should return unporcessable entity" do
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
       end
 
       context "when the user isn't authorized" do
         before do
-          prepare_update(club.id, update_club_hash)
+          prepare_update(club.id, update_club_attrs)
           club.reload
         end
 
-        it{expect(response.status).to eq(401)}
-        it{expect(club.name).to eq("UpdatedClub")}
-        it{expect(club.city).to eq("DateUpCity")}
-        it{expect(club.description).to eq("They are up to date")}
+        it "should respond with unauthorized status" do
+          expect(response).to have_http_status :unauthorized
+        end
 
+        it "should not update club attributes" do
+          expect(club.name).to eq(club_attrs[:name])
+          expect(club.city).to eq(club_attrs[:city])
+          expect(club.description).to eq(club_attrs[:description])
+        end
       end
     end
 
@@ -166,9 +192,11 @@ describe ClubsController do
 
       context "when user is not authorized" do
         before do
-          prepare_update(club_id,update_club_hash)
+          prepare_update(club_id,update_club_attrs)
         end
-        it{expect(response.status).to eq(401)}
+        it "should respond with unauthorized status" do
+          expect(response).to have_http_status :unauthorized
+        end
       end
     end
   end
@@ -189,16 +217,24 @@ describe ClubsController do
           authorize_user(club.id)
           prepare_destroy(club.id)
         end
-        it{expect(response.status).to eq(204)}
-        it{expect(Club.find_by_id(club.id)).to be_nil}
+        it "should respond with 204 status" do
+          expect(response.status).to eq(204)
+        end
+        it "should not be able to find deleted club" do
+          expect(Club.find_by_id(club.id)).to be_nil
+        end
       end
 
       context "when the user is not authorized" do
         before do
           prepare_destroy(club.id)
         end
-        it{expect(response.status).to eq(401)}
-        it{expect(Club.exists?(club.id)).to be true}
+        it "should respond with unauthorized status" do
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the club" do
+          expect(Club.exists?(club.id)).to be true
+        end
       end
     end
 
@@ -219,7 +255,64 @@ describe ClubsController do
           prepare_destroy(club_id)
         end
 
-        it{expect(response.status).to eq(401)}
+        it "should respond with unauthorized status" do
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
+
+  describe "POST :create" do
+    let(:attributes) {  FactoryGirl.attributes_for(:club) }
+    let(:action) do
+        xhr :post, :create, format: :json, club: attributes
+    end
+
+    context "when the user is not authenticated" do
+      it "does not create a club" do
+        expect {
+          action
+        }.to_not change(Club, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "with invalid attributes" do
+
+        let(:attributes) do
+          {
+             name: '',
+             city: ''
+          }
+        end
+
+        it "does not create a club" do
+          expect {
+            action
+          }.to_not change(Club, :count)
+        end
+
+        it "returns the correct status" do
+          action
+          expect(response).to have_http_status :unprocessable_entity
+        end
+      end
+      context "with valid attributes" do
+        it "creates a club" do
+          expect {
+            action
+          }.to change(Club, :count).by(1)
+        end
+
+        it "returns the correct status" do
+          action
+          expect(response).to be_successful
+        end
       end
     end
   end
