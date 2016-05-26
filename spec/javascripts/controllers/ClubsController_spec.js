@@ -51,6 +51,21 @@ describe('ClubsController', function() {
     });
   };
 
+  var setupAdmins = function(clubId,admins,users) {
+    if(admins == null) {
+      admins = [
+        {
+          id: "0",
+          username: "uname"
+        }
+      ];
+    }
+    httpBackend.expectGET(new RegExp("clubs/" + clubId + "/admins")).respond({
+      admins: admins,
+      users: users
+    });
+  };
+
   beforeEach(module('ippon'));
 
   afterEach(function(){
@@ -85,7 +100,10 @@ describe('ClubsController', function() {
 
   describe('show',function(){
     describe('club is found', function() {
-      beforeEach(setupController(true,42,false,'clubs_show'));
+      beforeEach(function() {
+        setupController(true,42,false,'clubs_show');
+        setupAdmins(42,null,[]);
+      });
       it('loads the given club', function() {
         httpBackend.flush();
         expect(scope.club).toEqualData(fakeClub);
@@ -156,6 +174,7 @@ describe('ClubsController', function() {
   describe('delete', function() {
     beforeEach(function() {
       setupController(true,42,false,'clubs_show');
+      setupAdmins(42,null,[]);
       httpBackend.flush();
       var request = new RegExp("clubs/" + scope.club.id);
       httpBackend.expectDELETE(request).respond(204);
