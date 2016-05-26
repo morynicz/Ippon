@@ -54,15 +54,19 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         clubId: $stateParams.clubId
       }, function(club) {
         $scope.club = club;
+        if ($state.is('clubs_show')) {
+          admins.query_admins({clubId: $stateParams.clubId},
+            function(results) {
+              $scope.admins = results.admins;
+              $scope.users = results.users;
+            }
+          );
+        }
       }, function(httpResponse) {
         $scope.club = null;
         //flash.error = 'There is no club with Id + $routeParams.clubId'
       });
-      admins.query_admins({clubId: $stateParams.clubId},
-        function(results) {
-          $scope.admins = results.admins;
-          $scope.users = results.users;
-        });
+
     }
   } else {
     if($state.is('clubs')){
