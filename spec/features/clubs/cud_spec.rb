@@ -17,7 +17,7 @@ feature 'Creating editing and deleting a club', js: true do
 
     visit "#/clubs/"
 
-    click_on "New Club..."
+    click_on "new-club"
 
     fill_in "name", with: cl1.name
     fill_in "city", with: cl1.city
