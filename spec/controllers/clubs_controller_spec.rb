@@ -387,4 +387,64 @@ describe ClubsController do
       end
     end
   end
+
+  describe "POST add_admin" do
+
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+
+    let(:tested_user) {
+      FactoryGirl::create(:user)
+    }
+
+    let(:action) {
+      xhr :post, :add_admin, format: :json, id: club.id, user_id: tested_user.id
+    }
+
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of admins" do
+        expect {
+          action
+        }.to_not change(ClubAdmin, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of admins" do
+          expect {
+            action
+          }.to_not change(ClubAdmin, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(club.id)
+        end
+
+        it "returns OK status" do
+          action
+          expect(response).to have_http_status :no_content
+        end
+
+        it "adds the user to admins of given club" do
+          action
+          expect(ClubAdmin.where(club_id: club.id).size).to eq(2)
+          expect(ClubAdmin.exists?(club_id: club.id, user_id: tested_user.id)).to be true
+        end
+      end
+    end
+  end
 end
