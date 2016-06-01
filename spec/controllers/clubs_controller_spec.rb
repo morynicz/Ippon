@@ -316,4 +316,75 @@ describe ClubsController do
       end
     end
   end
+
+  describe "GET: admins" do
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+    let(:action) {
+      xhr :get, :admins, format: :json, id: club.id
+    }
+
+    before do
+      user1 = FactoryGirl::create(:user)
+      user2 = FactoryGirl::create(:user)
+      user3 = FactoryGirl::create(:user)
+      user_not_admin1 = FactoryGirl::create(:user)
+      user_not_admin2 = FactoryGirl::create(:user)
+
+      ClubAdmin.create(club_id: club.id, user_id: user1.id)
+      ClubAdmin.create(club_id: club.id, user_id: user2.id)
+      ClubAdmin.create(club_id: club.id, user_id: user3.id)
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "returns response with no admins or users" do
+        action
+        expect(results["admins"]).to be nil
+        expect(results["users"]).to be nil
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when the user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "returns response body to be empty" do
+          action
+          expect(response.body.empty?).to be true
+        end
+      end
+
+      context "when the user is authorized" do
+        before do
+          ClubAdmin.create(club_id: club.id, user_id: current_user.id)
+        end
+
+        it "returns success status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns three current admins" do
+          action
+          expect(results["admins"].size).to eq(4)
+        end
+
+        it "returns two non-admin users" do
+          action
+          expect(results["users"].size).to eq(2)
+        end
+      end
+    end
+  end
 end
