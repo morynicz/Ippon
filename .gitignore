@@ -39,3 +39,6 @@ bower.json
 
 # Remaings after emacs...
 *~
+
+#byebug history
+.byebug_history
