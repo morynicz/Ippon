@@ -75,8 +75,10 @@ class ClubsController < ApplicationController
     club_id = params[:id]
     if User.exists?(user_id) && Club.exists?(club_id) && !ClubAdmin.exists?(club_id: club_id, user_id: user_id)
       add_admin_for_club(club_id,user_id)
+      head :no_content
+    else
+      head :bad_request
     end
-    head :no_content
   end
 
   def delete_admin
@@ -85,8 +87,10 @@ class ClubsController < ApplicationController
     if User.exists?(user_id) && Club.exists?(club_id) && (ClubAdmin.where(club_id: club_id).size > 1)
       admin= ClubAdmin.find_by(club_id: club_id, user_id: user_id)
       admin.destroy
+      head :no_content
+    else
+      head :bad_request
     end
-    head :no_content
   end
 
   def add_admin_for_club(club_id, user_id)
