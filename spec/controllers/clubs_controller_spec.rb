@@ -367,7 +367,7 @@ describe ClubsController do
 
       context "when the user is authorized" do
         before do
-          ClubAdmin.create(club_id: club.id, user_id: current_user.id)
+          authorize_user(club.id)
         end
 
         it "returns success status" do
@@ -434,17 +434,35 @@ describe ClubsController do
           authorize_user(club.id)
         end
 
-        it "returns OK status" do
-          action
-          expect(response).to have_http_status :no_content
+        context "when added user is not admin already" do
+          it "returns OK status" do
+            action
+            expect(response).to have_http_status :no_content
+          end
+
+          it "adds the user to admins of given club" do
+            action
+            expect(ClubAdmin.where(club_id: club.id).size).to eq(2)
+            expect(ClubAdmin.exists?(club_id: club.id, user_id: tested_user.id)).to be true
+          end
         end
 
-        it "adds the user to admins of given club" do
-          action
-          expect(ClubAdmin.where(club_id: club.id).size).to eq(2)
-          expect(ClubAdmin.exists?(club_id: club.id, user_id: tested_user.id)).to be true
+        context "when the user is already an andmin" do
+          before do
+            ClubAdmin.create(club_id: club.id, user_id: tested_user.id)
+          end
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change admin count" do
+            expect { action }.not_to change(ClubAdmin, :count)
+          end
         end
+
       end
     end
   end
+
 end
