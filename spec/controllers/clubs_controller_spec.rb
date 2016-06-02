@@ -465,4 +465,80 @@ describe ClubsController do
     end
   end
 
+  describe "DELETE delete_admin" do
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+
+    let(:tested_user) {
+      FactoryGirl::create(:user)
+    }
+
+    let(:action) {
+      xhr :delete, :delete_admin, format: :json, id: club.id, user_id: tested_user.id
+    }
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of admins" do
+        expect {
+          action
+        }.to_not change(ClubAdmin, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of admins" do
+          expect {
+            action
+          }.to_not change(ClubAdmin, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(club.id)
+        end
+
+        context "when the deleted admin is not an admin" do
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change admin count" do
+            expect { action }.not_to change(ClubAdmin, :count)
+          end
+        end
+
+        context "when the deleted admin is an admin" do
+          before do
+            ClubAdmin.create(club_id: club.id, user_id: tested_user.id)
+          end
+
+          context "when added user is not admin already" do
+            it "returns OK status" do
+              action
+              expect(response).to have_http_status :no_content
+            end
+
+            it "removes the deleted admin from admins of given club" do
+              action
+              expect(ClubAdmin.where(club_id: club.id).size).to eq(1)
+              expect(ClubAdmin.exists?(club_id: club.id, user_id: tested_user.id)).to be false
+            end
+          end
+        end
+      end
+    end
+  end
 end
