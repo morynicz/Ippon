@@ -14,7 +14,7 @@ feature 'Creating editing and deleting a club', js: true do
     click_on "Log In"
   end
 
-  scenario "Create a club when user exists" do
+  scenario "Create a club when user exists", :raceable do
     visit "#/clubs/"
 
     click_on "new-club"

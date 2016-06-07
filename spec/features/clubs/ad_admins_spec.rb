@@ -30,8 +30,7 @@ feature "Adding and removing admins", js: true do
     visit "#/home"
   end
 
-  scenario "Add an admin" do
-    visit "#/clubs/"
+  scenario "Add an admin", :raceable do
     visit "#/clubs/"
 
     click_on club.name
@@ -44,8 +43,7 @@ feature "Adding and removing admins", js: true do
     end
   end
 
-  scenario "Delete an admin" do
-    visit "#/clubs/"
+  scenario "Delete an admin", :raceable do
     visit "#/clubs/"
 
     click_on club.name
