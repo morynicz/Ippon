@@ -19,7 +19,7 @@
     <div ng-show="signedIn() && admins && users" >
         <ul class="list-unstyled">
           <li ng-repeat="admin in admins">
-            <section class="well col-md-6 col-md-offset-3">
+            <section id="{{admin.username}}-admin-row" class="well col-md-6 col-md-offset-3">
               <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
                 {{admin.username}}
                 <button ng-click="deleteAdmin(admin.id)" class="btn btn-danger" id="delete-admin"> Delete </button>
@@ -29,7 +29,7 @@
         </ul>
         <ul class="list-unstyled">
           <li ng-repeat="user in users">
-            <section class="well col-md-6 col-md-offset-3">
+            <section id="{{user.username}}-user-row" class="well col-md-6 col-md-offset-3">
               <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
                 {{user.username}}
                 <button ng-click="addAdmin(user.id)" class="btn btn-info"> Add </button>
