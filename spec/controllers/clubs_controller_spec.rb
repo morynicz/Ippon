@@ -12,11 +12,11 @@ describe ClubsController do
   end
 
   describe "index" do
+    let(:club_list) {
+      FactoryGirl::create_list(:club,3)
+    }
     before do
-      Club.create!(name: 'Ryushinkai', city: 'Wrocław', description: 'Debeściaki');
-      Club.create!(name: 'Innyfajnyklub', city: 'Miastów', description: 'Mlody ale cool');
-      Club.create!(name: 'NiemamPomyslu', city: 'Gdzies', description: 'HurHurHur');
-
+      club_list
       xhr :get, :index, format: :json
     end
 
@@ -44,15 +44,15 @@ describe ClubsController do
       end
 
       it "should include 'Ryushinkai' name" do
-        expect(results.map(&extract_name)).to include('Ryushinkai')
+        expect(results.map(&extract_name)).to include(club_list[0].name)
       end
 
       it "should include 'Miastów' city" do
-        expect(results.map(&extract_city)).to include('Miastów')
+        expect(results.map(&extract_city)).to include(club_list[1].city)
       end
 
       it "should include 'HurHurHur' description" do
-        expect(results.map(&extract_description)).to include('HurHurHur')
+        expect(results.map(&extract_description)).to include(club_list[2].description)
       end
     end
   end
@@ -66,7 +66,7 @@ describe ClubsController do
 
     context "when the club exists" do
       let(:club) {
-        Club.create!(name: "ShowingClub", city: "CityOfShows", description: "They are quite revealing")
+        FactoryGirl::create(:club)
       }
       let(:club_id){club.id}
 
