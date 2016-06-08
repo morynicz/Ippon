@@ -4,7 +4,6 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
 #from tutorial
-require 'rspec/rails'
 require 'capybara/rails'
 
 #Devise
