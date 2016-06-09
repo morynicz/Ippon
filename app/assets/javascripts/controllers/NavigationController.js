@@ -2,7 +2,7 @@ angular.module('ippon').controller('NavigationController',[
   '$scope',
   'Auth',
   '$translate',
-function($scope, Auth, $tranlsate) {
+function($scope, Auth, $translate) {
   $scope.signedIn = Auth.isAuthenticated;
   $scope.logout = Auth.logout;
 
@@ -19,6 +19,6 @@ function($scope, Auth, $tranlsate) {
   });
 
   $scope.changeLanguage = function(langKey) {
-    $tranlsate.use(langKey);
+    $translate.use(langKey);
   };
 }]);
