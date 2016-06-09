@@ -3,20 +3,20 @@
     <label
       for="name"
       class="col-md-2 control-label col-md-offset-2">
-      Name
+      {{'CLUB_NAME'|translate}}
     </label>
     <div class="col-md-5">
-      <input type="text" name="name" class="form-control" placeholder="Osom club" ng-model="club.name">
+      <input type="text" name="name" class="form-control" placeholder="{{'CLUB_NAME_PLACEHOLDER' | translate}}" ng-model="club.name">
     </div>
   </div>
   <div class="form-group" ng-class="{'has-warning has-feedback':errors.name}">
     <label
       for="city"
       class="col-md-2 control-label col-md-offset-2">
-      City
+      {{'CLUB_CITY'|translate}}
     </label>
     <div class="col-md-5">
-      <textarea name="city" class="form-control" ng-model='club.city' placeholder="Club city">
+      <textarea name="city" class="form-control" ng-model='club.city' placeholder="{{'CLUB_CITY_PLACEHOLDER' | translate}}">
       </textarea>
     </div>
   </div>
@@ -24,19 +24,19 @@
     <label
       for="description"
       class="col-md-2 control-label col-md-offset-2">
-      Description
+      {{'CLUB_DESCRIPTION'|translate}}
     </label>
     <div class="col-md-5">
-      <textarea name="description" class="form-control" ng-model='club.description' placeholder="New club from Club city">
+      <textarea name="description" class="form-control" ng-model='club.description' placeholder="{{'CLUB_DESCRIPTION_PLACEHOLDER'|translate}}">
       </textarea>
     </div>
   </div>
   <div class="form-group">
     <div class="col-md-offset-2 col-md-3">
-      <button class="btn btn-default" ng-click="cancel()"> Cancel</button>
+      <button class="btn btn-default" ng-click="cancel()" id="cancel-button">{{'CANCEL'|translate}}</button>
     </div>
     <div class="col-md-4 text-right">
-      <button class="btn btn-primary" ng-click="save()"> Save </button>
+      <button class="btn btn-primary" ng-click="save()" id="save-button">{{'SAVE'|translate}}</button>
     </div>
   </div>
 </section>
