@@ -1,4 +1,4 @@
-module ControllerRaceHelpers
+module FeatureRaceHelpers
   extend ActiveSupport::Concern
   included do
     before do |ex|
