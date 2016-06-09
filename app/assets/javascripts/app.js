@@ -56,17 +56,57 @@ angular.module('ippon').config([
 
 		$translateProvider.translations('en', {
 			CLUBS: "Clubs",
-			HOME: "Ippon Home Page",
+			HOME: "Home Page",
+
+			LANGUAGE: "Language",
+
+			LOG_IN: "Log In",
+			REGISTER: "Register",
+			LOG_OUT: "Log Out",
+
+			ADD: "Add",
+			EDIT: "Edit",
+			DELETE: "Delete",
+			CANCEL: "Cancel",
+			SAVE: "Save",
+			INDEX: "Index",
+
+			HOME_TITLE: "Ippon Home Page",
 			HOME_TEXT: "Here shall be some links",
-			BUTTON_TEXT_EN: "English",
-			BUTTON_TEXT_PL: "Polish"
+
+			CLUB_NAME: "Name",
+			CLUB_NAME_PLACEHOLDER: "Osoms",
+			CLUB_CITY: "City",
+			CLUB_CITY_PLACEHOLDER: "Samuraiville",
+			CLUB_DESCRIPTION: "Description",
+			CLUB_DESCRIPTION_PLACEHOLDER: "Strongest club around"
 		})
 		.translations('pl', {
 			CLUBS: "Kluby",
-			HOME: "Strona domowa Ippon",
+			HOME: "Strona Domowa",
+
+			LANGUAGE: "Język",
+
+			LOG_IN: "Zaloguj",
+			REGISTER: "Zarejestruj",
+			LOG_OUT: "Wyloguj",
+
+			ADD: "Dodaj",
+			EDIT: "Edytuj",
+			DELETE: "Usuń",
+			CANCEL: "Anuluj",
+			SAVE: "Zapisz",
+			INDEX: "Spis",
+
+			HOME_TITLE: "Strona domowa Ippon",
 			HOME_TEXT: "Tu pojawią się linki",
-			BUTTON_TEXT_EN: "Angielski",
-			BUTTON_TEXT_PL: "Polski"
+
+			CLUB_NAME: "Nazwa",
+			CLUB_NAME_PLACEHOLDER: "Superkai",
+			CLUB_CITY: "Miasto",
+			CLUB_CITY_PLACEHOLDER: "Samurajów",
+			CLUB_DESCRIPTION: "Opis",
+			CLUB_DESCRIPTION_PLACEHOLDER: "Najlepszy klub w okolicy"
 		});
 
 		$translateProvider.useSanitizeValueStrategy('escape');

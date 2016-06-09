@@ -9,11 +9,11 @@
   <section>
     <div class="col-md-9">
       <button ng-click="index()" class="btn btn-default">
-        &larr; Index
+        &larr; {{'INDEX' | translate}}
       </button>
       <div ng-show="signedIn()" class="col-md-9 text-right btn-group">
-        <button ng-click="edit()" class="btn btn-info"> Edit </button>
-        <button ng-click="delete()" class="btn btn-danger" id="delete-club"> Delete </button>
+        <button ng-click="edit()" class="btn btn-info"> {{'EDIT' | translate}} </button>
+        <button ng-click="delete()" class="btn btn-danger" id="delete-club"> {{'DELETE' | translate}} </button>
       </div>
     </div>
     <div ng-show="signedIn() && admins && users" >
@@ -21,8 +21,8 @@
           <li ng-repeat="admin in admins">
             <section id="{{admin.username}}-admin-row" class="well col-md-6 col-md-offset-3">
               <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
-                {{admin.username}}
-                <button ng-click="deleteAdmin(admin.id)" class="btn btn-danger" id="delete-admin"> Delete </button>
+                <span>{{admin.username}}</span><span>
+                <button ng-click="deleteAdmin(admin.id)" class="btn btn-danger" id="delete-admin"> {{'DELETE' | translate}} </button></span>
               </h1>
             </section>
           </li>
@@ -32,7 +32,7 @@
             <section id="{{user.username}}-user-row" class="well col-md-6 col-md-offset-3">
               <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
                 {{user.username}}
-                <button ng-click="addAdmin(user.id)" class="btn btn-info" id="add-admin" > Add </button>
+                <button ng-click="addAdmin(user.id)" class="btn btn-info" id="add-admin" > {{'ADD' | translate}} </button>
               </h1>
             </section>
           </li>
