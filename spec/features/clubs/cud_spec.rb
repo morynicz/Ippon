@@ -12,6 +12,7 @@ feature 'Creating editing and deleting a club', js: true do
     fill_in "password", with: user.password
 
     click_on "Log In"
+    visit "#/home/"
   end
 
   scenario "Create a club when user exists", :raceable do
