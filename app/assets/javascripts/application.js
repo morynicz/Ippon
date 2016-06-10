@@ -19,4 +19,5 @@
 //= require angular-devise
 //= require bootstrap-sass-official/assets/javascripts/bootstrap
 //= require angular-translate/angular-translate
+//= require angular-translate-loader-static-files/angular-translate-loader-static-files
 //= require_tree .
