@@ -29,7 +29,7 @@ feature "Viewing a Club", js: true do
     expect(page).to have_content(cl1city)
     expect(page).to have_content(cl1description)
 
-    click_on "Index"
+    click_on "index-club"
 
     expect(page).to have_content(cl2name)
     expect(page).to_not have_content(cl2city)
