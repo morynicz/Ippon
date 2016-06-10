@@ -74,6 +74,10 @@ angular.module('ippon').config([
 			HOME_TITLE: "Ippon Home Page",
 			HOME_TEXT: "Here shall be some links",
 
+			AUTH_EMAIL: "Email",
+			AUTH_USERNAME: "Username",
+			AUTH_PASSWORD: "Password",
+
 			CLUB_NAME: "Name",
 			CLUB_NAME_PLACEHOLDER: "Osoms",
 			CLUB_CITY: "City",
