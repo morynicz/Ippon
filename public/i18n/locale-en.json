@@ -1,0 +1,27 @@
+{
+  "CLUBS": "Clubs",
+  "HOME": "Home Page",
+
+  "LANGUAGE": "Language",
+
+  "LOG_IN": "Log In",
+  "REGISTER": "Register",
+  "LOG_OUT": "Log Out",
+
+  "ADD": "Add",
+  "EDIT": "Edit",
+  "DELETE": "Delete",
+  "CANCEL": "Cancel",
+  "SAVE": "Save",
+  "INDEX": "Index",
+
+  "HOME_TITLE": "Ippon Home Page",
+  "HOME_TEXT": "Here shall be some links",
+
+  "CLUB_NAME": "Name",
+  "CLUB_NAME_PLACEHOLDER": "Osoms",
+  "CLUB_CITY": "City",
+  "CLUB_CITY_PLACEHOLDER": "Samuraiville",
+  "CLUB_DESCRIPTION": "Description",
+  "CLUB_DESCRIPTION_PLACEHOLDER": "Strongest club around"
+}

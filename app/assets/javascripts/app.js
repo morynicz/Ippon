@@ -80,33 +80,11 @@ angular.module('ippon').config([
 			CLUB_CITY_PLACEHOLDER: "Samuraiville",
 			CLUB_DESCRIPTION: "Description",
 			CLUB_DESCRIPTION_PLACEHOLDER: "Strongest club around"
-		})
-		.translations('pl', {
-			CLUBS: "Kluby",
-			HOME: "Strona Domowa",
+		});
 
-			LANGUAGE: "Język",
-
-			LOG_IN: "Zaloguj",
-			REGISTER: "Zarejestruj",
-			LOG_OUT: "Wyloguj",
-
-			ADD: "Dodaj",
-			EDIT: "Edytuj",
-			DELETE: "Usuń",
-			CANCEL: "Anuluj",
-			SAVE: "Zapisz",
-			INDEX: "Spis",
-
-			HOME_TITLE: "Strona domowa Ippon",
-			HOME_TEXT: "Tu pojawią się linki",
-
-			CLUB_NAME: "Nazwa",
-			CLUB_NAME_PLACEHOLDER: "Superkai",
-			CLUB_CITY: "Miasto",
-			CLUB_CITY_PLACEHOLDER: "Samurajów",
-			CLUB_DESCRIPTION: "Opis",
-			CLUB_DESCRIPTION_PLACEHOLDER: "Najlepszy klub w okolicy"
+		$translateProvider.useStaticFilesLoader({
+			prefix: "/i18n/locale-",
+			suffix: ".json"
 		});
 
 		$translateProvider.useSanitizeValueStrategy('escape');
