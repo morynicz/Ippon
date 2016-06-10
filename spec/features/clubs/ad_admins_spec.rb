@@ -26,7 +26,7 @@ feature "Adding and removing admins", js: true do
     fill_in "email", with: adm.email
     fill_in "password", with: adm.password
 
-    click_on "Log In"
+    click_on "log-in-button"
     visit "#/home"
   end
 
@@ -35,7 +35,7 @@ feature "Adding and removing admins", js: true do
 
     click_on club.name
     within('h1', :text =>"#{not_admins[0].username}") do
-      click_on "Add"
+      click_on "add-admin"
     end
 
     within('h1', :text =>"#{not_admins[0].username}") do
@@ -49,7 +49,7 @@ feature "Adding and removing admins", js: true do
     click_on club.name
 
     within('h1', :text =>"#{admins[3].username}") do
-      click_on "Delete"
+      click_on "delete-admin"
     end
 
     within('h1', :text =>"#{admins[3].username}") do

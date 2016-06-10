@@ -11,7 +11,7 @@ feature 'Creating editing and deleting a club', js: true do
     fill_in "email", with: user.email
     fill_in "password", with: user.password
 
-    click_on "Log In"
+    click_on "log-in-button"
     visit "#/home/"
   end
 
@@ -24,7 +24,7 @@ feature 'Creating editing and deleting a club', js: true do
     fill_in "city", with: cl1[:city]
     fill_in "description",with: cl1[:description]
 
-    click_on "Save"
+    click_on "save-club"
 
     expect(page).to have_content(cl1[:name])
     expect(page).to have_content(cl1[:city])
@@ -39,13 +39,13 @@ feature 'Creating editing and deleting a club', js: true do
 
     click_on cl1[:name]
 
-    click_on "Edit"
+    click_on "edit-club"
 
     fill_in "name", with: cl2[:name]
     fill_in "city", with: cl2[:city]
     fill_in "description",with: cl2[:description]
 
-    click_on "Save"
+    click_on "save-club"
 
     expect(page).to have_content(cl2[:name])
     expect(page).to have_content(cl2[:city])
