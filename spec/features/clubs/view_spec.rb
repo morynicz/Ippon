@@ -18,7 +18,7 @@ feature "Viewing a Club", js: true do
     expect(page).to have_content(cl1attrs[:city])
     expect(page).to have_content(cl1attrs[:description])
 
-    click_on "Index"
+    click_on "index-club"
 
     expect(page).to have_content(cl2attrs[:name])
     expect(page).to_not have_content(cl2attrs[:city])
