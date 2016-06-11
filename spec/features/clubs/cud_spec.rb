@@ -6,8 +6,8 @@ feature 'Creating editing and deleting a club', js: true do
   let(:user) { FactoryGirl::create(:user) }
 
   before do
-    visit '#/login'
-
+    visit "#/home"
+    visit "#/login"
     fill_in "email", with: user.email
     fill_in "password", with: user.password
 
