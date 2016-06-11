@@ -20,8 +20,8 @@ feature "Adding and removing admins", js: true do
 
     adm = admins.first
     not_adm = not_admins.second
-
-    visit '#/login'
+    visit "#/home"
+    visit "#/login"
 
     fill_in "email", with: adm.email
     fill_in "password", with: adm.password
