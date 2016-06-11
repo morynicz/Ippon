@@ -12,7 +12,7 @@ feature "Viewing a Club", js: true do
 
   scenario "view one Club" do
     visit "#/clubs"
-    click_on cl1name
+    click_on cl1attrs[:name]
 
     expect(page).to have_content(cl1attrs[:name])
     expect(page).to have_content(cl1attrs[:city])
