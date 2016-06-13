@@ -521,11 +521,12 @@ describe ClubsController do
         end
 
         context "when the deleted admin is an admin" do
-          before do
-            ClubAdmin.create(club_id: club.id, user_id: tested_user.id)
-          end
 
-          context "when added user is not admin already" do
+          context "when deleted admin is not the last" do
+            before do
+              ClubAdmin.create(club_id: club.id, user_id: tested_user.id)
+            end
+
             it "returns OK status" do
               action
               expect(response).to have_http_status :no_content
@@ -535,6 +536,20 @@ describe ClubsController do
               action
               expect(ClubAdmin.where(club_id: club.id).size).to eq(1)
               expect(ClubAdmin.exists?(club_id: club.id, user_id: tested_user.id)).to be false
+            end
+          end
+
+          context "when the deleted admin is the last admin" do
+            let(:unadmin_self) {
+              xhr :delete, :delete_admin, format: :json, id: club.id, user_id: current_user.id
+            }
+            it "returns bad request status" do
+              unadmin_self
+              expect(response).to have_http_status :bad_request
+            end
+
+            it "does not change admin count" do
+              expect { unadmin_self }.not_to change(ClubAdmin, :count)
             end
           end
         end
