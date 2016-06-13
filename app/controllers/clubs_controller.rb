@@ -84,7 +84,7 @@ class ClubsController < ApplicationController
   def delete_admin
     user_id = params[:user_id]
     club_id = params[:id]
-    if User.exists?(user_id) && Club.exists?(club_id) && (ClubAdmin.where(club_id: club_id).size > 1)
+    if User.exists?(user_id) && Club.exists?(club_id) && ClubAdmin.exists?(club_id: club_id, user_id: user_id) && (ClubAdmin.where(club_id: club_id).size > 1)
       admin= ClubAdmin.find_by(club_id: club_id, user_id: user_id)
       admin.destroy
       head :no_content
