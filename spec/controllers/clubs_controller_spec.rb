@@ -39,19 +39,19 @@ describe ClubsController do
         expect(response.status).to eq(200)
       end
 
-      it "should return four results" do
+      it "should return three results" do
         expect(results.size).to eq(3)
       end
 
-      it "should include 'Ryushinkai' name" do
+      it "should include name of the first club" do
         expect(results.map(&extract_name)).to include(club_list[0].name)
       end
 
-      it "should include 'Miastów' city" do
+      it "should include city of the second club" do
         expect(results.map(&extract_city)).to include(club_list[1].city)
       end
 
-      it "should include 'HurHurHur' description" do
+      it "should include description of the third club" do
         expect(results.map(&extract_description)).to include(club_list[2].description)
       end
     end
