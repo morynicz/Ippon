@@ -79,4 +79,62 @@ RSpec.describe PlayersController, type: :controller do
       end
     end
   end
+
+  describe "GET show" do
+    let(:action) {
+      xhr :get, :show, format: :json, id: player_id
+    }
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the player exists" do
+      let(:player) {
+        FactoryGirl::create(:player)
+      }
+      let(:player_id){player.id}
+
+      it "should return 200 status" do
+        action
+        expect(response.status).to eq(200)
+      end
+
+      it "should return result with correct id" do
+        action
+        expect(results["id"]).to eq(player.id)
+      end
+
+      it "should return result with correct name" do
+        action
+        expect(results["name"]).to eq(player.name)
+      end
+
+      it "should return result with correct surname" do
+        action
+        expect(results["surname"]).to eq(player.surname)
+      end
+
+      it "should return result with correct birthday" do
+        action
+        expect(results["birthday"]).to eq(player.birthday.to_s(:db))
+      end
+
+      it "should return result with correct rank" do
+        action
+        expect(results["rank"]).to eq(player.rank)
+      end
+
+      it "should return result with correct" do
+        action
+        expect(results["sex"]).to eq(player.sex)
+      end
+    end
+
+    context "when player doesn't exist" do
+      let(:player_id) {-9999}
+      it "should respond with 404 status" do
+        action
+        expect(response.status).to eq(404)
+      end
+    end
+  end
 end
