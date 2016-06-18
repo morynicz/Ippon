@@ -556,4 +556,112 @@ describe ClubsController do
       end
     end
   end
+
+  describe "GET: players" do
+    let(:action) {
+      xhr :get, :players, format: :json, id: club.id
+    }
+
+    def extract_name
+      ->(object) { object["name"]}
+    end
+
+    def extract_surname
+      ->(object) {object["surname"]}
+    end
+
+    def extract_birthday
+      ->(object) {object["birthday"]}
+    end
+
+    def extract_rank
+      ->(object) {object["rank"]}
+    end
+
+    def extract_sex
+      ->(object) {object["sex"]}
+    end
+
+    def extract_club
+      ->(object) {object["club_id"]}
+    end
+
+    def extract_id
+      ->(object) {object["id"]}
+    end
+
+    subject(:results) { JSON.parse(response.body)}
+
+    context "when list of players is requested for a club" do
+      context "when the club exists" do
+        let(:club) {FactoryGirl::create(:club)}
+        let(:player_list) {FactoryGirl::create_list(:player, 10, club_id: club.id)}
+        let(:other_player) {FactoryGirl::create(:player)}
+
+
+        it "returns list of all 6 players" do
+          player_list
+          other_player
+          action
+          expect(results.size).to eq(10)
+        end
+
+        it "should return OK response" do
+          player_list
+          other_player
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "should include name of the first player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_name)).to include(player_list[0].name)
+        end
+
+        it "should include surname of the second player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_surname)).to include(player_list[1].surname)
+        end
+
+        it "should include birthday of the third player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_birthday)).to include(player_list[2].birthday.to_s(:db))
+        end
+
+        it "should include rank of the fourth player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_rank)).to include(player_list[3].rank)
+        end
+
+        it "should include sex of the fifth player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_sex)).to include(player_list[4].sex)
+        end
+
+        it "should include club of the sixth player" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_club)).to include(player_list[6].club.id)
+        end
+
+        it "should not contain player from another club" do
+          player_list
+          other_player
+          action
+          expect(results.map(&extract_id)).not_to include(other_player.id)
+        end
+      end
+    end
+  end
 end
