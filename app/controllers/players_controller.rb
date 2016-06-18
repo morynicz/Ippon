@@ -47,7 +47,7 @@ class PlayersController < ApplicationController
 
   def update
     player = Player.find(params[:id])
-    if player.update_attributes(params.require(:player).permit(:name, :surname, :birthday, :rank, :sex, :club_id))
+    if player.update_attributes(permitted_params)
       head :no_content
     else
       head :unprocessable_entity
