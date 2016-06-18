@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'clubs/:id/admins' => 'clubs#admins'
   post 'clubs/:id/admins/:user_id' => 'clubs#add_admin'
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
+  get 'clubs/:id/players' => 'clubs#players'
 
   resources :players
   # Example of regular route:

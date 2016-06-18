@@ -97,4 +97,9 @@ class ClubsController < ApplicationController
     ClubAdmin.create(club_id: club_id, user_id: user_id) unless ClubAdmin.exists?(club_id: club_id, user_id: user_id)
   end
 
+  def players
+    club = Club.find(params[:id])
+    @players = club.players
+  end
+
 end
