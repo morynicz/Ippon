@@ -348,4 +348,58 @@ RSpec.describe PlayersController, type: :controller do
       end
     end
   end
+
+  describe "destroy" do
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: player_id
+    }
+
+    context "when the player exists" do
+      let(:player) {
+        FactoryGirl::create(:player, club_id: club.id)
+      }
+      let(:player_id){player.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(club.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted club" do
+          action
+          expect(Player.find_by_id(player.id)).to be_nil
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the club" do
+          action
+          expect(Club.exists?(club.id)).to be true
+        end
+      end
+    end
+
+    context "when the club doesn't exist" do
+      let(:player_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
