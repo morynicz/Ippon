@@ -267,4 +267,85 @@ RSpec.describe PlayersController, type: :controller do
       end
     end
   end
+
+  describe "POST :create" do
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+
+    let(:attributes) {  FactoryGirl.attributes_for(:player, club_id: club.id) }
+    let(:action) do
+        xhr :post, :create, format: :json, player: attributes
+    end
+
+    context "when the user is not authenticated" do
+      it "does not create a player" do
+        expect {
+          action
+        }.to_not change(Player, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when user is authorized" do
+        before do
+          authorize_user(club.id)
+        end
+
+        context "with invalid attributes" do
+
+          let(:attributes) do
+            {
+              name: '',
+              surname: '',
+              birthday: '',
+              rank: '',
+              sex: ''
+            }
+          end
+
+          it "does not create a player" do
+            expect {
+              action
+            }.to_not change(Player, :count)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+        context "with valid attributes" do
+          it "creates a player" do
+            expect {
+              action
+            }.to change(Player, :count).by(1)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to be_successful
+          end
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not create a player" do
+          expect {
+            action
+          }.to_not change(Player, :count)
+        end
+      end
+    end
+  end
 end
