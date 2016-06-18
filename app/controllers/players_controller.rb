@@ -1,7 +1,7 @@
 class PlayersController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def authorize_user
     if user_signed_in?
@@ -52,6 +52,12 @@ class PlayersController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    player = Player.find(params[:id])
+    player.destroy
+    head :no_content
   end
 
   private
