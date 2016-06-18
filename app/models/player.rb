@@ -1,5 +1,6 @@
 class Player < ActiveRecord::Base
   belongs_to :club
+  validates :name, :surname, :birthday, :rank, :sex, :club_id, presence: true
 
   enum rank: {
     kyu_6: 0,
