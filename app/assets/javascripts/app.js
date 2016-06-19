@@ -16,6 +16,21 @@ angular.module('ippon').config([
 			templateUrl: 'Home/_index.html',
 			controller: 'HomePageController'
 		})
+    .state('login',{
+      url: '/login',
+      templateUrl: 'auth/_login.html',
+      controller: 'AuthController',
+      onEnter: ['$state', 'Auth', function($state, Auth) {
+        Auth.currentUser().then(function() {
+          $state.go('home');
+        });
+      }]
+    })
+    .state('register', {
+      url: '/register',
+      templateUrl: 'auth/_register.html',
+      controller: 'AuthController'
+    })
 		.state('clubs', {
 			url: '/clubs',
 			templateUrl: 'Clubs/_index.html',
@@ -36,21 +51,7 @@ angular.module('ippon').config([
 			templateUrl: 'Clubs/_form.html',
 			controller: 'ClubsController'
 		})
-		.state('login',{
-			url: '/login',
-			templateUrl: 'auth/_login.html',
-			controller: 'AuthController',
-			onEnter: ['$state', 'Auth', function($state, Auth) {
-				Auth.currentUser().then(function() {
-					$state.go('home');
-				});
-			}]
-		})
-		.state('register', {
-			url: '/register',
-			templateUrl: 'auth/_register.html',
-			controller: 'AuthController'
-		});;
+    ;
 
 		$urlRouterProvider.otherwise('home');
 
