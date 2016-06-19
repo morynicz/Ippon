@@ -51,7 +51,11 @@ angular.module('ippon').config([
 			templateUrl: 'Clubs/_form.html',
 			controller: 'ClubsController'
 		})
-    ;
+    .state('players', {
+      url: '/players',
+      templateUrl: 'Players/_index.html',
+      controller: 'PlayersController'
+    });
 
 		$urlRouterProvider.otherwise('home');
 
