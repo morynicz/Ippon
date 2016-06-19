@@ -61,4 +61,69 @@ describe('PlayersController', function() {
     httpBackend.verifyNoOutstandingRequest();
   });
 
+  describe('index', function(){
+    var players = [
+      {
+        "id":71,
+        "name":"Tessie",
+        "surname":"Ryan",
+        "birthday":"1979-04-28",
+        "rank":"kyu_3",
+        "sex":"male",
+        "club_id":71
+      },
+      {
+        "id":72,
+        "name":"Elza",
+        "surname":"Spinka",
+        "birthday":"1982-01-22",
+        "rank":"dan_1",
+        "sex":"male",
+        "club_id":72
+      },{
+        "id":73,
+        "name":"Ines",
+        "surname":"Hirthe",
+        "birthday":"1970-04-18",
+        "rank":"kyu_3",
+        "sex":"male",
+        "club_id":73
+      },
+      {
+        "id":74,
+        "name":"Isac",
+        "surname":"Fritsch",
+        "birthday":"1957-09-06",
+        "rank":"dan_1",
+        "sex":"female",
+        "club_id":74
+      },
+      {
+        "id":75,
+        "name":"Trenton",
+        "surname":"Denesik",
+        "birthday":"1990-05-04",
+        "rank":"dan_2",
+        "sex":"female",
+        "club_id":75
+      },
+      {
+        "id":76,
+        "name":"Karlee",
+        "surname":"Kuhic",
+        "birthday":"1965-12-10",
+        "rank":"kyu_5",
+        "sex":"female",
+        "club_id":76
+      }];
+
+    beforeEach(function(){
+      setupController(false,false,players,'players');
+      httpBackend.flush();
+    });
+    it('calls the back-end', function() {
+      expect(scope.players).toEqualData(players);
+    });
+  });
+
 });
