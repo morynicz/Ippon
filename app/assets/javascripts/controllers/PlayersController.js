@@ -42,6 +42,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       $scope.player = {};
     }
 
+    $scope.index = function() {
+      $state.go('players');
+    }
+
     $scope.save = function() {
     var onError = function(_httpResponse) {
       //TODO flash.error
@@ -57,4 +61,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }), onError);
     }
   };
+
+  $scope["delete"] = function() {
+    $scope.player.$delete();
+    $scope.index();
+  }
 }]);
