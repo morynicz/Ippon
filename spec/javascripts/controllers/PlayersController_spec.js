@@ -211,4 +211,20 @@ describe('PlayersController', function() {
       expect(state.is('players_show')).toBe(true);
     });
   });
+
+  describe('delete', function() {
+    beforeEach(function() {
+      setupController(true,42,false,'players_show');
+      httpBackend.flush();
+      var request = new RegExp("players/" + scope.player.id);
+      httpBackend.expectDELETE(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope["delete"]();
+      scope.$apply();
+      httpBackend.flush();
+      expect('#'+ location.path()).toBe(state.href('players'));
+    });
+  });
 });
