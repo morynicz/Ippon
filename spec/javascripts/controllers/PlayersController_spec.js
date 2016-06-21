@@ -28,8 +28,8 @@ describe('PlayersController', function() {
 
       state = $state;
 
-      //$templateCache.put('Clubs/_index.html','');
-      //$templateCache.put('Clubs/_show.html','');
+      $templateCache.put('Players/_index.html','');
+      $templateCache.put('Players/_show.html','');
       //$templateCache.put('Clubs/_form.html','');
 
       state.go(stateName);
@@ -126,4 +126,24 @@ describe('PlayersController', function() {
     });
   });
 
+  describe('show',function(){
+    describe('player is found', function() {
+      beforeEach(function() {
+        setupController(true,42,false,'players_show');
+      });
+      it('loads the given player', function() {
+        httpBackend.flush();
+        expect(scope.player).toEqualData(fakePlayer);
+      });
+    });
+
+    describe('player is not found', function() {
+      beforeEach(setupController(false, playerId,false,'players_show'));
+      it("doesn't load a player", function() {
+        httpBackend.flush();
+        expect(scope.player).toBe(null);
+        //flash about error
+      });
+    });
+  });
 });
