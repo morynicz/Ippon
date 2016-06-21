@@ -20,9 +20,25 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }
     });
 
-    if($state.is('players')){
-      player.query(function(results) {
-        return $scope.players = results;
-      });
+    if($state.is('players_show')) {
+      if(!$stateParams.playerId) {
+        $state.go('players');
+      } else {
+        player.get({
+          playerId: $stateParams.playerId
+        }, function(player) {
+          $scope.player = player;
+        }, function(httpResponse) {
+          $scope.player = null;
+          //flash.error = 'There is no club with Id + $routeParams.clubId'
+        });
+      }
+    } else {
+      if($state.is('players')){
+        player.query(function(results) {
+          return $scope.players = results;
+        });
+      }
+      $scope.player = {};
     }
 }]);
