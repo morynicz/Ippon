@@ -179,4 +179,36 @@ describe('PlayersController', function() {
       expect(state.is('players_show')).toBe(true);
     });
   });
+
+  describe('update', function() {
+    var updatedPlayer = {
+      id: 97,
+      name: "Misael",
+      surname: "Durgan",
+      birthday: "1978-02-28",
+      rank: "kyu_2",
+      sex: "male",
+      club_id: 113
+    };
+
+    beforeEach(function() {
+      setupController(true, 42,false,'players_edit');
+      httpBackend.flush();
+      var request = new RegExp("players/");
+      httpBackend.expectPUT(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope.player.name = updatedPlayer.name;
+      scope.player.surname = updatedPlayer.surname;
+      scope.player.birthday = updatedPlayer.birthday;
+      scope.player.rank = updatedPlayer.rank;
+      scope.player.sex = updatedPlayer.sex;
+      scope.player.club_id = updatedPlayer.club_id;
+      scope.save();
+      httpBackend.flush();
+      expect('#'+location.path()).toBe(state.href('players_show',{playerId: scope.player.id}));
+      expect(state.is('players_show')).toBe(true);
+    });
+  });
 });
