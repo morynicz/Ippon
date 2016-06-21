@@ -9,7 +9,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   var controllerRoot = "/players/";
   var player = $resource(controllerRoot + ':playerId',
     {
-      clubId: "@id",
+      playerId: "@id",
       format: "json"
     }, {
       'save' : {
@@ -20,7 +20,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }
     });
 
-    if($state.is('players_show')) {
+    if($state.is('players_show') || $state.is('players_edit')) {
       if(!$stateParams.playerId) {
         $state.go('players');
       } else {

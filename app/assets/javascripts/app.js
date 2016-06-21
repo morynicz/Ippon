@@ -65,6 +65,11 @@ angular.module('ippon').config([
       url: '/players/:playerId',
       templateUrl: 'Players/_show.html',
       controller: 'PlayersController'
+    })
+    .state('players_edit', {
+      url: '/players/:playerId/edit',
+      templateUrl: 'Players/_form.html',
+      controller: 'PlayersController'
     });
 
 		$urlRouterProvider.otherwise('home');
