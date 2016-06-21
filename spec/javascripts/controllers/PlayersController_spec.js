@@ -146,4 +146,37 @@ describe('PlayersController', function() {
       });
     });
   });
+
+  describe('create', function() {
+    var newPlayer = {
+      id: 104,
+      name: "Steve",
+      surname: "Balistreri",
+      birthday: "1960-10-06",
+      rank: "dan_7",
+      sex: "male",
+      club_id: 120
+    };
+
+    beforeEach(function() {
+      setupController(false, false, false, 'players_new');
+      var request = new RegExp("\/players");
+      httpBackend.expectPOST(request).respond(201, newPlayer);
+    });
+
+    it('post to the backend', function() {
+      scope.player.name = newPlayer.name;
+      scope.player.surname = newPlayer.surname;
+      scope.player.birthday = newPlayer.birthday;
+      scope.player.rank = newPlayer.rank;
+      scope.player.sex = newPlayer.sex;
+      scope.player.club_id = newPlayer.club_id;
+
+      scope.save();
+      scope.$apply();
+      httpBackend.flush();
+      expect('#' + location.path()).toBe(state.href('players_show'));
+      expect(state.is('players_show')).toBe(true);
+    });
+  });
 });
