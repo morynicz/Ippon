@@ -56,6 +56,11 @@ angular.module('ippon').config([
       templateUrl: 'Players/_index.html',
       controller: 'PlayersController'
     })
+    .state('players_new',{
+      url: '/players/new',
+      templateUrl: 'Players/_form.html',
+      controller: 'PlayersController'
+    })
     .state('players_show',{
       url: '/players/:playerId',
       templateUrl: 'Players/_show.html',

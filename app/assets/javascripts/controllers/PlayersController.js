@@ -41,4 +41,20 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }
       $scope.player = {};
     }
+
+    $scope.save = function() {
+    var onError = function(_httpResponse) {
+      //TODO flash.error
+    }
+
+    if($scope.player.id) {
+      $scope.player.$save((function() {
+        $state.go('players_show',{playerId: $scope.player.id});
+      }), onError)
+    } else {
+      player.create($scope.player, (function(newPlayer) {
+        $state.go('players_show',{playerId: newPlayer.id});
+      }), onError);
+    }
+  };
 }]);
