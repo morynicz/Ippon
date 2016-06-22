@@ -53,12 +53,7 @@ describe('ClubsController', function() {
 
   var setupAdmins = function(clubId,admins,users) {
     if(admins == null) {
-      admins = [
-        {
-          id: "0",
-          username: "uname"
-        }
-      ];
+      admins = [];
     }
     httpBackend.expectGET(new RegExp("clubs/" + clubId + "/admins")).respond({
       admins: admins,
@@ -100,13 +95,21 @@ describe('ClubsController', function() {
 
   describe('show',function(){
     describe('club is found', function() {
+      var admins = [
+        {
+          id: "0",
+          username: "uname"
+        }
+      ];
       beforeEach(function() {
         setupController(true,42,false,'clubs_show');
-        setupAdmins(42,null,[]);
+        setupAdmins(42,admins,[]);
       });
       it('loads the given club', function() {
         httpBackend.flush();
         expect(scope.club).toEqualData(fakeClub);
+        expect(scope.admins).toEqualData(admins);
+        expect(scope.users).toEqualData([]);
       });
     });
 
