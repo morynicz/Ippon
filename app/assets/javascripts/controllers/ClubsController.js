@@ -44,7 +44,11 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }
     });
 
-
+  var player = $resource(controllerRoot + ":clubId" + "/players/" + ":playerId",
+    {
+      clubId: "@Id",
+      format: "json"
+    });
 
   if($state.is('clubs_show') || $state.is('clubs_edit')) {
     if(!$stateParams.clubId) {
@@ -55,6 +59,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       }, function(club) {
         $scope.club = club;
         if ($state.is('clubs_show')) {
+          player.query({clubId: $stateParams.clubId},
+          function(results) {
+            $scope.players = results;
+          });
           admins.query_admins({clubId: $stateParams.clubId},
             function(results) {
               $scope.admins = results.admins;
