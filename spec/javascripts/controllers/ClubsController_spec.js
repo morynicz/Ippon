@@ -51,6 +51,13 @@ describe('ClubsController', function() {
     });
   };
 
+  var setupPlayers = function(clubId,players) {
+    if(players == null) {
+      players = [];
+    }
+    httpBackend.expectGET(new RegExp("clubs/" + clubId + "/players")).respond(players);
+  };
+
   var setupAdmins = function(clubId,admins,users) {
     if(admins == null) {
       admins = [];
@@ -95,6 +102,17 @@ describe('ClubsController', function() {
 
   describe('show',function(){
     describe('club is found', function() {
+      var players = [
+        {
+          id:96,
+          name:"Laverne",
+          surname:"Ratke",
+          birthday:"2008-07-03",
+          rank:"kyu_5",
+          sex:"male",
+          club_id:112
+        }
+      ];
       var admins = [
         {
           id: "0",
@@ -103,11 +121,13 @@ describe('ClubsController', function() {
       ];
       beforeEach(function() {
         setupController(true,42,false,'clubs_show');
+        setupPlayers(42,players);
         setupAdmins(42,admins,[]);
       });
       it('loads the given club', function() {
         httpBackend.flush();
         expect(scope.club).toEqualData(fakeClub);
+        expect(scope.players).toEqualData(players);
         expect(scope.admins).toEqualData(admins);
         expect(scope.users).toEqualData([]);
       });
@@ -177,6 +197,7 @@ describe('ClubsController', function() {
   describe('delete', function() {
     beforeEach(function() {
       setupController(true,42,false,'clubs_show');
+      setupPlayers(42,null);
       setupAdmins(42,null,[]);
       httpBackend.flush();
       var request = new RegExp("clubs/" + scope.club.id);
