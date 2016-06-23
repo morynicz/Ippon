@@ -1,28 +1,23 @@
 require 'spec_helper.rb'
 
-cl1attrs = FactoryGirl::attributes_for(:club)
-cl2attrs = FactoryGirl::attributes_for(:club)
-
 feature "Viewing a Club", js: true do
-  before do
-    club1 = Club.create!(cl1attrs);
-
-    club2 = Club.create!(cl2attrs);
-  end
+  let(:club1) {FactoryGirl::create(:club)}
+  let(:club2) {FactoryGirl::create(:club)}
 
   scenario "view one Club" do
+    club1
+    club2
     visit "#/clubs"
-    click_on cl1attrs[:name]
+    click_on club1.name
 
-    expect(page).to have_content(cl1attrs[:name])
-    expect(page).to have_content(cl1attrs[:city])
-    expect(page).to have_content(cl1attrs[:description])
+    expect(page).to have_content(club1.name)
+    expect(page).to have_content(club1.city)
+    expect(page).to have_content(club1.description)
 
     click_on "index-club"
 
-    expect(page).to have_content(cl2attrs[:name])
-    expect(page).to_not have_content(cl2attrs[:city])
-    expect(page).to_not have_content(cl2attrs[:description])
+    expect(page).not_to have_content(club1.description)
+    expect(page).not_to have_content(club2.description)
 
   end
 end
