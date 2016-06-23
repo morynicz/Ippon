@@ -61,6 +61,6 @@ feature 'Creating editing and deleting a club', js: true do
     click_on cl1[:name]
     click_on "delete-club"
 
-    expect(Club.find_by_name(cl2[:name])).to be_nil
+    expect(Club.find_by_name(cl1[:name])).to be_nil
   end
 end
