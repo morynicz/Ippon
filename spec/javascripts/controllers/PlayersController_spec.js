@@ -5,18 +5,41 @@ describe('PlayersController', function() {
   var stateParams = null;
   var resource = null;
   var httpBackend = null;
-  var playerId = 42;
+  var fakePlayerId = 42;
+  var fakeClubId = 77;
   var state;
 
   var fakePlayer = {
-      "id": playerId,
+      "id": fakePlayerId,
       "name":"Tia",
       "surname":"Pollich",
       "birthday":"1994-07-26",
       "rank":"dan_4",
       "sex":"female",
-      "club_id":77
+      "club_id": fakeClubId
   }
+
+  var fakeClub = {
+    id: fakeClubId,
+    name: "FakinClub",
+    city: "Fakeville",
+    description: "They are far from being real"
+  };
+
+  var clubs = [
+    {
+      id: 2,
+      name: 'Ryushinkai',
+      city: 'Wrocław',
+      description: 'Najlepszy klub'
+    },
+    {
+      id: 7,
+      name: 'Nowoklub',
+      city: 'Daleków',
+      description: 'Świeżaki'
+    }
+  ];
 
   var setupController = function(playerExists, playerId, results, stateName) {
     return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
@@ -60,6 +83,18 @@ describe('PlayersController', function() {
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
   });
+
+  var setupClub = function(clubId, club) {
+    request = new RegExp("clubs/" + clubId);
+    results = [200, club];
+    httpBackend.expectGET(request).respond(results[0], results[1]);
+  }
+
+  var setupClubs = function(clubs) {
+    request = new RegExp("clubs");
+    results = [200, clubs];
+    httpBackend.expectGET(request).respond(results[0], results[1]);
+  }
 
   describe('index', function(){
     var players = [
@@ -129,16 +164,19 @@ describe('PlayersController', function() {
   describe('show',function(){
     describe('player is found', function() {
       beforeEach(function() {
-        setupController(true,42,false,'players_show');
+        setupController(true,fakePlayerId,false,'players_show');
+        setupClub(fakeClubId,fakeClub);
       });
       it('loads the given player', function() {
         httpBackend.flush();
-        expect(scope.player).toEqualData(fakePlayer);
+        var composedPlayer = fakePlayer;
+        composedPlayer.club = fakeClub;
+        expect(scope.player).toEqualData(composedPlayer);
       });
     });
 
     describe('player is not found', function() {
-      beforeEach(setupController(false, playerId,false,'players_show'));
+      beforeEach(setupController(false, fakePlayerId,false,'players_show'));
       it("doesn't load a player", function() {
         httpBackend.flush();
         expect(scope.player).toBe(null);
@@ -160,6 +198,7 @@ describe('PlayersController', function() {
 
     beforeEach(function() {
       setupController(false, false, false, 'players_new');
+      setupClubs(clubs);
       var request = new RegExp("\/players");
       httpBackend.expectPOST(request).respond(201, newPlayer);
     });
@@ -192,7 +231,9 @@ describe('PlayersController', function() {
     };
 
     beforeEach(function() {
-      setupController(true, 42,false,'players_edit');
+      setupController(true, fakePlayerId,false,'players_edit');
+      setupClubs(clubs);
+      setupClub(fakeClubId, fakeClub);
       httpBackend.flush();
       var request = new RegExp("players/");
       httpBackend.expectPUT(request).respond(204);
@@ -214,7 +255,8 @@ describe('PlayersController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,42,false,'players_show');
+      setupController(true,fakePlayerId,false,'players_show');
+      setupClub(fakeClubId,fakeClub);
       httpBackend.flush();
       var request = new RegExp("players/" + scope.player.id);
       httpBackend.expectDELETE(request).respond(204);
