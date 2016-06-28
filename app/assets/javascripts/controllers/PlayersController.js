@@ -18,7 +18,15 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       'create': {
         method: 'POST'
       }
-    });
+    }
+  );
+
+  var club = $resource('/clubs/:clubId',
+    {
+      clubId: "@id",
+      format: "json"
+    }
+  );
 
     if($state.is('players_show') || $state.is('players_edit')) {
       if(!$stateParams.playerId) {
@@ -28,6 +36,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
           playerId: $stateParams.playerId
         }, function(player) {
           $scope.player = player;
+          club.get({clubId: player.club_id}, function(club) {
+            $scope.player.club = club;
+          });
         }, function(httpResponse) {
           $scope.player = null;
           //flash.error = 'There is no club with Id + $routeParams.clubId'
@@ -40,6 +51,12 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         });
       }
       $scope.player = {};
+    }
+
+    if($state.is('players_edit') || $state.is('players_new')) {
+      club.query(function(results) {
+        return $scope.clubs = results;
+      });
     }
 
     $scope.index = function() {
