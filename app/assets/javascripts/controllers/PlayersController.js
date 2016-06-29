@@ -64,8 +64,16 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     }
 
 
+  $scope.index = function() {
+    $state.go('players');
+  }
+
   $scope.view = function(playerId) {
     $state.go("players_show",{playerId: playerId})
+  }
+
+  $scope.viewPlayersClub = function(clubId) {
+    $state.go('clubs_show',{clubId: $scope.player.club.id});
   }
 
   $scope.save = function() {
@@ -87,5 +95,25 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   $scope["delete"] = function() {
     $scope.player.$delete();
     $scope.index();
+  }
+
+  $scope.mapRanks = function(rank) {
+    switch(rank) {
+      case "dan_8": return '8 DAN';
+      case "dan_7": return '7 DAN';
+      case "dan_6": return '6 DAN';
+      case "dan_5": return '5 DAN';
+      case "dan_4": return '4 DAN';
+      case "dan_3": return '3 DAN';
+      case "dan_2": return '2 DAN';
+      case "dan_1": return '1 DAN';
+      case "kyu_1": return '1 KYU';
+      case "kyu_2": return '2 KYU';
+      case "kyu_3": return '3 KYU';
+      case "kyu_4": return '4 KYU';
+      case "kyu_5": return '5 KYU';
+      case "kyu_6": return '6 KYU';
+      default: return rank;
+    }
   }
 }]);
