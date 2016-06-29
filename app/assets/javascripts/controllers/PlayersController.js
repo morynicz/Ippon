@@ -28,41 +28,38 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     }
   );
 
-    if($state.is('players_show') || $state.is('players_edit')) {
-      if(!$stateParams.playerId) {
-        $state.go('players');
-      } else {
-        player.get({
-          playerId: $stateParams.playerId
-        }, function(player) {
-          $scope.player = player;
-          club.get({clubId: player.club_id}, function(club) {
-            $scope.player.club = club;
-          });
-        }, function(httpResponse) {
-          $scope.player = null;
-          //flash.error = 'There is no club with Id + $routeParams.clubId'
-        });
-      }
+  if($state.is('players_show') || $state.is('players_edit')) {
+    if(!$stateParams.playerId) {
+      $state.go('players');
     } else {
-      if($state.is('players')){
-        player.query(function(results) {
-          return $scope.players = results;
+      player.get({
+        playerId: $stateParams.playerId
+      }, function(player) {
+        $scope.player = player;
+        club.get({clubId: player.club_id}, function(club) {
+          $scope.player.club = club;
         });
-      }
-      $scope.player = {};
-    }
-
-    if($state.is('players_edit') || $state.is('players_new')) {
-      club.query(function(results) {
-        return $scope.clubs = results;
+      }, function(httpResponse) {
+        $scope.player = null;
+        //flash.error = 'There is no club with Id + $routeParams.clubId'
       });
     }
-
-    $scope.index = function() {
-      $state.go('players');
+  } else {
+    if($state.is('players')){
+      player.query(function(results) {
+        return $scope.players = results;
+      });
     }
+    if($scope.player == null || $scope.player.clubId == null) {
+      $scope.player = {};
+    }
+  }
 
+  if($state.is('players_edit') || $state.is('players_new')) {
+    club.query(function(results) {
+      return $scope.clubs = results;
+    });
+  }
 
   $scope.index = function() {
     $state.go('players');
