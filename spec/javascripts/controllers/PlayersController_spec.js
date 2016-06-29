@@ -53,7 +53,7 @@ describe('PlayersController', function() {
 
       $templateCache.put('Players/_index.html','');
       $templateCache.put('Players/_show.html','');
-      //$templateCache.put('Clubs/_form.html','');
+      $templateCache.put('Players/_form.html','');
 
       state.go(stateName);
       $rootScope.$apply();
