@@ -75,8 +75,9 @@ angular.module('ippon').config([
 		$urlRouterProvider.otherwise('home');
 
 		$translateProvider.translations('en', {
-			CLUBS: "Clubs",
 			HOME: "Home Page",
+      CLUBS: "Clubs",
+      PLAYERS: "Players",
 
 			LANGUAGE: "Language",
 
@@ -103,7 +104,15 @@ angular.module('ippon').config([
 			CLUB_CITY: "City",
 			CLUB_CITY_PLACEHOLDER: "Samuraiville",
 			CLUB_DESCRIPTION: "Description",
-			CLUB_DESCRIPTION_PLACEHOLDER: "Strongest club around"
+			CLUB_DESCRIPTION_PLACEHOLDER: "Strongest club around",
+
+      PLAYER_NAME: "Name",
+      PLAYER_SURNAME: "Surname",
+      PLAYER_AGE: "Age",
+      PLAYER_BIRTHDAY: "Birthday",
+      PLAYER_RANK: "Rank",
+      PLAYER_SEX: "Sex",
+      PLAYER_CLUB: "Club"
 		});
 
 		$translateProvider.useStaticFilesLoader({

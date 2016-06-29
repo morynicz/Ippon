@@ -1,0 +1,21 @@
+<section class="col-md-6 col-md-offset-3">
+  <article class="panel panel-info">
+    <header class="panel-heading"><h1>{{player.name}} {{player.surname}}</h1>
+    </header>
+    <p class="panel-body">
+      <div class="h3">{{'PLAYER_RANK'|translate}}: {{mapRanks(player.rank)}}</div>
+      <div class="h3">{{'PLAYER_CLUB'|translate}}: <a href="" ng-click="viewPlayersClub()" > {{player.club.name}}</a></div>
+    </p>
+  </article>
+  <section>
+    <div class="col-md-9">
+      <button ng-click="index()" class="btn btn-default" id="index-player">
+        &larr; {{'INDEX' | translate}}
+      </button>
+      <div ng-show="signedIn()" class="col-md-9 text-right btn-group">
+        <button ng-click="edit()" class="btn btn-info" id="edit-player"> {{'EDIT' | translate}} </button>
+        <button ng-click="delete()" class="btn btn-danger" id="delete-player"> {{'DELETE' | translate}} </button>
+      </div>
+    </div>
+  </section>
+</section>
