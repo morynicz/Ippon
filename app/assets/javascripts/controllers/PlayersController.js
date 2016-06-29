@@ -63,7 +63,12 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       $state.go('players');
     }
 
-    $scope.save = function() {
+
+  $scope.view = function(playerId) {
+    $state.go("players_show",{playerId: playerId})
+  }
+
+  $scope.save = function() {
     var onError = function(_httpResponse) {
       //TODO flash.error
     }

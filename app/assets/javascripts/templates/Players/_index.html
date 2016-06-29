@@ -1,0 +1,14 @@
+<header class="row" >
+  <h1 class="text-center col-md-6 col-md-offset-3">{{'PLAYERS' | translate}}</h1>
+</header>
+
+<section class="row" ng-if="players.length">
+  <ul class="list-unstyled">
+    <li ng-repeat="player in players">
+      <section class="well col-md-6 col-md-offset-3">
+        <h1 class="h3" style="margin-top: 0"><a class="col-md-4" href="" ng-click="view(player.id)" >
+          {{player.name}} {{player.surname}}</a></h1>
+      </section>
+    </li>
+  </ul>
+</section>

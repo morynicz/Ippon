@@ -75,8 +75,9 @@ angular.module('ippon').config([
 		$urlRouterProvider.otherwise('home');
 
 		$translateProvider.translations('en', {
-			CLUBS: "Clubs",
 			HOME: "Home Page",
+      CLUBS: "Clubs",
+      PLAYERS: "Players",
 
 			LANGUAGE: "Language",
 
