@@ -86,22 +86,18 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   }
 
   $scope.index = function() {
-//    $location.path(controllerRoot);
     $state.go('clubs');
   }
 
   $scope.newClub = function(recipeId) {
-    //$location.path(controllerRoot +"new");
     $state.go('clubs_new');
   }
 
   $scope.view = function(clubId) {
-    //return $location.path(controllerRoot + clubId);
     $state.go('clubs_show',{clubId: clubId});
   }
 
   $scope.edit = function() {
-    //$location.path(controllerRoot + $scope.club.id + "/edit");
     $state.go('clubs_edit',{clubId: $scope.club.id});
   };
 
