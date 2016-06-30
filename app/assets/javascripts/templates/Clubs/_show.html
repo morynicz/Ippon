@@ -16,6 +16,15 @@
         <button ng-click="delete()" class="btn btn-danger" id="delete-club"> {{'DELETE' | translate}} </button>
       </div>
     </div>
+    <div>
+      <ul class="list-unstyled">
+        <li ng-repeat="player in players">
+          <section class="well col-md-6 col-md-offset-3">
+            <a id="{{player.name}}-{{player.surname}}-link" href ng-click="viewPlayer(player.id)">{{player.name}} {{player.surname}}</a>
+          </section>
+        </li>
+      </ul>
+    </div>
     <div ng-show="signedIn() && admins && users" >
         <ul class="list-unstyled">
           <li ng-repeat="admin in admins">

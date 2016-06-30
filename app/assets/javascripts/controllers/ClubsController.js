@@ -164,4 +164,8 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     });
 
   }
+
+  $scope.viewPlayer = function(playerId) {
+    $state.go("players_show",{playerId: playerId});
+  }
 }]);
