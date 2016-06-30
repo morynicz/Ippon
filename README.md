@@ -1,2 +1,2 @@
-# Ippon [![Build Status](https://travis-ci.org/morynicz/Ippon.svg?branch=2.0)](https://travis-ci.org/morynicz/Ippon)
+# Ippon [![Build Status](https://travis-ci.org/morynicz/Ippon.svg?branch=2.0)](https://travis-ci.org/morynicz/Ippon) [![Code Climate](https://codeclimate.com/github/morynicz/Ippon/badges/gpa.svg)](https://codeclimate.com/github/morynicz/Ippon) [![Dependency Status](https://gemnasium.com/badges/github.com/morynicz/Ippon.svg)](https://gemnasium.com/github.com/morynicz/Ippon)
 A web service designed to help in kendo tournament organisation
