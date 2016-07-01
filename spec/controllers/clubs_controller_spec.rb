@@ -664,4 +664,63 @@ describe ClubsController do
       end
     end
   end
+
+  describe "GET is_admin" do
+    let(:club) {
+      FactoryGirl::create(:club)
+    }
+    let(:club_id) {
+      club.id
+    }
+    let(:action) {
+      xhr :get, :is_admin, format: :json, id: club_id
+    }
+
+    subject(:results){JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+    context "when the user is authenticated", authenticated: true do
+      context "when the user is not authorized" do
+        it "returns OK status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns false" do
+          action
+          expect(results["is_admin"]).to be false
+        end
+      end
+
+      context "when the user is authorized" do
+        before do
+          ClubAdmin.create(club_id: club.id, user_id: current_user.id)
+        end
+        it "returns OK status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns false" do
+          action
+          expect(results["is_admin"]).to be true
+        end
+      end
+
+      context "when the club does not exist" do
+        let(:club_id) { -9999}
+        it "returns not_found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
+
+
 end
