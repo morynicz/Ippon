@@ -1,5 +1,5 @@
 class ClubsController < ApplicationController
-  before_filter :authenticate_user!, only: :create
+  before_filter :authenticate_user!, only: [:create, :is_admin]
   before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
 
   def authorize_user
@@ -102,4 +102,16 @@ class ClubsController < ApplicationController
     @players = club.players
   end
 
+  def is_admin
+    if user_signed_in?
+      club = Club.find(params[:id])
+      if club != nil
+        @is_admin =  ClubAdmin.exists?(club_id: club.id, user_id: current_user.id)
+      else
+        head :not_found
+      end
+    else
+      head :unauthorized
+    end
+  end
 end

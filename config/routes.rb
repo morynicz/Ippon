@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'clubs/:id/admins/:user_id' => 'clubs#add_admin'
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
+  get 'clubs/:id/is_admin' => 'clubs#is_admin'
 
   resources :players
   # Example of regular route:
