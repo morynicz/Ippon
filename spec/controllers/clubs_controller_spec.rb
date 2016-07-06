@@ -722,5 +722,76 @@ describe ClubsController do
     end
   end
 
+  describe "GET where_admin" do
+    let(:action) {
+      xhr :get, :where_admin, format: :json
+    }
 
+    subject(:results) { JSON.parse(response.body)}
+
+    def extract_name
+      ->(object) { object["name"]}
+    end
+
+    def extract_city
+      ->(object) {object["city"]}
+    end
+
+    def extract_description
+      ->(object) {object["description"]}
+    end
+
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      let(:admin_club_list) {
+        list = FactoryGirl::create_list(:club_with_admins, 10, creator: current_user)
+        for club in list do
+          ClubAdmin.create(club_id: club.id, user_id: current_user.id)
+        end
+        list
+      }
+      let(:not_admin_club_list) {
+        FactoryGirl::create_list(:club_with_admins, 5)
+      }
+
+      it "returns OK status" do
+        admin_club_list
+        not_admin_club_list
+        action
+        expect(response).to have_http_status :ok
+      end
+
+      it "returns 10 results" do
+        admin_club_list
+        not_admin_club_list
+        action
+        expect(results.size).to eq(10)
+      end
+
+      it "returns all the clubs where user is an admin" do
+        admin_club_list
+        not_admin_club_list
+        action
+        for club in admin_club_list do
+          expect(results.select {|a| a['id'] == club.id}).not_to be_empty
+        end
+      end
+
+      it "returns none of the clubs where user is not an admin" do
+        admin_club_list
+        not_admin_club_list
+        action
+        for club in not_admin_club_list do
+          expect(results.select {|a| a[:id] == club.id}).to be_empty
+        end
+      end
+
+    end
+  end
 end
