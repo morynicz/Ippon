@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
   get 'clubs/:id/is_admin' => 'clubs#is_admin'
+  get 'clubs/where_admin' => 'clubs#where_admin'
 
   resources :players
   # Example of regular route:
