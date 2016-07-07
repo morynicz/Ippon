@@ -122,4 +122,12 @@ class ClubsController < ApplicationController
       head :unauthorized
     end
   end
+
+  def is_admin_for_any
+    if user_signed_in? && ClubAdmin.exists?(user_id: current_user.id)
+      @is_admin = true
+    else
+      @is_admin = false
+    end
+  end
 end
