@@ -794,4 +794,58 @@ describe ClubsController do
 
     end
   end
+
+  describe "GET is_admin_for_any" do
+    let(:action) {
+      xhr :get, :is_admin_for_any, format: :json
+    }
+    let(:club) {FactoryGirl::create(:club_with_admins)}
+
+    subject(:results) { JSON.parse(response.body)}
+
+    context "when user is not igned in" do
+      it "returns OK status" do
+        club
+        action
+        expect(response).to have_http_status :ok
+      end
+
+      it "returns false" do
+        club
+        action
+        expect(results["is_admin"]).to be false
+      end
+    end
+
+    context "when user is signed in", authenticated: true do
+      context "when user is not an admin for any club" do
+        it "returns OK status" do
+          club
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns false" do
+          club
+          action
+          expect(results["is_admin"]).to be false
+        end
+      end
+
+      context "when user is an admin for a club" do
+        let(:admin){ClubAdmin.create(club_id: club.id, user_id: current_user.id)}
+        it "returns OK status" do
+          admin
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns false" do
+          admin
+          action
+          expect(results["is_admin"]).to be true
+        end
+      end
+    end
+  end
 end
