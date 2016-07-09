@@ -164,4 +164,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   $scope.viewPlayer = function(playerId) {
     $state.go("players_show",{playerId: playerId});
   }
+
+  $scope.addPlayer = function() {
+    $scope.player = {};
+    $scope.player.club_id = $scope.club.id;
+    $state.go('players_new',{club_id: $scope.club.id});
+  }
 }]);

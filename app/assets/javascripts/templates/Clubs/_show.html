@@ -24,6 +24,9 @@
           </section>
         </li>
       </ul>
+      <div ng-show="signedIn()" class="col-md-9 text-right btn-group">
+        <button ng-click="addPlayer()" class="btn btn-info" id="new-player"> {{'ADD_PLAYER' | translate}} </button>
+      </div>
     </div>
     <div ng-show="signedIn() && admins && users" >
         <ul class="list-unstyled">
