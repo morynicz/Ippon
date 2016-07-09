@@ -67,4 +67,44 @@ feature 'Creating editing and deleting a club', js: true do
     expect(page).to have_content("#{tokens[1]} #{tokens[0].upcase}")
     expect(page).to have_content(club1.name)
   end
+
+  scenario "Update a player when user exists and is a club admin", :raceable do
+    ClubAdmin.create(user_id: user.id, club_id: club1.id)
+    club2
+    Player.create(pl1)
+    visit "#/players/"
+
+    click_on "#{pl1[:name]} #{pl1[:surname]}"
+    click_on "edit-player"
+
+    fill_in "name", with: pl2[:name]
+    fill_in "surname", with: pl2[:surname]
+    fill_in "birthday", with: pl2[:birthday]
+    if pl2[:sex] == :man
+      choose "button-sex-man"
+    else
+      choose "button-sex-woman"
+    end
+    select club2.name, from: "club-select"
+    tokens = pl2[:rank].split('_')
+    select "#{tokens[1]} #{tokens[0].upcase}", from: "rank-select"
+
+    click_on "save-player"
+
+    expect(page).to have_content(pl2[:name])
+    expect(page).to have_content(pl2[:surname])
+    expect(page).to have_content("#{tokens[1]} #{tokens[0].upcase}")
+    expect(page).to have_content(club2.name)
+  end
+
+  scenario "Delete a player when user is club admin" do
+    ClubAdmin.create(user_id: user.id, club_id: club1.id)
+    player = Player.create(pl1)
+    visit "#/players/"
+
+    click_on "#{player.name} #{player.surname}"
+    click_on "delete-player"
+
+    expect(Player.exists?(id: player.id)).to be false
+  end
 end
