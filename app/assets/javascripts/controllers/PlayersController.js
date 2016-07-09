@@ -59,6 +59,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         playerId: $stateParams.playerId
       }, function(player) {
         $scope.player = player;
+        $scope.player.birthday = new Date($scope.player.birthday);
         club.get({clubId: player.club_id}, function(club) {
           $scope.player.club = club;
         });
@@ -110,6 +111,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   $scope.view = function(playerId) {
     $state.go("players_show",{playerId: playerId})
   }
+
+  $scope.edit = function() {
+    $state.go('players_edit',{playerId: $scope.player.id});
+  };
 
   $scope.viewPlayersClub = function(clubId) {
     $state.go('clubs_show',{clubId: $scope.player.club.id});
