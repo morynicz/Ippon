@@ -6,14 +6,14 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
+  get 'clubs/admin/any' => 'clubs#is_admin_for_any'
+  get 'clubs/admin/:id' => 'clubs#is_admin'
+  get 'clubs/admin' => 'clubs#where_admin'
   resources :clubs, only: [:index, :show, :create, :update, :destroy]
   get 'clubs/:id/admins' => 'clubs#admins'
   post 'clubs/:id/admins/:user_id' => 'clubs#add_admin'
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
-  get 'clubs/admin/any' => 'clubs#is_admin_for_any'
-  get 'clubs/admin/:id' => 'clubs#is_admin'
-  get 'clubs/admin' => 'clubs#where_admin'
 
   resources :players
   # Example of regular route:

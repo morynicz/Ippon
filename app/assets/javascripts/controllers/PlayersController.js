@@ -28,6 +28,29 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     }
   );
 
+  var adminedClub = $resource('/clubs/admin/:clubId',
+    {
+      format: "json",
+    },
+    {
+      'admin_for_any':
+      {
+        method: "GET",
+        isArray: false,
+        url: '/clubs/admin/any'
+      },
+      'is_admin':
+      {
+        metod: "GET",
+        isArray: false,
+        params: {
+          clubId: "@clubId"
+        }
+      }
+    }
+  );
+
+
   if($state.is('players_show') || $state.is('players_edit')) {
     if(!$stateParams.playerId) {
       $state.go('players');
@@ -39,6 +62,12 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         club.get({clubId: player.club_id}, function(club) {
           $scope.player.club = club;
         });
+
+        if($state.is('players_show')) {
+          adminedClub.is_admin({clubId: player.club_id}, function(admin) {
+            $scope.isAdmin = admin;
+          });
+        }
       }, function(httpResponse) {
         $scope.player = null;
         //flash.error = 'There is no club with Id + $routeParams.clubId'
@@ -47,17 +76,26 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
   } else {
     if($state.is('players')){
       player.query(function(results) {
-        return $scope.players = results;
+        $scope.players = results;
+      });
+      $scope.is_admin = false;
+      adminedClub.admin_for_any(function(admin) {
+        $scope.is_admin = admin;
       });
     }
-    if($scope.player == null || $scope.player.clubId == null) {
-      $scope.player = {};
+    $scope.player = {};
+    if($stateParams.club_id != null) {
+      $scope.player.club_id = $stateParams.club_id;
     }
   }
 
-  if($state.is('players_edit') || $state.is('players_new')) {
+  if($state.is('players_edit')) {
     club.query(function(results) {
-      return $scope.clubs = results;
+      $scope.clubs = results;
+    });
+  } else if($state.is('players_new')){
+    adminedClub.query(function(results) {
+      $scope.clubs = results;
     });
   }
 
