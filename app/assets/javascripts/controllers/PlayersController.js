@@ -79,9 +79,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
       player.query(function(results) {
         $scope.players = results;
       });
-      $scope.is_admin = false;
+      $scope.isAdmin = false;
       adminedClub.admin_for_any(function(admin) {
-        $scope.is_admin = admin;
+        $scope.isAdmin = admin.is_admin;
       });
     }
     $scope.player = {};

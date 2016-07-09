@@ -124,7 +124,7 @@ class ClubsController < ApplicationController
   end
 
   def is_admin_for_any
-    if user_signed_in? && ClubAdmin.exists?(user_id: current_user.id)
+    if user_signed_in? && current_user.id != nil && ClubAdmin.exists?(user_id: current_user.id)
       @is_admin = true
     else
       @is_admin = false
