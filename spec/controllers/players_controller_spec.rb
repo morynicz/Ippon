@@ -186,7 +186,7 @@ RSpec.describe PlayersController, type: :controller do
 
           it "should update player rank" do
             action
-            expect(Player.ranks[player.rank]).to eq(update_player_attrs[:rank])
+            expect(player.rank).to eq(update_player_attrs[:rank])
           end
 
           it "should update player surname" do
@@ -196,7 +196,7 @@ RSpec.describe PlayersController, type: :controller do
 
           it "should update player sex" do
             action
-            expect(Player.sexes[player.sex]).to eq(update_player_attrs[:sex])
+            expect(player.sex).to eq(update_player_attrs[:sex])
           end
 
           it "should update player club id" do
@@ -222,8 +222,8 @@ RSpec.describe PlayersController, type: :controller do
             expect(player.name).to eq(player_attrs[:name])
             expect(player.surname).to eq(player_attrs[:surname])
             expect(player.birthday).to eq(player_attrs[:birthday])
-            expect(Player.sexes[player.sex]).to eq(player_attrs[:sex])
-            expect(Player.ranks[player.rank]).to eq(player_attrs[:rank])
+            expect(player.sex).to eq(player_attrs[:sex])
+            expect(player.rank).to eq(player_attrs[:rank])
             expect(player.club.id).to eq(player_attrs[:club_id])
           end
 
@@ -245,8 +245,8 @@ RSpec.describe PlayersController, type: :controller do
           expect(player.name).to eq(player_attrs[:name])
           expect(player.surname).to eq(player_attrs[:surname])
           expect(player.birthday).to eq(player_attrs[:birthday])
-          expect(Player.sexes[player.sex]).to eq(player_attrs[:sex])
-          expect(Player.ranks[player.rank]).to eq(player_attrs[:rank])
+          expect(player.sex).to eq(player_attrs[:sex])
+          expect(player.rank).to eq(player_attrs[:rank])
           expect(player.club.id).to eq(player_attrs[:club_id])
         end
       end
