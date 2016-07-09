@@ -103,6 +103,10 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     $state.go('players');
   }
 
+  $scope.newPlayer = function() {
+    $state.go('players_new');
+  }
+
   $scope.view = function(playerId) {
     $state.go("players_show",{playerId: playerId})
   }
@@ -127,10 +131,35 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
     }
   };
 
+  $scope.cancel = function() {
+    if($scope.player.id) {
+      $state.go('players_show',{playerId: $scope.player.id});
+    } else {
+      $state.go('players');
+    }
+  };
+
   $scope["delete"] = function() {
     $scope.player.$delete();
     $scope.index();
   }
+
+  $scope.ranks = [
+    'kyu_6',
+    'kyu_5',
+    'kyu_4',
+    'kyu_3',
+    'kyu_2',
+    'kyu_1',
+    'dan_1',
+    'dan_2',
+    'dan_3',
+    'dan_4',
+    'dan_5',
+    'dan_6',
+    'dan_7',
+    'dan_8'
+  ];
 
   $scope.mapRanks = function(rank) {
     switch(rank) {
