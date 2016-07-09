@@ -41,4 +41,30 @@ feature 'Creating editing and deleting a club', js: true do
     expect(page).to have_content("#{tokens[1]} #{tokens[0].upcase}")
     expect(page).to have_content(club1.name)
   end
+
+  scenario "Create a player from club view when user exists and is a club admin", :raceable do
+    ClubAdmin.create(user_id: user.id, club_id: club1.id)
+    visit "#/clubs/"
+
+    click_on club1.name
+    click_on "new-player"
+
+    fill_in "name", with: pl1[:name]
+    fill_in "surname", with: pl1[:surname]
+    fill_in "birthday", with: pl1[:birthday]
+    if pl1[:sex] == :man
+      choose "button-sex-man"
+    else
+      choose "button-sex-woman"
+    end
+    tokens = pl1[:rank].split('_')
+    select "#{tokens[1]} #{tokens[0].upcase}", from: "rank-select"
+
+    click_on "save-player"
+
+    expect(page).to have_content(pl1[:name])
+    expect(page).to have_content(pl1[:surname])
+    expect(page).to have_content("#{tokens[1]} #{tokens[0].upcase}")
+    expect(page).to have_content(club1.name)
+  end
 end
