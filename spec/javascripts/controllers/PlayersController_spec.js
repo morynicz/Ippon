@@ -96,6 +96,18 @@ describe('PlayersController', function() {
     httpBackend.expectGET(request).respond(results[0], results[1]);
   }
 
+  var setupIsAdminForClub(clubId, isAdmin) {
+    request = new RegExp("clubs/admin/"+clubId);
+    results = [200, isAdmin];
+    httpBackend.expectGET(request).respond(results[0], results[1]);
+  }
+
+  var setupIsClubAdmin(isAdmin) {
+    request = new RegExp("clubs/admin/any");
+    results = [200, isAdmin];
+    httpBackend.expectGET(request).respond(results[0], results[1]);
+  }
+
   describe('index', function(){
     var players = [
       {
@@ -154,6 +166,7 @@ describe('PlayersController', function() {
 
     beforeEach(function(){
       setupController(false,false,players,'players');
+      setupIsClubAdmin(false);
       httpBackend.flush();
     });
     it('calls the back-end', function() {
@@ -166,6 +179,7 @@ describe('PlayersController', function() {
       beforeEach(function() {
         setupController(true,fakePlayerId,false,'players_show');
         setupClub(fakeClubId,fakeClub);
+        setupIsAdminForClub(fakeClubId, isAdmin)
       });
       it('loads the given player', function() {
         httpBackend.flush();
@@ -257,6 +271,7 @@ describe('PlayersController', function() {
     beforeEach(function() {
       setupController(true,fakePlayerId,false,'players_show');
       setupClub(fakeClubId,fakeClub);
+      setupIsAdminForClub(fakeClubId, isAdmin)
       httpBackend.flush();
       var request = new RegExp("players/" + scope.player.id);
       httpBackend.expectDELETE(request).respond(204);
