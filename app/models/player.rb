@@ -20,7 +20,7 @@ class Player < ActiveRecord::Base
   }
 
   enum sex: {
-    female: 0,
-    male: 1
+    woman: 0,
+    man: 1
   }
 end
