@@ -373,7 +373,7 @@ RSpec.describe PlayersController, type: :controller do
           expect(response.status).to eq(204)
         end
 
-        it "should not be able to find deleted club" do
+        it "should not be able to find deleted player" do
           action
           expect(Player.find_by_id(player.id)).to be_nil
         end
@@ -384,9 +384,9 @@ RSpec.describe PlayersController, type: :controller do
           action
           expect(response).to have_http_status :unauthorized
         end
-        it "should not delete the club" do
+        it "should not delete the player" do
           action
-          expect(Club.exists?(club.id)).to be true
+          expect(Player.exists?(player.id)).to be true
         end
       end
     end
