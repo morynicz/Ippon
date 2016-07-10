@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
 
+  resources :tournaments, only: [:show]
+
   resources :players
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
