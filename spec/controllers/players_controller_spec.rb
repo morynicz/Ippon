@@ -127,7 +127,7 @@ RSpec.describe PlayersController, type: :controller do
         expect(results["rank"]).to eq(player.rank)
       end
 
-      it "should return result with correct" do
+      it "should return result with correct sex" do
         action
         expect(results["sex"]).to eq(player.sex)
       end
