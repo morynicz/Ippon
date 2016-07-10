@@ -62,4 +62,77 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "POST: create" do
+    let(:attributes){FactoryGirl::attributes_for(:tournament)}
+
+    let(:action){
+      xhr :post, :create, format: :json, tournament: attributes
+    }
+
+    context "when the user is not authenticated" do
+      it "does not create a tournament" do
+        expect {
+          action
+        }.to_not change(Tournament, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "with invalid attributes" do
+
+        let(:attributes) do
+          {
+            name: "",
+            playoff_match_length: 0,
+            group_match_length: 0,
+            team_size: 0,
+            player_age_constraint: '',
+            player_age_constraint_value: '',
+            player_sex_constraint: '',
+            player_sex_constraint_value: '',
+            player_rank_constraint: '',
+            player_rank_constraint_value: ''
+          }
+        end
+
+        it "does not create a tournament" do
+          expect {
+            action
+          }.to_not change(Tournament, :count)
+        end
+
+        it "returns the correct status" do
+          action
+          expect(response).to have_http_status :unprocessable_entity
+        end
+      end
+      context "with valid attributes" do
+        it "creates a Tournament" do
+          expect {
+            action
+          }.to change(Tournament, :count).by(1)
+        end
+
+        it "returns the correct status" do
+          action
+          expect(response).to be_successful
+        end
+
+        it "makes the creating user an admin" do
+          action
+          tournament = Tournament.find_by_name(attributes[:name])
+          expect(TournamentAdmin.exists?(user_id: current_user.id, tournament_id: tournament.id)).to be true
+          admin = TournamentAdmin.where(user_id: current_user.id, tournament_id: tournament.id).first
+
+          expect(admin.status).to eq(:main.to_s)
+        end
+      end
+    end
+  end
 end
