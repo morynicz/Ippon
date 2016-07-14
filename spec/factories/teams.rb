@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :team do
-    name "MyString"
+    name {Faker::Lorem.word}
     required_size 1
-    tournament nil
+    tournament {FactoryGirl::create(:tournament)}
   end
 end
