@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :tournaments, only: [:show, :create]
 
+  resources :teams, only: [:show]
   resources :players
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
