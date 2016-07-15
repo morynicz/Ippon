@@ -71,6 +71,8 @@ group :development, :test do
   gem 'test_after_commit'
 end
 
+gem "codeclimate-test-reporter", group: :test, require: nil
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
