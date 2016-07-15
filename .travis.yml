@@ -5,7 +5,8 @@ rvm:
 install:
  - npm install
  - npm install -g bower
-
+ - npm install -g codeclimate-test-reporter
+ 
 before_script:
  - bundle install
  - rake bower:install
@@ -15,3 +16,7 @@ before_script:
 
 script:
  - RAILS_ENV=test rake test
+
+addons:
+    code_climate:
+        repo_token: c53f1607b65ec13555badf010d79408b2bb14ad9dff3bc495df5e72e534a0c2d
