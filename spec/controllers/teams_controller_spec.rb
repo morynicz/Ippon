@@ -176,6 +176,100 @@ RSpec.describe TeamsController, type: :controller do
     end
   end
 
+  describe "PATCH update" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: team.id, team: update_team_attrs
+      team.reload
+    }
+
+    let(:update_team_attrs) {
+      FactoryGirl::attributes_for(:team)
+    }
+    let(:team_attrs) {
+      FactoryGirl::attributes_for(:team, tournament_id: tournament.id)
+    }
+    context "when the team exists" do
+      let(:team) {
+        Team.create(team_attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update team attributes" do
+            action
+            expect(team.name).to eq(update_team_attrs[:name])
+            expect(team.required_size).to eq(update_team_attrs[:required_size])
+            expect(team.tournament_id).to eq(update_team_attrs[:tournament_id])
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_team_attrs) {
+            {
+              name: '',
+              required_size: '',
+              tournament_id: ''
+            }
+          }
+
+          it "should not update team attributes" do
+            action
+            expect(team.name).to eq(team_attrs[:name])
+            expect(team.required_size).to eq(team_attrs[:required_size])
+            expect(team.tournament_id).to eq(team_attrs[:tournament_id])
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should update team attributes" do
+          action
+          expect(team.name).to eq(team_attrs[:name])
+          expect(team.required_size).to eq(team_attrs[:required_size])
+          expect(team.tournament_id).to eq(team_attrs[:tournament_id])
+        end
+      end
+    end
+
+    context "when the team doesn't exist" do
+      let(:team_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: team_id, team: update_team_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
+
   describe "DELETE: destroy" do
     let(:tournament) {
       FactoryGirl::create(:tournament)
