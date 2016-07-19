@@ -175,4 +175,58 @@ RSpec.describe TeamsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: team_id
+    }
+
+    context "when the team exists" do
+      let(:team) {
+        FactoryGirl::create(:team, tournament_id: tournament.id)
+      }
+      let(:team_id){team.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted team" do
+          action
+          expect(Team.find_by_id(team.id)).to be_nil
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the team" do
+          action
+          expect(Team.exists?(team.id)).to be true
+        end
+      end
+    end
+
+    context "when the team doesn't exist" do
+      let(:team_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
