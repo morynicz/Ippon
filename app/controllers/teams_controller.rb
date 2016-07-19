@@ -1,5 +1,19 @@
 class TeamsController < ApplicationController
 
+  before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!,:authorize_user, only: [:destroy]
+
+  def authorize_user
+    if user_signed_in?
+      user = current_user
+      team = Team.find(params[:id])
+      tournament = team.tournament
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id: tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
+    else
+      head :unauthorized
+    end
+  end
+
   def show
     @team = Team.find(params[:id])
     if @team != nil && TeamMembership.exists?(team_id: @team.id)
@@ -30,6 +44,12 @@ class TeamsController < ApplicationController
     else
       head :unauthorized
     end
+  end
+
+  def destroy
+    team = Team.find(params[:id])
+    team.destroy
+    head :no_content
   end
 
   private
