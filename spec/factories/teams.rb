@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :team do
     name {Faker::Lorem.word}
     required_size 1
-    tournament {FactoryGirl::create(:tournament)}
+    tournament_id {FactoryGirl::create(:tournament).id}
 
     factory :team_with_players do
       transient do

@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:destroy]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def authorize_user
     if user_signed_in?
@@ -43,6 +43,15 @@ class TeamsController < ApplicationController
       end
     else
       head :unauthorized
+    end
+  end
+
+  def update
+    team = Team.find(params[:id])
+    if team.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
     end
   end
 
