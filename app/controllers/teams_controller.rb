@@ -57,6 +57,10 @@ class TeamsController < ApplicationController
 
   def destroy
     team = Team.find(params[:id])
+    memberships = TeamMembership.where(team_id: team.id)
+    for membership in memberships do
+      membership.destroy
+    end
     team.destroy
     head :no_content
   end
