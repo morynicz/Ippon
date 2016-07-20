@@ -333,6 +333,16 @@ RSpec.describe TeamsController, type: :controller do
           expect(response).to have_http_status :unauthorized
         end
       end
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
     end
   end
 end
