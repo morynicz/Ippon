@@ -279,9 +279,16 @@ RSpec.describe TeamsController, type: :controller do
         xhr :delete, :destroy, format: :json, id: team_id
     }
 
+    let(:player_list) {
+      FactoryGirl::create_list(:player,3)
+    }
     context "when the team exists" do
       let(:team) {
-        FactoryGirl::create(:team, tournament_id: tournament.id)
+        team = FactoryGirl::create(:team, tournament_id: tournament.id)
+        for player in player_list do
+          TeamMembership.create(player_id: player.id, team_id: team.id)
+        end
+        team
       }
       let(:team_id){team.id}
 
@@ -297,6 +304,11 @@ RSpec.describe TeamsController, type: :controller do
         it "should not be able to find deleted team" do
           action
           expect(Team.find_by_id(team.id)).to be_nil
+        end
+
+        it "should destroy all memberships of this team" do
+          action
+          expect(TeamMembership.exists?(team_id: team_id)).to be false
         end
       end
 
