@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :tournaments, only: [:show, :create]
 
   resources :teams, only: [:show, :create, :update, :destroy]
+  put 'teams/:id/add_member/:player_id' => 'teams#add_member'
   resources :players
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
