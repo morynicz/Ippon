@@ -345,4 +345,105 @@ RSpec.describe TeamsController, type: :controller do
       end
     end
   end
+
+  describe "PUT: add_member" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:player) {
+      FactoryGirl::create(:player)
+    }
+
+    let(:action) {
+        xhr :put, :add_member, format: :json, id: team_id, player_id: player_id
+    }
+    let(:player_id){player.id}
+
+    let(:team) {
+      FactoryGirl::create(:team, tournament_id: tournament.id)
+    }
+    let(:team_id){team.id}
+
+    context "when the user is not authorized" do
+      it "should respond with unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+      it "should not change number of team memberships" do
+        expect{
+          action
+        }.not_to change(TeamMembership, :count)
+      end
+    end
+
+    context "when the user is authorized", authenticated: true do
+      before do
+        authorize_user(tournament.id)
+      end
+
+      context "when the team exists" do
+        context "when the player does not exist" do
+          let(:player_id){-9999}
+          it "should respond with not found status" do
+            action
+            expect(response).to have_http_status :not_found
+          end
+          it "should not change number of team memberships" do
+            expect{
+              action
+            }.not_to change(TeamMembership, :count)
+          end
+        end
+
+        context "when the player exists" do
+          context "when the membership desn't exists yet" do
+            it "should respond with OK status" do
+              action
+              expect(response).to have_http_status :no_content
+            end
+            it "should not change number of team memberships" do
+              expect{
+                action
+              }.to change(TeamMembership, :count).by(1)
+            end
+            it "should create a team membership for the player and team" do
+              action
+              expect(TeamMembership.exists?(team_id: team_id, player_id: player_id)).to be true
+            end
+          end
+
+          context "when the membership exists already" do
+            before do
+              TeamMembership.create(team_id: team_id, player_id: player_id)
+            end
+            it "should respond with not found status" do
+              action
+              expect(response).to have_http_status :conflict
+            end
+
+            it "should not change number of team memberships" do
+              expect{
+                action
+              }.not_to change(TeamMembership, :count)
+            end
+          end
+        end
+      end
+
+
+      context "when the team doesn't exist" do
+        let(:team_id) {-9999}
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+        it "should not change number of team memberships" do
+          expect{
+            action
+          }.not_to change(TeamMembership, :count)
+        end
+      end
+    end
+  end
 end
