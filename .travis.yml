@@ -20,3 +20,9 @@ script:
 addons:
     code_climate:
         repo_token: c53f1607b65ec13555badf010d79408b2bb14ad9dff3bc495df5e72e534a0c2d
+
+cache:
+  bundler: true
+  directories:
+  - node_modules # NPM packages
+  - vendor/assets
