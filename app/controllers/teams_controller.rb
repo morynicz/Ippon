@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :add_member]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :add_member, :delete_member]
 
   def authorize_user
     if user_signed_in?
@@ -74,6 +74,22 @@ class TeamsController < ApplicationController
         head :no_content
       else
         head :conflict
+      end
+    else
+      head :not_found
+    end
+  end
+
+  def delete_member
+    player = Player.find(params[:player_id])
+    team = Team.find(params[:id])
+    if player != nil && team != nil
+      if TeamMembership.exists?(team_id: team.id, player_id: player.id)
+        member = TeamMembership.find_by(team_id: team.id, player_id: player.id)
+        member.destroy
+        head :no_content
+      else
+        head :not_found
       end
     else
       head :not_found

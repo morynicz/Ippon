@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   resources :teams, only: [:show, :create, :update, :destroy]
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'
+  delete 'teams/:id/delete_member/:player_id' => 'teams#delete_member'
   resources :players
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
