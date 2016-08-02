@@ -21,6 +21,12 @@ class TeamsController < ApplicationController
     else
       @players = []
     end
+
+    if user_signed_in? && @team != nil
+      @isAdmin = TournamentAdmin.exists?(tournament_id: @team.tournament.id, user_id: current_user.id, status: TournamentAdmin.statuses[:main])
+    else
+      @isAdmin = false
+    end
   end
 
   def create
