@@ -87,6 +87,23 @@ RSpec.describe TeamsController, type: :controller do
           expect(results["players"].map(&extract_club)).to include(player.club_id)
         end
       end
+
+      context "when the user is not an admin" do
+        it "should return admin status false" do
+          action
+          expect(results["is_admin"]).to be false
+        end
+      end
+
+      context "when the user is an admin", authenticated: true do
+        context "when the user is not an admin" do
+          it "should return admin status true" do
+            authorize_user(team.tournament.id)
+            action
+            expect(results["is_admin"]).to be true
+          end
+        end
+      end
     end
 
     context "when team doesn't exist" do
