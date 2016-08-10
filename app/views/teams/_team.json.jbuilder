@@ -1,1 +1,1 @@
-json.(team, :id, :name, :required_size)
+json.(team, :id, :name, :required_size, :tournament_id)
