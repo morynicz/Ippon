@@ -79,6 +79,11 @@ RSpec.describe TeamsController, type: :controller do
         expect(results["team"]["required_size"]).to eq(team.required_size)
       end
 
+      it "should return result with correct tournament id" do
+        action
+        expect(results["team"]["tournament_id"]).to eq(team.tournament_id)
+      end
+
       it "should return players with proper values" do
         action
         for player in player_list do
@@ -197,7 +202,6 @@ RSpec.describe TeamsController, type: :controller do
     let(:tournament) {
       FactoryGirl::create(:tournament)
     }
-
 
     let(:action) {
       xhr :put, :update, format: :json, id: team.id, team: update_team_attrs
@@ -448,7 +452,6 @@ RSpec.describe TeamsController, type: :controller do
         end
       end
 
-
       context "when the team doesn't exist" do
         let(:team_id) {-9999}
         it "should respond with not found status" do
@@ -548,7 +551,6 @@ RSpec.describe TeamsController, type: :controller do
           end
         end
       end
-
 
       context "when the team doesn't exist" do
         let(:team_id) {-9999}
