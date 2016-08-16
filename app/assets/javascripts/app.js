@@ -74,6 +74,11 @@ angular.module('ippon').config([
       templateUrl: 'Players/_form.html',
       controller: 'PlayersController'
     })
+    .state('teams_new',{
+      url: '/teams/new',
+      templateUrl: 'Teams/_form.html',
+      controller: 'TeamsController'
+    })
     .state('teams_show',{
       url: '/teams/:teamId',
       templateUrl: 'Teams/_show.html',

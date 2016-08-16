@@ -54,7 +54,23 @@ angular.module('ippon').controller('TeamsController',[
         });
       }
     } else {
-      $scope.team={};
+      $scope.team = {};
       $scope.tournament_id = $stateParams.tournament_id;
     }
+
+    $scope.save = function() {
+      var onError = function(_httpResponse) {
+        //TODO flash.error
+      };
+
+      if($scope.team.id) {
+        $scope.teamResource.$save((function() {
+          $state.go('teams_show',{teamId: $scope.team.id});
+        }), onError);
+      } else {
+        teamResource.create($scope.team, function(newTeam) {
+          $state.go('teams_show',{teamId: newTeam.id});
+        }, onError);
+      }
+    };
   }]);
