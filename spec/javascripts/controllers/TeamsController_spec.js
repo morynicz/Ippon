@@ -129,4 +129,48 @@ describe('TeamsController', function() {
       expect(state.is('teams_show')).toBe(true);
     });
   });
+
+  describe('update', function() {
+    var updatedTeam = {
+      name: "Teleteam",
+      required_size: 4
+    };
+
+    var players = [
+      {
+        "id":71,
+        "name":"Tessie",
+        "surname":"Ryan",
+        "birthday":"1979-04-28",
+        "rank":"kyu_3",
+        "sex":"male",
+        "club_id":71
+      },
+      {
+        "id":72,
+        "name":"Elza",
+        "surname":"Spinka",
+        "birthday":"1982-01-22",
+        "rank":"dan_1",
+        "sex":"male",
+        "club_id":72
+      }];
+
+    beforeEach(function() {
+      setupController(true, fakeTeamId,false,'teams_edit');
+      httpBackend.expectGET(new RegExp("players")).respond(players);
+      httpBackend.flush();
+      var request = new RegExp("teams/");
+      httpBackend.expectPUT(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope.team.name = updatedTeam.name;
+      scope.team.required_size = updatedTeam.required_size;
+      scope.save();
+      httpBackend.flush();
+      expect('#'+location.path()).toBe(state.href('teams_show',{teamId: scope.team.id}));
+      expect(state.is('teams_show')).toBe(true);
+    });
+  });
 });
