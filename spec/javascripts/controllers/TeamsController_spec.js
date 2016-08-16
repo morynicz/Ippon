@@ -103,4 +103,40 @@ describe('TeamsController', function() {
       });
     });
   });
+
+  describe('create', function() {
+    var newPlayer = {
+      id: 104,
+      name: "Steve",
+      surname: "Balistreri",
+      birthday: "1960-10-06",
+      rank: "dan_7",
+      sex: "male",
+      club_id: 120
+    };
+
+    var newTeam = {
+      name: "Teemo",
+      required_size: 3,
+      tournament_id: 15
+    };
+
+    beforeEach(function() {
+      setupController(false, false, false, 'teams_new');
+      var request = new RegExp("\/teams");
+      httpBackend.expectPOST(request).respond(201, newTeam);
+    });
+
+    it('post to the backend', function() {
+      scope.team.name = newTeam.name;
+      scope.team.required_size = newTeam.required_size;
+      scope.team.tournament_id = newTeam.tournament_id;
+
+      scope.save();
+      scope.$apply();
+      httpBackend.flush();
+      expect('#' + location.path()).toBe(state.href('teams_show'));
+      expect(state.is('teams_show')).toBe(true);
+    });
+  });
 });
