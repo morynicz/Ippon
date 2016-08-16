@@ -17,22 +17,15 @@ describe('TeamsController', function() {
       "rank":"dan_4",
       "sex":"female",
       "club_id": fakeClubId
-  }
+  };
 
   var fakeTeam = {
     id: fakeTeamId,
     name: "Team Name",
     required_size: 2,
     tournament_id: 33
-  }
+  };
 
-  var responseComposite = {
-    team: fakeTeam,
-    players: [
-      fakePlayer
-    ],
-    is_admin: false
-  }
   var state;
 
   var setupController = function(teamExists, teamId, isAdmin, stateName) {
@@ -65,9 +58,9 @@ describe('TeamsController', function() {
             fakePlayer
           ],
           is_admin: isAdmin
-        }
+        };
         responseComposite.team.id = teamId;
-        results = (teamExists)?[200, responseComposite]:[404];
+        var results = (teamExists)?[200, responseComposite]:[404];
         httpBackend.expectGET(request).respond(results[0], results[1]);
       }
 
