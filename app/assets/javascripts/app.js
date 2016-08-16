@@ -83,6 +83,11 @@ angular.module('ippon').config([
       url: '/teams/:teamId',
       templateUrl: 'Teams/_show.html',
       controller: 'TeamsController'
+    })
+    .state('teams_edit', {
+      url: '/teams/:teamId/edit',
+      templateUrl: 'Teams/_form.html',
+      controller: 'TeamsController'
     });
 
 		$urlRouterProvider.otherwise('home');

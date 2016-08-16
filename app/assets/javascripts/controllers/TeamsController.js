@@ -47,7 +47,7 @@ angular.module('ippon').controller('TeamsController',[
         $scope.is_admin = false;
       });
       if($state.is('teams_edit')) {
-        playerResource.qery(function(results) {
+        playerResource.query(function(results) {
           $scope.players = results;
         }, function(httpResponse) {
           $scope.players = null;
@@ -64,9 +64,9 @@ angular.module('ippon').controller('TeamsController',[
       };
 
       if($scope.team.id) {
-        $scope.teamResource.$save((function() {
+        teamResource.save($scope.team, function() {
           $state.go('teams_show',{teamId: $scope.team.id});
-        }), onError);
+        }, onError);
       } else {
         teamResource.create($scope.team, function(newTeam) {
           $state.go('teams_show',{teamId: newTeam.id});
