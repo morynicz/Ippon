@@ -105,16 +105,6 @@ describe('TeamsController', function() {
   });
 
   describe('create', function() {
-    var newPlayer = {
-      id: 104,
-      name: "Steve",
-      surname: "Balistreri",
-      birthday: "1960-10-06",
-      rank: "dan_7",
-      sex: "male",
-      club_id: 120
-    };
-
     var newTeam = {
       name: "Teemo",
       required_size: 3,
