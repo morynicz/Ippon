@@ -85,28 +85,28 @@ describe('PlayersController', function() {
   });
 
   var setupClub = function(clubId, club) {
-    request = new RegExp("clubs/" + clubId);
-    results = [200, club];
+    var request = new RegExp("clubs/" + clubId);
+    var results = [200, club];
     httpBackend.expectGET(request).respond(results[0], results[1]);
-  }
+  };
 
   var setupClubs = function(clubs) {
-    request = new RegExp("clubs");
-    results = [200, clubs];
+    var request = new RegExp("clubs");
+    var results = [200, clubs];
     httpBackend.expectGET(request).respond(results[0], results[1]);
-  }
+  };
 
-  var setupIsAdminForClub(clubId, isAdmin) {
-    request = new RegExp("clubs/admin/"+clubId);
-    results = [200, isAdmin];
+  var setupIsAdminForClub = function(clubId, isAdmin) {
+    var request = new RegExp("clubs/admin/"+clubId);
+    var results = [200, isAdmin];
     httpBackend.expectGET(request).respond(results[0], results[1]);
-  }
+  };
 
-  var setupIsClubAdmin(isAdmin) {
-    request = new RegExp("clubs/admin/any");
-    results = [200, isAdmin];
+  var setupIsClubAdmin = function(isAdmin) {
+    var request = new RegExp("clubs/admin/any");
+    var results = [200, isAdmin];
     httpBackend.expectGET(request).respond(results[0], results[1]);
-  }
+  };
 
   describe('index', function(){
     var players = [
@@ -179,13 +179,19 @@ describe('PlayersController', function() {
       beforeEach(function() {
         setupController(true,fakePlayerId,false,'players_show');
         setupClub(fakeClubId,fakeClub);
-        setupIsAdminForClub(fakeClubId, isAdmin)
+        setupIsAdminForClub(fakeClubId, false)
       });
       it('loads the given player', function() {
         httpBackend.flush();
         var composedPlayer = fakePlayer;
         composedPlayer.club = fakeClub;
-        expect(scope.player).toEqualData(composedPlayer);
+
+        expect(scope.player.name).toEqualData(composedPlayer.name);
+        expect(scope.player.surname).toEqualData(composedPlayer.surname);
+        expect(scope.player.sex).toEqualData(composedPlayer.sex);
+        expect(scope.player.rank).toEqualData(composedPlayer.rank);
+        expect(scope.player.club).toEqualData(composedPlayer.club);
+        expect(scope.player.club_id).toEqualData(composedPlayer.club_id);
       });
     });
 
@@ -271,7 +277,7 @@ describe('PlayersController', function() {
     beforeEach(function() {
       setupController(true,fakePlayerId,false,'players_show');
       setupClub(fakeClubId,fakeClub);
-      setupIsAdminForClub(fakeClubId, isAdmin)
+      setupIsAdminForClub(fakeClubId, true)
       httpBackend.flush();
       var request = new RegExp("players/" + scope.player.id);
       httpBackend.expectDELETE(request).respond(204);
