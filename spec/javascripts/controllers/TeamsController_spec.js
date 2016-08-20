@@ -173,4 +173,20 @@ describe('TeamsController', function() {
       expect(state.is('teams_show')).toBe(true);
     });
   });
+
+  describe('delete', function() {
+    beforeEach(function() {
+      setupController(true,fakeTeamId,false,'teams_show');
+      httpBackend.flush();
+      var request = new RegExp("teams/" + scope.team.id);
+      httpBackend.expectDELETE(request).respond(204);
+    });
+
+    it('posts to the backend', function() {
+      scope["delete"]();
+      scope.$apply();
+      httpBackend.flush();
+      expect('#'+ location.path()).toBe(state.href('home'));
+    });
+  });
 });
