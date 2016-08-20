@@ -73,4 +73,9 @@ angular.module('ippon').controller('TeamsController',[
         }, onError);
       }
     };
+
+    $scope["delete"] = function() {
+      teamResource.delete({teamId: $scope.team.id});
+      $state.go('home');
+    }
   }]);
