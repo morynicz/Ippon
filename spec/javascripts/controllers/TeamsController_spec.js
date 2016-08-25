@@ -72,6 +72,19 @@ describe('TeamsController', function() {
     });
   };
 
+  var expectGetTeam = function(teamId, isAdmin) {
+    request = new RegExp("teams/" + teamId);
+    var responseComposite = {
+      team: fakeTeam,
+      players: [
+        fakePlayer
+      ],
+      is_admin: isAdmin
+    };
+    responseComposite.team.id = teamId;
+    httpBackend.expectGET(request).respond(responseComposite);
+  };
+
   beforeEach(module('ippon'));
 
   afterEach(function(){
@@ -187,6 +200,45 @@ describe('TeamsController', function() {
       scope.$apply();
       httpBackend.flush();
       expect('#'+ location.path()).toBe(state.href('home'));
+    });
+  });
+
+  describe('add_member', function() {
+    var players = [
+      {
+        "id":71,
+        "name":"Tessie",
+        "surname":"Ryan",
+        "birthday":"1979-04-28",
+        "rank":"kyu_3",
+        "sex":"male",
+        "club_id":71
+      },
+      {
+        "id":72,
+        "name":"Elza",
+        "surname":"Spinka",
+        "birthday":"1982-01-22",
+        "rank":"dan_1",
+        "sex":"male",
+        "club_id":72
+      },
+      fakePlayer
+    ];
+
+    beforeEach(function() {
+      setupController(true, fakeTeamId,false,'teams_edit');
+      httpBackend.expectGET(new RegExp("players")).respond(players);
+      httpBackend.flush();
+      httpBackend.expectPUT(new RegExp("teams/" + fakeTeamId + "/add_member/" + fakePlayerId)).respond(204);
+      expectGetTeam(fakeTeamId);
+    });
+
+    it('posts to the backend', function() {
+        scope.add_member(fakePlayerId, true);
+        httpBackend.flush();
+        expect(state.is('teams_edit')).toBe(true);
+        expect(scope.members).toContain(fakePlayer);
     });
   });
 });
