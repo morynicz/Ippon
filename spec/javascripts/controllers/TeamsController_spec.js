@@ -87,7 +87,7 @@ describe('TeamsController', function() {
       it('loads the given team', function() {
         httpBackend.flush();
         expect(scope.team).toEqualData(fakeTeam);
-        expect(scope.players).toEqualData([fakePlayer]);
+        expect(scope.members).toEqualData([fakePlayer]);
         expect(scope.is_admin).toBe(false);
       });
     });
@@ -97,7 +97,7 @@ describe('TeamsController', function() {
       it("doesn't load a team", function() {
         httpBackend.flush();
         expect(scope.team).toBe(null);
-        expect(scope.players).toBe(null);
+        expect(scope.members).toBe(null);
         expect(scope.is_admin).toBe(false);
         //flash about error
       });

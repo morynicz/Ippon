@@ -28,6 +28,20 @@ angular.module('ippon').controller('TeamsController',[
       }
     });
 
+    var getTeam = function(teamId) {
+      teamResource.get({
+        teamId: teamId
+      }, function(response) {
+        $scope.team = response.team;
+        $scope.members = response.players;
+        $scope.is_admin = response.is_admin;
+      }, function(httpResponse) {
+        $scope.team = null;
+        $scope.members = null;
+        $scope.is_admin = false;
+      });
+    }
+
     var playerResource = $resource("/players/:playerId",
     {
       playerId: "@id",
@@ -35,17 +49,7 @@ angular.module('ippon').controller('TeamsController',[
     });
 
     if($stateParams.teamId && ($state.is('teams_show') || $state.is('teams_edit'))) {
-      teamResource.get({
-        teamId: $stateParams.teamId
-      }, function(response) {
-        $scope.team = response.team;
-        $scope.players = response.players;
-        $scope.is_admin = response.is_admin;
-      }, function(httpResponse) {
-        $scope.team = null;
-        $scope.players = null;
-        $scope.is_admin = false;
-      });
+      getTeam($stateParams.teamId);
       if($state.is('teams_edit')) {
         playerResource.query(function(results) {
           $scope.players = results;
