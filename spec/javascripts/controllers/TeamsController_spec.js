@@ -176,7 +176,7 @@ describe('TeamsController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,fakeTeamId,false,'teams_show');
+      setupController(true,fakeTeamId,true,'teams_show');
       httpBackend.flush();
       var request = new RegExp("teams/" + scope.team.id);
       httpBackend.expectDELETE(request).respond(204);
