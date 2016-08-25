@@ -20,7 +20,11 @@ angular.module('ippon').controller('TeamsController',[
       },
       'add_member' : {
         method: 'PUT',
-        url: '/teams/:teamId/add_member/:playerId'
+        url: '/teams/:teamId/add_member/:playerId',
+        params: {
+          teamId: "@teamId",
+          playerId: "@playerId"
+        }
       },
       'delete_member' : {
         method: 'DELETE',
@@ -82,4 +86,11 @@ angular.module('ippon').controller('TeamsController',[
       teamResource.delete({teamId: $scope.team.id});
       $state.go('home');
     }
+
+    $scope.add_member = function(playerId) {
+      teamResource.add_member({teamId: $scope.team.id, playerId: playerId},
+      function() {
+        getTeam($scope.team.id);
+      });
+    };
   }]);
