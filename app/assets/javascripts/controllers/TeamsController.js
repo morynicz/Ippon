@@ -93,4 +93,11 @@ angular.module('ippon').controller('TeamsController',[
         getTeam($scope.team.id);
       });
     };
+
+    $scope.delete_member = function(playerId) {
+      teamResource.delete_member({teamId: $scope.team.id, playerId: playerId},
+      function() {
+        getTeam($scope.team.id);
+      });
+    };
   }]);
