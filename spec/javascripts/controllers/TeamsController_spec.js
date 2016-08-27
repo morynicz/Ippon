@@ -28,7 +28,23 @@ describe('TeamsController', function() {
 
   var state;
 
-  var setupController = function(teamExists, teamId, isAdmin, stateName) {
+  var expectGetTeam = function(teamId, isAdmin, team, players) {
+    var request = new RegExp("teams/" + teamId);
+    var responseComposite = {
+      team: team,
+      players: players,
+      is_admin: isAdmin
+    };
+    responseComposite.team.id = teamId;
+    httpBackend.expectGET(request).respond(200, responseComposite);
+  };
+
+  var expectTeamNotFound = function(teamId) {
+    var request = new RegExp("teams/" + teamId);
+    httpBackend.expectGET(request).respond(404, null);
+  }
+
+  var setupController = function(stateName, teamId) {
     return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
       scope = $rootScope.$new();
       location = $location;
@@ -43,25 +59,9 @@ describe('TeamsController', function() {
 
       state.go(stateName);
       $rootScope.$apply();
-      var request = null;
-
-      if(isAdmin === null) {
-        isAdmin = false;
-      }
 
       if (teamId) {
         stateParams.teamId = teamId;
-        request = new RegExp("teams/" + teamId);
-        var responseComposite = {
-          team: fakeTeam,
-          players: [
-            fakePlayer
-          ],
-          is_admin: isAdmin
-        };
-        responseComposite.team.id = teamId;
-        var results = (teamExists)?[200, responseComposite]:[404];
-        httpBackend.expectGET(request).respond(results[0], results[1]);
       }
 
       ctrl = $controller('TeamsController', {
@@ -70,19 +70,6 @@ describe('TeamsController', function() {
         $state: state
       });
     });
-  };
-
-  var expectGetTeam = function(teamId, isAdmin) {
-    request = new RegExp("teams/" + teamId);
-    var responseComposite = {
-      team: fakeTeam,
-      players: [
-        fakePlayer
-      ],
-      is_admin: isAdmin
-    };
-    responseComposite.team.id = teamId;
-    httpBackend.expectGET(request).respond(responseComposite);
   };
 
   beforeEach(module('ippon'));
@@ -95,7 +82,8 @@ describe('TeamsController', function() {
   describe('show',function(){
     describe('team is found', function() {
       beforeEach(function() {
-        setupController(true,fakeTeamId,false,'teams_show');
+        setupController('teams_show', fakeTeamId);
+        expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
       });
       it('loads the given team', function() {
         httpBackend.flush();
@@ -106,7 +94,10 @@ describe('TeamsController', function() {
     });
 
     describe('team is not found', function() {
-      beforeEach(setupController(false, fakeTeamId,false,'teams_show'));
+      beforeEach(function() {
+        setupController('teams_show', fakeTeamId);
+        expectTeamNotFound(fakeTeamId);
+      });
       it("doesn't load a team", function() {
         httpBackend.flush();
         expect(scope.team).toBe(null);
@@ -125,7 +116,7 @@ describe('TeamsController', function() {
     };
 
     beforeEach(function() {
-      setupController(false, false, false, 'teams_new');
+      setupController('teams_new', false);
       var request = new RegExp("\/teams");
       httpBackend.expectPOST(request).respond(201, newTeam);
     });
@@ -170,7 +161,8 @@ describe('TeamsController', function() {
       }];
 
     beforeEach(function() {
-      setupController(true, fakeTeamId,false,'teams_edit');
+      setupController('teams_edit', fakeTeamId);
+      expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
       httpBackend.expectGET(new RegExp("players")).respond(players);
       httpBackend.flush();
       var request = new RegExp("teams/");
@@ -189,7 +181,8 @@ describe('TeamsController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,fakeTeamId,true,'teams_show');
+      setupController('teams_show', fakeTeamId);
+      expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
       httpBackend.flush();
       var request = new RegExp("teams/" + scope.team.id);
       httpBackend.expectDELETE(request).respond(204);
@@ -227,11 +220,12 @@ describe('TeamsController', function() {
     ];
 
     beforeEach(function() {
-      setupController(true, fakeTeamId,false,'teams_edit');
+      setupController('teams_edit', fakeTeamId);
+      expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
       httpBackend.expectGET(new RegExp("players")).respond(players);
       httpBackend.flush();
       httpBackend.expectPUT(new RegExp("teams/" + fakeTeamId + "/add_member/" + fakePlayerId)).respond(204);
-      expectGetTeam(fakeTeamId);
+      expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
     });
 
     it('posts to the backend', function() {
