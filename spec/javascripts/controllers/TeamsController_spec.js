@@ -235,4 +235,44 @@ describe('TeamsController', function() {
         expect(scope.members).toContain(fakePlayer);
     });
   });
+
+  describe('delete_member', function() {
+    var players = [
+      {
+        "id":71,
+        "name":"Tessie",
+        "surname":"Ryan",
+        "birthday":"1979-04-28",
+        "rank":"kyu_3",
+        "sex":"male",
+        "club_id":71
+      },
+      {
+        "id":72,
+        "name":"Elza",
+        "surname":"Spinka",
+        "birthday":"1982-01-22",
+        "rank":"dan_1",
+        "sex":"male",
+        "club_id":72
+      },
+      fakePlayer
+    ];
+
+    beforeEach(function() {
+      setupController('teams_edit', fakeTeamId);
+      expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
+      httpBackend.expectGET(new RegExp("players")).respond(players);
+      httpBackend.flush();
+      httpBackend.expectDELETE(new RegExp("teams/" + fakeTeamId + "/delete_member/" + fakePlayerId)).respond(204);
+      expectGetTeam(fakeTeamId, true, fakeTeam, []);
+    });
+
+    it('posts to the backend', function() {
+        scope.delete_member(fakePlayerId, true);
+        httpBackend.flush();
+        expect(state.is('teams_edit')).toBe(true);
+        expect(scope.members).not.toContain(fakePlayer);
+    });
+  });
 });
