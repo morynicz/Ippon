@@ -1,0 +1,28 @@
+<section class="col-md-6 col-md-offset-3">
+  <article class="panel panel-info">
+    <header class="panel-heading"><h1>{{team.name}}</h1>
+    </header>
+    <p class="panel-body">
+      <div class="h3">{{'TEAM_REQUIRED_SIZE'|translate}}: {{team.required_size}}</div>
+      <section class="row" ng-if="members.length">
+        <div class="h3">{{'TEAM_MEMBERS'|translate}} </div>
+        <ul class="list-unstyled">
+          <li ng-repeat="player in members">
+            <section class="well col-md-6 col-md-offset-3">
+              <h1 class="h3" style="margin-top: 0"><a class="col-md-4" href="" ng-click="view(player.id)" >
+                {{player.name}} {{player.surname}}</a></h1>
+            </section>
+          </li>
+        </ul>
+      </section>
+    </p>
+  </article>
+  <section>
+    <div class="col-md-9">
+      <div ng-show="is_admin" class="col-md-9 text-right btn-group">
+        <button ng-click="edit()" class="btn btn-info" id="edit-team"> {{'EDIT' | translate}} </button>
+        <button ng-click="delete()" class="btn btn-danger" id="delete-team"> {{'DELETE' | translate}} </button>
+      </div>
+    </div>
+  </section>
+</section>
