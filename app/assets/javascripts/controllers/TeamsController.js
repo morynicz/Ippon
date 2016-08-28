@@ -100,4 +100,16 @@ angular.module('ippon').controller('TeamsController',[
         getTeam($scope.team.id);
       });
     };
+
+    $scope.edit = function() {
+      $state.go('teams_edit',{teamId: $scope.team.id});
+    };
+
+    $scope.cancel = function() {
+      if($scope.player.id) {
+        $state.go('teams_show',{teamId: $scope.team.id});
+      } else {
+        $state.go('teams');
+      }
+    };
   }]);
