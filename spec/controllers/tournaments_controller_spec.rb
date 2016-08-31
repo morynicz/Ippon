@@ -135,4 +135,82 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "index" do
+    let(:tournament_list) {
+      FactoryGirl::create_list(:tournament,3)
+    }
+    before do
+      tournament_list
+      xhr :get, :index, format: :json
+    end
+
+    subject(:results) { JSON.parse(response.body)}
+
+    def extract_name
+      ->(object) { object["name"]}
+    end
+
+    def extract_playoff_match_length
+      ->(object) {object["playoff_match_length"]}
+    end
+
+    def extract_group_match_length
+      ->(object) {object["group_match_length"]}
+    end
+
+    def extract_team_size
+      ->(object) {object["team_size"]}
+    end
+
+    def extract_player_age_constraint
+      ->(object) {object["player_age_constraint"]}
+    end
+
+    def extract_player_age_constraint_value
+      ->(object) {object["player_age_constraint_value"]}
+    end
+
+    def extract_player_rank_constraint
+      ->(object) {object["player_rank_constraint"]}
+    end
+
+    def extract_player_rank_constraint_value
+      ->(object) {object["player_rank_constraint_value"]}
+    end
+
+    def extract_player_sex_constraint
+      ->(object) {object["player_sex_constraint"]}
+    end
+
+    def extract_player_sex_constraint_value
+      ->(object) {object["player_sex_constraint_value"]}
+    end
+
+
+    context "when we want the full list" do
+      it "should 200" do
+        expect(response.status).to eq(200)
+      end
+
+      it "should return three results" do
+        expect(results.size).to eq(3)
+      end
+
+      it "should include all the values of all the tournaments" do
+        for tournament in tournament_list do
+          expect(results.map(&extract_name)).to include(tournament.name)
+          expect(results.map(&extract_group_match_length)).to include(tournament.group_match_length)
+          expect(results.map(&extract_playoff_match_length)).to include(tournament.playoff_match_length)
+          expect(results.map(&extract_team_size)).to include(tournament.team_size)
+          expect(results.map(&extract_player_age_constraint)).to include(tournament.player_age_constraint)
+          expect(results.map(&extract_player_age_constraint_value)).to include(tournament.player_age_constraint_value)
+          expect(results.map(&extract_player_rank_constraint)).to include(tournament.player_rank_constraint)
+          expect(results.map(&extract_player_rank_constraint_value)).to include(tournament.player_rank_constraint_value)
+          expect(results.map(&extract_player_sex_constraint)).to include(tournament.player_sex_constraint)
+          expect(results.map(&extract_player_sex_constraint_value)).to include(tournament.player_sex_constraint_value)
+        end
+      end
+    end
+  end
 end
