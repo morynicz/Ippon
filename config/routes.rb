@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
 
-  resources :tournaments, only: [:show, :create]
+  resources :tournaments, only: [:show, :create, :index]
 
   resources :teams, only: [:show, :create, :update, :destroy]
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'

@@ -21,6 +21,10 @@ before_filter :authenticate_user!, only: [:create]
     @tournament = Tournament.find(params[:id])
   end
 
+  def index
+    @tournaments = Tournament.all
+  end
+
   private
 
   def permitted_params
