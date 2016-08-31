@@ -10,7 +10,7 @@ RSpec.describe TournamentsController, type: :controller do
 
     subject(:results) {JSON.parse(response.body)}
 
-    context "when the player exists" do
+    context "when the tournament exists" do
       let(:tournament) {
         FactoryGirl::create(:tournament)
       }
