@@ -3,6 +3,21 @@ require 'rails_helper'
 RSpec.describe TournamentsController, type: :controller do
   render_views
 
+  def authorize_user(tournament_id)
+    TournamentAdmin.create(tournament_id: tournament_id, user_id: current_user.id, status: :main)
+  end
+
+  attribute_list = [:name,
+  :playoff_match_length,
+  :group_match_length,
+  :team_size,
+  :player_age_constraint,
+  :player_age_constraint_value,
+  :player_sex_constraint,
+  :player_sex_constraint_value,
+  :player_rank_constraint,
+  :player_rank_constraint_value]
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: tournament_id
@@ -209,6 +224,103 @@ RSpec.describe TournamentsController, type: :controller do
           expect(results.map(&extract_player_rank_constraint_value)).to include(tournament.player_rank_constraint_value)
           expect(results.map(&extract_player_sex_constraint)).to include(tournament.player_sex_constraint)
           expect(results.map(&extract_player_sex_constraint_value)).to include(tournament.player_sex_constraint_value)
+        end
+      end
+    end
+  end
+
+  describe "PATCH update" do
+    let(:action) {
+      xhr :put, :update, format: :json, id: tournament.id, tournament: update_tournament_attrs
+      tournament.reload
+    }
+
+    let(:update_tournament_attrs) {
+      FactoryGirl::attributes_for(:tournament)
+    }
+    let(:tournament_attrs) {
+      FactoryGirl::attributes_for(:tournament)
+    }
+    context "when the tournament exists" do
+      let(:tournament) {
+        Tournament.create(tournament_attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update tournament attributes" do
+            action
+
+            for attribute in attribute_list
+              expect(tournament.attributes[attribute.to_s]).to eq(update_tournament_attrs[attribute])
+            end
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_tournament_attrs) do
+            {
+              name: "",
+              playoff_match_length: 0,
+              group_match_length: 0,
+              team_size: 0,
+              player_age_constraint: '',
+              player_age_constraint_value: '',
+              player_sex_constraint: '',
+              player_sex_constraint_value: '',
+              player_rank_constraint: '',
+              player_rank_constraint_value: ''
+            }
+          end
+
+          it "should not update tournament attributes" do
+            action
+            for attribute in attribute_list
+              expect(tournament.attributes[attribute.to_s]).to eq(tournament_attrs[attribute])
+            end
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should not update tournament attributes" do
+          action
+          for attribute in attribute_list
+            expect(tournament.attributes[attribute.to_s]).to eq(tournament_attrs[attribute])
+          end
+        end
+      end
+    end
+
+    context "when the tournament doesn't exist" do
+      let(:tournament_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: tournament_id, tournament: update_tournament_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
         end
       end
     end
