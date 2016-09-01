@@ -31,7 +31,7 @@ RSpec.describe TournamentsController, type: :controller do
         expect(results["name"]).to eq(tournament.name)
       end
 
-      it "should return result with team size" do
+      it "should return result with tournament size" do
         action
         expect(results["team_size"]).to eq(tournament.team_size)
       end
