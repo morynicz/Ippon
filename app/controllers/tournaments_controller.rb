@@ -1,5 +1,16 @@
 class TournamentsController < ApplicationController
 before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!,:authorize_user, only: [:update]
+
+  def authorize_user
+    if user_signed_in?
+      user = current_user
+      tournament = Tournament.find(params[:id])
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id: tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
+    else
+      head :unauthorized
+    end
+  end
 
   def create
     if user_signed_in?
@@ -23,6 +34,15 @@ before_filter :authenticate_user!, only: [:create]
 
   def index
     @tournaments = Tournament.all
+  end
+
+  def update
+    tournament = Tournament.find(params[:id])
+    if tournament.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
   end
 
   private
