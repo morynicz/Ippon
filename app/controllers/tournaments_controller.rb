@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
 before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
 
   def authorize_user
     if user_signed_in?
@@ -60,7 +60,45 @@ before_filter :authenticate_user!, only: [:create]
     head :no_content
   end
 
+  def admins
+    tournament = Tournament.find(params[:id])
+    if user_signed_in? && TournamentAdmin.exists?(tournament_id: tournament.id, user_id: current_user.id)
+      @admins = TournamentAdmin.where(tournament_id: tournament.id).collect {|ta| User.find(ta.user_id)}
+      @users = User.all - @admins
+    else
+      @admins = []
+      @users = []
+    end
+  end
+
+  def add_admin
+    user_id = params[:user_id]
+    tournament_id = params[:id]
+    if User.exists?(user_id) && Tournament.exists?(tournament_id) && !TournamentAdmin.exists?(tournament_id: tournament_id, user_id: user_id)
+      add_admin_for_tournament(tournament_id,user_id)
+      head :no_content
+    else
+      head :bad_request
+    end
+  end
+
+  def delete_admin
+    user_id = params[:user_id]
+    tournament_id = params[:id]
+    if User.exists?(user_id) && Tournament.exists?(tournament_id) && TournamentAdmin.exists?(tournament_id: tournament_id, user_id: user_id) && (TournamentAdmin.where(tournament_id: tournament_id).size > 1)
+      admin= TournamentAdmin.find_by(tournament_id: tournament_id, user_id: user_id)
+      admin.destroy
+      head :no_content
+    else
+      head :bad_request
+    end
+  end
+
   private
+
+  def add_admin_for_tournament(tournament_id, user_id)
+    TournamentAdmin.create(tournament_id: tournament_id, user_id: user_id) unless TournamentAdmin.exists?(tournament_id: tournament_id, user_id: user_id)
+  end
 
   def permitted_params
     par = params.require(:tournament).permit(:name,:playoff_match_length,:group_match_length,:team_size,:player_age_constraint,:player_age_constraint_value,:player_rank_constraint, :player_rank_constraint_value, :player_sex_constraint, :player_sex_constraint_value)
