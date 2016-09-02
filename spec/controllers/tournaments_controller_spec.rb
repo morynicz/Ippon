@@ -333,7 +333,7 @@ RSpec.describe TournamentsController, type: :controller do
 
     context "when the torunament exists" do
       let(:tournament) {
-        FactoryGirl::create(:tournament_with_members_and_admins)
+        FactoryGirl::create(:tournament_with_participants_and_admins)
       }
       let(:tournament_id){tournament.id}
 
@@ -353,7 +353,7 @@ RSpec.describe TournamentsController, type: :controller do
 
         it "should destroy all memberships of this tournament" do
           action
-          expect(TournamentMembership.exists?(tournament_id: tournament_id)).to be false
+          expect(TournamentParticipation.exists?(tournament_id: tournament_id)).to be false
         end
 
         it "should delete all admins of this tournament" do

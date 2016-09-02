@@ -47,9 +47,9 @@ before_filter :authenticate_user!, only: [:create]
 
   def destroy
     tournament = Tournament.find(params[:id])
-    memberships = TournamentMembership.where(tournament_id: tournament.id)
-    for membership in memberships do
-      membership.destroy
+    participations = TournamentParticipation.where(tournament_id: tournament.id)
+    for participation in participations do
+      participation.destroy
     end
 
     admins = TournamentAdmin.where(tournament_id: tournament.id)
