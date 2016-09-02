@@ -385,4 +385,241 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "GET: admins" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+    let(:action) {
+      xhr :get, :admins, format: :json, id: tournament.id
+    }
+
+    before do
+      admin_list = FactoryGirl::create_list(:user, 3)
+      not_admin_list = FactoryGirl::create_list(:user,2)
+
+      for admin in admin_list do
+        TournamentAdmin.create(tournament_id: tournament.id, user_id: admin.id)
+      end
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "returns response with no admins or users" do
+        action
+        expect(results["admins"]).to be nil
+        expect(results["users"]).to be nil
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when the user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "returns response body to be empty" do
+          action
+          expect(response.body.empty?).to be true
+        end
+      end
+
+      context "when the user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        it "returns success status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns three current admins" do
+          action
+          expect(results["admins"].size).to eq(4)
+        end
+
+        it "returns two non-admin users" do
+          action
+          expect(results["users"].size).to eq(2)
+        end
+      end
+    end
+  end
+
+  describe "POST add_admin" do
+
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:tested_user) {
+      FactoryGirl::create(:user)
+    }
+
+    let(:action) {
+      xhr :post, :add_admin, format: :json, id: tournament.id, user_id: tested_user.id
+    }
+
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of admins" do
+        expect {
+          action
+        }.to_not change(TournamentAdmin, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of admins" do
+          expect {
+            action
+          }.to_not change(TournamentAdmin, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "when added user is not admin already" do
+          it "returns OK status" do
+            action
+            expect(response).to have_http_status :no_content
+          end
+
+          it "adds the user to admins of given tournament" do
+            action
+            expect(TournamentAdmin.where(tournament_id: tournament.id).size).to eq(2)
+            expect(TournamentAdmin.exists?(tournament_id: tournament.id, user_id: tested_user.id)).to be true
+          end
+        end
+
+        context "when the user is already an andmin" do
+          before do
+            TournamentAdmin.create(tournament_id: tournament.id, user_id: tested_user.id)
+          end
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change admin count" do
+            expect { action }.not_to change(TournamentAdmin, :count)
+          end
+        end
+
+      end
+    end
+  end
+
+  describe "DELETE delete_admin" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:tested_user) {
+      FactoryGirl::create(:user)
+    }
+
+    let(:action) {
+      xhr :delete, :delete_admin, format: :json, id: tournament.id, user_id: tested_user.id
+    }
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of admins" do
+        expect {
+          action
+        }.to_not change(TournamentAdmin, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of admins" do
+          expect {
+            action
+          }.to_not change(TournamentAdmin, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "when the deleted admin is not an admin" do
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change admin count" do
+            expect { action }.not_to change(TournamentAdmin, :count)
+          end
+        end
+
+        context "when the deleted admin is an admin" do
+
+          context "when deleted admin is not the last" do
+            before do
+              TournamentAdmin.create(tournament_id: tournament.id, user_id: tested_user.id)
+            end
+
+            it "returns OK status" do
+              action
+              expect(response).to have_http_status :no_content
+            end
+
+            it "removes the deleted admin from admins of given tournament" do
+              action
+              expect(TournamentAdmin.where(tournament_id: tournament.id).size).to eq(1)
+              expect(TournamentAdmin.exists?(tournament_id: tournament.id, user_id: tested_user.id)).to be false
+            end
+          end
+
+          context "when the deleted admin is the last admin" do
+            let(:unadmin_self) {
+              xhr :delete, :delete_admin, format: :json, id: tournament.id, user_id: current_user.id
+            }
+            it "returns bad request status" do
+              unadmin_self
+              expect(response).to have_http_status :bad_request
+            end
+
+            it "does not change admin count" do
+              expect { unadmin_self }.not_to change(TournamentAdmin, :count)
+            end
+          end
+        end
+      end
+    end
+  end
 end
