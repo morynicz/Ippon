@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
 before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def authorize_user
     if user_signed_in?
@@ -43,6 +43,21 @@ before_filter :authenticate_user!, only: [:create]
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    tournament = Tournament.find(params[:id])
+    memberships = TournamentMembership.where(tournament_id: tournament.id)
+    for membership in memberships do
+      membership.destroy
+    end
+
+    admins = TournamentAdmin.where(tournament_id: tournament.id)
+    for admin in admins do
+      admin.destroy
+    end
+    tournament.destroy
+    head :no_content
   end
 
   private
