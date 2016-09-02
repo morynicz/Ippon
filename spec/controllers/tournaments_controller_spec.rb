@@ -325,4 +325,64 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: tournament_id
+    }
+
+    context "when the torunament exists" do
+      let(:tournament) {
+        FactoryGirl::create(:tournament_with_members_and_admins)
+      }
+      let(:tournament_id){tournament.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted tournament" do
+          action
+          expect(Tournament.find_by_id(tournament.id)).to be_nil
+        end
+
+        it "should destroy all memberships of this tournament" do
+          action
+          expect(TournamentMembership.exists?(tournament_id: tournament_id)).to be false
+        end
+
+        it "should delete all admins of this tournament" do
+          action
+          expect(TournamentAdmin.exists?(tournament_id: tournament_id)).to be false
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the tournament" do
+          action
+          expect(Tournament.exists?(tournament.id)).to be true
+        end
+      end
+    end
+
+    context "when the tournament doesn't exist" do
+      let(:tournament_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
