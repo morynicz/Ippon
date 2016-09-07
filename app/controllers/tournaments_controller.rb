@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
 before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
+before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin, :add_participant]
 
   def authorize_user
     if user_signed_in?
@@ -98,6 +98,21 @@ before_filter :authenticate_user!, only: [:create]
     tournament = Tournament.find(params[:id])
     @participants = tournament.players
     @players = Player.all - @participants
+  end
+
+  def add_participant
+    player = Player.find(params[:player_id])
+    tournament = Tournament.find(params[:id])
+    if player != nil && tournament != nil
+      if !TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)
+        TournamentParticipation.create(tournament_id: tournament.id, player_id: player.id)
+        head :no_content
+      else
+        head :bad_request
+      end
+    else
+      head :not_found
+    end
   end
 
   private
