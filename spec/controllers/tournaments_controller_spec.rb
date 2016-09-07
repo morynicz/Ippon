@@ -761,7 +761,8 @@ RSpec.describe TournamentsController, type: :controller do
     before do
       tournament
     end
-+    context "when user is not authenticated" do
+
+    context "when user is not authenticated" do
       it "returns unauthorized status" do
         action
         expect(response).to have_http_status :unauthorized

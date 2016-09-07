@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
 before_filter :authenticate_user!, only: [:create]
-before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin, :add_participant]
+before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin, :add_participant, :delete_participant]
 
   def authorize_user
     if user_signed_in?
@@ -106,6 +106,28 @@ before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :ad
     if player != nil && tournament != nil
       if !TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)
         TournamentParticipation.create(tournament_id: tournament.id, player_id: player.id)
+        head :no_content
+      else
+        head :bad_request
+      end
+    else
+      head :not_found
+    end
+  end
+
+  def delete_participant
+    player = Player.find(params[:player_id])
+    tournament = Tournament.find(params[:id])
+    if player != nil && tournament != nil
+      if TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)
+        participation = TournamentParticipation.find_by(tournament_id: tournament.id, player_id: player.id)
+        participation.destroy
+
+        membership_ids = tournament.team_memberships.ids
+        if TeamMembership.exists?(player_id: player.id, id: membership_ids)
+          member = TeamMembership.find_by(player_id: player.id, id: membership_ids)
+          member.destroy
+        end
         head :no_content
       else
         head :bad_request
