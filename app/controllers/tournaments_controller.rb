@@ -94,6 +94,12 @@ before_filter :authenticate_user!, only: [:create]
     end
   end
 
+  def participants
+    tournament = Tournament.find(params[:id])
+    @participants = tournament.players
+    @players = Player.all - @participants
+  end
+
   private
 
   def add_admin_for_tournament(tournament_id, user_id)

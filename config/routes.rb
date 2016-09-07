@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get 'tournaments/:id/admins' => 'tournaments#admins'
   post 'tournaments/:id/admins/:user_id' => 'tournaments#add_admin'
   delete 'tournaments/:id/admins/:user_id' => 'tournaments#delete_admin'
+  get 'tournaments/:id/participants' => 'tournaments#participants'
 
   resources :teams, only: [:show, :create, :update, :destroy]
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'
