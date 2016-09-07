@@ -744,4 +744,118 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE delete_participant" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament_with_participants_and_admins)
+    }
+
+    let(:player) {
+      FactoryGirl::create(:player)
+    }
+
+    let(:action) {
+      xhr :delete, :delete_participant, format: :json, id: tournament.id, player_id: player.id
+    }
+
+    before do
+      tournament
+    end
++    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of participants" do
+        expect {
+          action
+        }.to_not change(TournamentParticipation, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of admins" do
+          expect {
+            action
+          }.to_not change(TournamentParticipation, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "when the deleted participant is not a participant" do
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change participant count" do
+            expect { action }.not_to change(TournamentParticipation, :count)
+          end
+        end
+
+        context "when the deleted participant is a participant" do
+          before do
+            TournamentParticipation.create(tournament_id: tournament.id, player_id: player.id)
+          end
+          it "returns OK status" do
+            action
+            expect(response).to have_http_status :no_content
+          end
+
+          it "removes the deleted participant from participants of given tournament" do
+            action
+            expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+          end
+
+          context "when deleted participant belongs to a team" do
+            let(:team) {
+              FactoryGirl::create(:team, tournament_id: tournament.id)
+            }
+            let(:tournament2) {
+              FactoryGirl::create(:tournament)
+            }
+            let(:team2) {
+              FactoryGirl::create(:team, tournament_id: tournament2.id)
+            }
+            before do
+              TeamMembership.create(team_id: team.id, player_id: player.id)
+              TeamMembership.create(team_id: team2.id, player_id: player.id)
+              TournamentParticipation.create(tournament_id: tournament2.id, player_id: player.id)
+            end
+
+            it "returns OK status" do
+              action
+              expect(response).to have_http_status :no_content
+            end
+
+            it "removes the deleted participant from participants of given tournament" do
+              action
+              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+            end
+
+            it "removes the deleted participant from the team he is member of" do
+              action
+              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+            end
+
+            it "does not affect the other tournament participations and team memberships of the player" do
+              action
+              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+            end
+          end
+        end
+      end
+    end
+  end
 end
