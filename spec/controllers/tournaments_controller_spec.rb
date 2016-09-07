@@ -659,4 +659,89 @@ RSpec.describe TournamentsController, type: :controller do
         end
     end
   end
+
+  describe "POST add_participant" do
+
+    let(:tournament) {
+      FactoryGirl::create(:tournament_with_participants_and_admins)
+    }
+
+    let(:tested_player) {
+      FactoryGirl::create(:player)
+    }
+
+    let(:action) {
+      xhr :post, :add_participant, format: :json, id: tournament.id, player_id: tested_player.id
+    }
+
+    before do
+      tournament
+    end
+
+    context "when user is not authenticated" do
+      it "returns unauthorized status" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it "does not change number of participants" do
+        expect {
+          action
+        }.to_not change(TournamentParticipation, :count)
+      end
+    end
+
+    context "when user is authenticated", authenticated: true do
+      context "when user is not authorized" do
+        it "returns unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not change number of participants" do
+          expect {
+            action
+          }.to_not change(TournamentParticipation, :count)
+        end
+      end
+
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "when added player is not participant already" do
+          it "returns OK status" do
+            action
+            expect(response).to have_http_status :no_content
+          end
+
+          it "adds the player to participants of given tournament" do
+            action
+            expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: tested_player.id)).to be true
+          end
+
+          it "does not change number of participants" do
+            expect {
+              action
+            }.to change(TournamentParticipation, :count).by(1)
+          end
+        end
+
+        context "when the user is already a participant" do
+          before do
+            TournamentParticipation.create(tournament_id: tournament.id, player_id: tested_player.id)
+          end
+          it "returns bad request status" do
+            action
+            expect(response).to have_http_status :bad_request
+          end
+
+          it "does not change admin count" do
+            expect { action }.not_to change(TournamentParticipation, :count)
+          end
+        end
+      end
+    end
+  end
 end
