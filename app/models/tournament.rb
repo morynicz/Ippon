@@ -2,6 +2,9 @@ class Tournament < ActiveRecord::Base
   after_commit :add_admin, on: :create
   has_many :tournament_participations
   has_many :players, through: :tournament_participations
+  has_many :teams
+  has_many :team_memberships, through: :teams
+  has_many :team_members, through: :team_memberships, source: :player
   validates :name, :team_size, :playoff_match_length,
     :group_match_length, :player_age_constraint, :player_age_constraint_value,
     :player_rank_constraint, :player_rank_constraint_value,
