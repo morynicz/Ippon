@@ -622,4 +622,41 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "GET: participants" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+    let(:action) {
+      xhr :get, :participants, format: :json, id: tournament.id
+    }
+
+    before do
+      participant_list = FactoryGirl::create_list(:player, 15)
+      not_participant_list = FactoryGirl::create_list(:player,30)
+
+      for participant in participant_list do
+        TournamentParticipation.create(tournament_id: tournament.id, player_id: participant.id)
+      end
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+      context "when the method is called" do
+        it "returns success status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns fifteen current participants" do
+          action
+          expect(results["participants"].size).to eq(15)
+        end
+
+        it "returns thirty non-participants users" do
+          action
+          expect(results["players"].size).to eq(30)
+        end
+    end
+  end
 end
