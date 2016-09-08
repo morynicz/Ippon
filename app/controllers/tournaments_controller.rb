@@ -137,6 +137,13 @@ before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :ad
     end
   end
 
+  def unassigned_participants
+    tournament = Tournament.find(params[:id])
+    participants = tournament.players
+    team_members = tournament.team_members
+    @unassigned = (participants - team_members)
+  end
+
   private
 
   def add_admin_for_tournament(tournament_id, user_id)

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   post 'tournaments/:id/admins/:user_id' => 'tournaments#add_admin'
   delete 'tournaments/:id/admins/:user_id' => 'tournaments#delete_admin'
   get 'tournaments/:id/participants' => 'tournaments#participants'
+  get 'tournaments/:id/participants/unassigned' => 'tournaments#unassigned_participants'
   post 'tournaments/:id/participants/:player_id' => 'tournaments#add_participant'
   delete 'tournaments/:id/participants/:player_id' => 'tournaments#delete_participant'
 
