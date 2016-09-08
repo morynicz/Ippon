@@ -859,4 +859,61 @@ RSpec.describe TournamentsController, type: :controller do
       end
     end
   end
+
+  describe "GET: unassigned_participants" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+    let(:action) {
+      xhr :get, :unassigned_participants, format: :json, id: tournament.id
+    }
+
+    let(:participant_list) {
+      participant_list = FactoryGirl::create_list(:player, 30)
+      for participant in participant_list do
+        TournamentParticipation.create(tournament_id: tournament.id, player_id: participant.id)
+      end
+    }
+
+    let(:free_participant_list) {
+      assigned_list = participant_list[1..10]
+
+      for assigned in assigned_list do
+        t = FactoryGirl::create(:team, tournament_id: tournament.id)
+        TeamMembership.create(team_id: t.id, player_id: assigned.id)
+      end
+      participant_list - assigned_list
+    }
+
+    def extract_id
+      ->(object) { object["id"]}
+    end
+
+    subject(:results) { JSON.parse(response.body)}
+
+    before do
+      free_participant_list
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+      context "when the method is called" do
+        it "returns success status" do
+          action
+          expect(response).to have_http_status :ok
+        end
+
+        it "returns 20 unassigned participants" do
+          action
+          expect(results.size).to eq(20)
+        end
+
+        it "returns all unassigned players" do
+          action
+          for unassigned in free_participant_list do
+            expect(results.map(&extract_id)).to include(unassigned.id)
+          end
+        end
+    end
+  end
 end
