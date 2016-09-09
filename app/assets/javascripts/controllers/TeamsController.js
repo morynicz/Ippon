@@ -32,13 +32,16 @@ angular.module('ippon').controller('TeamsController',[
       }
     });
 
-    var getTeam = function(teamId) {
+    var getTeam = function(teamId, next) {
       teamResource.get({
         teamId: teamId
       }, function(response) {
         $scope.team = response.team;
         $scope.members = response.players;
         $scope.is_admin = response.is_admin;
+        if(next) {
+          next();
+        }
       }, function(httpResponse) {
         $scope.team = null;
         $scope.members = null;
@@ -46,20 +49,39 @@ angular.module('ippon').controller('TeamsController',[
       });
     }
 
-    var playerResource = $resource("/players/:playerId",
+    var tournamentResource = $resource("/tournaments/:tournamentId",
     {
-      playerId: "@id",
+      tournamentId: "@id",
       format: "json"
+    },{
+      'participants' : {
+        method: 'GET',
+        isArray: true,
+        url: "/tournaments/:tournamentId/participants"
+      },
+      'unassigned' : {
+        method: 'GET',
+        isArray: true,
+        url: "/tournaments/:tournamentId/participants/unassigned",
+        params: {
+          tournamentId: "@tournamentId"
+        }
+      }
     });
 
+    var getAvailablePlayers = function() {
+      tournamentResource.unassigned({tournamentId: $scope.team.tournament_id}, function(results) {
+        $scope.players = results;
+      }, function(httpResponse) {
+        $scope.players = null;
+      });
+    }
+
     if($stateParams.teamId && ($state.is('teams_show') || $state.is('teams_edit'))) {
-      getTeam($stateParams.teamId);
       if($state.is('teams_edit')) {
-        playerResource.query(function(results) {
-          $scope.players = results;
-        }, function(httpResponse) {
-          $scope.players = null;
-        });
+        getTeam($stateParams.teamId, getAvailablePlayers);
+      } else {
+        getTeam($stateParams.teamId);
       }
     } else {
       $scope.team = {};
@@ -90,14 +112,14 @@ angular.module('ippon').controller('TeamsController',[
     $scope.add_member = function(playerId) {
       teamResource.add_member({teamId: $scope.team.id, playerId: playerId},
       function() {
-        getTeam($scope.team.id);
+        getTeam($scope.team.id, getAvailablePlayers);
       });
     };
 
     $scope.delete_member = function(playerId) {
       teamResource.delete_member({teamId: $scope.team.id, playerId: playerId},
       function() {
-        getTeam($scope.team.id);
+        getTeam($scope.team.id, getAvailablePlayers);
       });
     };
 
