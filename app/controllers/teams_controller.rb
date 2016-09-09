@@ -75,7 +75,7 @@ class TeamsController < ApplicationController
     player = Player.find(params[:player_id])
     team = Team.find(params[:id])
     if player != nil && team != nil
-      if !TeamMembership.exists?(team_id: team.id, player_id: player.id)
+      if !TeamMembership.exists?(team_id: team.id, player_id: player.id) && (team.players.size < team.required_size)
         TeamMembership.create(team_id: team.id, player_id: player.id)
         head :no_content
       else
