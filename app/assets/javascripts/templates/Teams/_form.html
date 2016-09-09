@@ -30,3 +30,25 @@
     </div>
   </div>
 </form>
+<div>
+  <ul class="list-unstyled">
+    <li ng-repeat="member in members">
+      <section id="{{member.name}}-{{member.surname}}-member-row" class="well col-md-6 col-md-offset-3">
+        <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
+          <span>{{member.name}} {{member.surname}}</span><span>
+          <button ng-click="delete_member(member.id)" class="btn btn-danger" id="delete-member"> {{'DELETE' | translate}} </button></span>
+        </h1>
+      </section>
+    </li>
+  </ul>
+  <ul class="list-unstyled">
+    <li ng-repeat="player in players">
+      <section id="{{player.name}}-{{player.surname}}-player-row" class="well col-md-6 col-md-offset-3">
+        <h1 class="h3 col-md-6 text-left" style="margin-top: 0">
+          {{player.name}} {{player.surname}}
+          <button ng-click="add_member(player.id)" class="btn btn-info" id="add-member" > {{'ADD' | translate}} </button>
+        </h1>
+      </section>
+    </li>
+  </ul>
+</div>
