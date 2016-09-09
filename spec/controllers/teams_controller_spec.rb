@@ -419,18 +419,35 @@ RSpec.describe TeamsController, type: :controller do
 
         context "when the player exists" do
           context "when the membership desn't exists yet" do
-            it "should respond with OK status" do
-              action
-              expect(response).to have_http_status :no_content
-            end
-            it "should not change number of team memberships" do
-              expect{
+            context "when there are still members missing" do
+              it "should respond with OK status" do
                 action
-              }.to change(TeamMembership, :count).by(1)
+                expect(response).to have_http_status :no_content
+              end
+              it "should not change number of team memberships" do
+                expect{
+                  action
+                }.to change(TeamMembership, :count).by(1)
+              end
+              it "should create a team membership for the player and team" do
+                action
+                expect(TeamMembership.exists?(team_id: team_id, player_id: player_id)).to be true
+              end
             end
-            it "should create a team membership for the player and team" do
-              action
-              expect(TeamMembership.exists?(team_id: team_id, player_id: player_id)).to be true
+
+            context "when the team is full" do
+              before do
+                FactoryGirl::create_list(:team_membership, (team.required_size - team.players.size) , team: team)
+              end
+              it "should respond with unauthorized status" do
+                action
+                expect(response).to have_http_status :conflict
+              end
+              it "should not change number of team memberships" do
+                expect{
+                  action
+                }.not_to change(TeamMembership, :count)
+              end
             end
           end
 
