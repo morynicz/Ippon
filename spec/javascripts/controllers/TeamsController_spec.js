@@ -8,6 +8,7 @@ describe('TeamsController', function() {
   var fakePlayerId = 42;
   var fakeClubId = 77;
   var fakeTeamId = 17;
+  var fakeTournamentId = 33;
 
   var fakePlayer = {
       "id": fakePlayerId,
@@ -26,7 +27,31 @@ describe('TeamsController', function() {
     tournament_id: 33
   };
 
+  var fakePlayers = [
+    {
+      "id":71,
+      "name":"Tessie",
+      "surname":"Ryan",
+      "birthday":"1979-04-28",
+      "rank":"kyu_3",
+      "sex":"male",
+      "club_id":71
+    },
+    {
+      "id":72,
+      "name":"Elza",
+      "surname":"Spinka",
+      "birthday":"1982-01-22",
+      "rank":"dan_1",
+      "sex":"male",
+      "club_id":72
+    }];
+
   var state;
+
+  var expectUnassignedTournamentPlayers = function(tournamentId, players) {
+    httpBackend.expectGET(new RegExp("tournaments/" + tournamentId + "/participants/unassigned")).respond(players);
+  }
 
   var expectGetTeam = function(teamId, isAdmin, team, players) {
     var request = new RegExp("teams/" + teamId);
@@ -163,7 +188,7 @@ describe('TeamsController', function() {
     beforeEach(function() {
       setupController('teams_edit', fakeTeamId);
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
-      httpBackend.expectGET(new RegExp("players")).respond(players);
+      expectUnassignedTournamentPlayers(fakeTournamentId, fakePlayers);
       httpBackend.flush();
       var request = new RegExp("teams/");
       httpBackend.expectPUT(request).respond(204);
@@ -221,11 +246,12 @@ describe('TeamsController', function() {
 
     beforeEach(function() {
       setupController('teams_edit', fakeTeamId);
-      expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
-      httpBackend.expectGET(new RegExp("players")).respond(players);
+      expectGetTeam(fakeTeamId, false, fakeTeam, []);
+      expectUnassignedTournamentPlayers(fakeTournamentId, players);
       httpBackend.flush();
       httpBackend.expectPUT(new RegExp("teams/" + fakeTeamId + "/add_member/" + fakePlayerId)).respond(204);
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
+      expectUnassignedTournamentPlayers(fakeTournamentId, fakePlayers);
     });
 
     it('posts to the backend', function() {
@@ -262,10 +288,11 @@ describe('TeamsController', function() {
     beforeEach(function() {
       setupController('teams_edit', fakeTeamId);
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
-      httpBackend.expectGET(new RegExp("players")).respond(players);
+      expectUnassignedTournamentPlayers(fakeTournamentId, fakePlayers);
       httpBackend.flush();
       httpBackend.expectDELETE(new RegExp("teams/" + fakeTeamId + "/delete_member/" + fakePlayerId)).respond(204);
       expectGetTeam(fakeTeamId, true, fakeTeam, []);
+      expectUnassignedTournamentPlayers(fakeTournamentId, players);
     });
 
     it('posts to the backend', function() {
