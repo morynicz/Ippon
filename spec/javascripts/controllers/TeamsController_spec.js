@@ -201,6 +201,11 @@ describe('TeamsController', function() {
       httpBackend.flush();
       expect('#'+location.path()).toBe(state.href('teams_show',{teamId: scope.team.id}));
       expect(state.is('teams_show')).toBe(true);
+
+      expect(scope.team.name).toBe(updatedTeam.name);
+      expect(scope.team.required_size).toBe(updatedTeam.required_size);
+      expect(angular.equals(scope.members, [fakePlayer])).toBe(true);
+      expect(angular.equals(scope.players, players)).toBe(true);
     });
   });
 
@@ -259,6 +264,8 @@ describe('TeamsController', function() {
         httpBackend.flush();
         expect(state.is('teams_edit')).toBe(true);
         expect(scope.members).toContain(fakePlayer);
+        expect(angular.equals(scope.members, [fakePlayer])).toBe(true);
+        expect(angular.equals(scope.players, fakePlayers)).toBe(true);
     });
   });
 
@@ -300,6 +307,8 @@ describe('TeamsController', function() {
         httpBackend.flush();
         expect(state.is('teams_edit')).toBe(true);
         expect(scope.members).not.toContain(fakePlayer);
+        expect(angular.equals(scope.members, [])).toBe(true);
+        expect(angular.equals(scope.players, players)).toBe(true);
     });
   });
 });
