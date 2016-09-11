@@ -47,7 +47,8 @@ RSpec.describe TeamsController, type: :controller do
         FactoryGirl::create_list(:player,3)
       }
       let(:team) {
-        FactoryGirl::create(:team, required_size: 3)
+        to = FactoryGirl::create(:tournament, team_size: 3)
+        FactoryGirl::create(:team, tournament: to)
       }
       let(:team_id){team.id}
 
@@ -72,11 +73,6 @@ RSpec.describe TeamsController, type: :controller do
       it "should return result with correct name" do
         action
         expect(results["team"]["name"]).to eq(team.name)
-      end
-
-      it "should return result with correct required size" do
-        action
-        expect(results["team"]["required_size"]).to eq(team.required_size)
       end
 
       it "should return result with correct tournament id" do
@@ -153,8 +149,7 @@ RSpec.describe TeamsController, type: :controller do
 
           let(:attributes) do
             {
-              name: '',
-              required_size: ''
+              name: ''
             }
           end
 
@@ -232,7 +227,6 @@ RSpec.describe TeamsController, type: :controller do
           it "should update team attributes" do
             action
             expect(team.name).to eq(update_team_attrs[:name])
-            expect(team.required_size).to eq(update_team_attrs[:required_size])
           end
         end
 
@@ -240,7 +234,6 @@ RSpec.describe TeamsController, type: :controller do
           let(:update_team_attrs) {
             {
               name: '',
-              required_size: '',
               tournament_id: ''
             }
           }
@@ -248,7 +241,6 @@ RSpec.describe TeamsController, type: :controller do
           it "should not update team attributes" do
             action
             expect(team.name).to eq(team_attrs[:name])
-            expect(team.required_size).to eq(team_attrs[:required_size])
             expect(team.tournament_id).to eq(team_attrs[:tournament_id])
           end
 
@@ -435,7 +427,7 @@ RSpec.describe TeamsController, type: :controller do
 
             context "when the team is full" do
               before do
-                FactoryGirl::create_list(:team_membership, (team.required_size - team.players.size) , team: team)
+                FactoryGirl::create_list(:team_membership, (team.tournament.team_size - team.players.size) , team: team)
               end
               it "should respond with unauthorized status" do
                 action

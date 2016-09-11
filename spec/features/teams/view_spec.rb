@@ -7,7 +7,6 @@ feature "Viewing a Team", js: true do
     visit "#/teams/" + t1.id.to_s
 
     expect(page).to have_content(t1.name)
-    expect(page).to have_content(t1.required_size)
 
     members = t1.players
 

@@ -75,7 +75,7 @@ class TeamsController < ApplicationController
     player = Player.find(params[:player_id])
     team = Team.find(params[:id])
     if player != nil && team != nil
-      if !TeamMembership.exists?(team_id: team.id, player_id: player.id) && (team.players.size < team.required_size)
+      if !TeamMembership.exists?(team_id: team.id, player_id: player.id) && (team.players.size < team.tournament.team_size)
         TeamMembership.create(team_id: team.id, player_id: player.id)
         head :no_content
       else
@@ -105,6 +105,6 @@ class TeamsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:team).permit(:name, :required_size, :tournament_id)
+    params.require(:team).permit(:name, :tournament_id)
   end
 end

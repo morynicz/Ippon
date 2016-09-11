@@ -10,17 +10,6 @@
       placeholder="{{'TEAM_NAME_PLACEHOLDER' | translate}}" ng-model="team.name">
     </div>
   </div>
-  <div class="form-group" ng-class="{'has-warning has-feedback':errors.name}">
-    <label
-      for="required_size"
-      class="col-md-2 control-label col-md-offset-2">
-      {{'TEAM_REQUIRED_SIZE'|translate}}
-    </label>
-    <div class="col-md-5">
-      <input type="text" name="required_size" class="form-control"
-      placeholder="{{'TEAM_REQUIRED_SIZE_PLACEHOLDER' | translate}}" ng-model="team.required_size">
-    </div>
-  </div>
   <div class="form-group">
     <div class="col-md-offset-2 col-md-3">
       <button class="btn btn-default" type="button" ng-click="cancel()" id="cancel-team">{{'CANCEL'|translate}}</button>

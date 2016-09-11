@@ -1,7 +1,9 @@
 require 'spec_helper.rb'
 
 feature 'Adding and removing member of a team', js: true do
-  let(:team1) { FactoryGirl::create(:team_with_players, {players_count: 2, required_size: 4})}
+  let(:team1) {
+    to = FactoryGirl::create(:tournament, team_size: 4)
+    FactoryGirl::create(:team_with_players, players_count: 2)}
   let(:user) { FactoryGirl::create(:user) }
   let(:players) {
     FactoryGirl::create_list(:tournament_participation, 5, tournament: team1.tournament)

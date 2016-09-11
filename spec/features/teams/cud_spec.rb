@@ -28,12 +28,10 @@ feature 'Creating editing and deleting a team', js: true do
     click_on "edit-team"
 
     fill_in "name", with: team2[:name]
-    fill_in "required_size", with: team2[:required_size]
 
     click_on "save-team"
 
     expect(page).to have_content(team2[:name])
-    expect(page).to have_content(team2[:required_size])
   end
 
   scenario "Delete a team when user is a tournament admin" do
