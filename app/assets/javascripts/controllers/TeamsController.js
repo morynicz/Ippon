@@ -128,10 +128,12 @@ angular.module('ippon').controller('TeamsController',[
     };
 
     $scope.cancel = function() {
-      if($scope.player.id) {
+      if($scope.team.id) {
         $state.go('teams_show',{teamId: $scope.team.id});
+      } else if ($scope.tournament.id) {
+        $state.go('tournaments_edit', {tournament_id: $scope.tournament.id});
       } else {
-        $state.go('teams');
+        $state.go('home');
       }
     };
   }]);
