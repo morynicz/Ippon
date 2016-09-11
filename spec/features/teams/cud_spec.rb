@@ -34,6 +34,23 @@ feature 'Creating editing and deleting a team', js: true do
     expect(page).to have_content(team2[:name])
   end
 
+  scenario "Cancel updating team when user exists and is a tournament admin", :raceable do
+    TournamentAdmin.create(user_id: user.id, tournament_id: tournament1.id, status: :main)
+    tournament2
+    t1 = Team.create(team1)
+
+    #TODO: when tournament IF is done, enter properly
+    visit "#/teams/" + t1.id.to_s
+
+    click_on "edit-team"
+
+    fill_in "name", with: team2[:name]
+
+    click_on "cancel-team"
+
+    expect(page).to have_content(team1[:name])
+  end
+
   scenario "Delete a team when user is a tournament admin" do
     TournamentAdmin.create(user_id: user.id, tournament_id: tournament1.id, status: :main)
     team = Team.create(team1)
