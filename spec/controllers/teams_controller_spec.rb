@@ -233,7 +233,6 @@ RSpec.describe TeamsController, type: :controller do
             action
             expect(team.name).to eq(update_team_attrs[:name])
             expect(team.required_size).to eq(update_team_attrs[:required_size])
-            expect(team.tournament_id).to eq(update_team_attrs[:tournament_id])
           end
         end
 
@@ -266,10 +265,9 @@ RSpec.describe TeamsController, type: :controller do
           expect(response).to have_http_status :unauthorized
         end
 
-        it "should update team attributes" do
+        it "should not update team attributes" do
           action
           expect(team.name).to eq(team_attrs[:name])
-          expect(team.required_size).to eq(team_attrs[:required_size])
           expect(team.tournament_id).to eq(team_attrs[:tournament_id])
         end
       end

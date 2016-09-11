@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :team do
     name {Faker::Lorem.word}
-    tournament_id {FactoryGirl::create(:tournament).id}
     required_size {Tournament.find(tournament_id).team_size}
+    tournament
 
     factory :team_with_players do
       transient do
