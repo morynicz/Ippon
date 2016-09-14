@@ -4,4 +4,6 @@ class TeamFight < ActiveRecord::Base
 
   has_many :shiro_members, through: :shiro_team, source: :players
   has_many :aka_members, through: :aka_team, source: :players
+
+  has_one :tournament, through: :shiro_team, source: :tournament
 end
