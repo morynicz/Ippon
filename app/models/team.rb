@@ -3,4 +3,5 @@ class Team < ActiveRecord::Base
   belongs_to :tournament
   has_many :team_memberships
   has_many :players, through: :team_memberships
+  has_many :team_fights
 end
