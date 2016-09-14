@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914065800) do
+ActiveRecord::Schema.define(version: 20160914123414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(version: 20160914065800) do
   add_index "fights", ["shiro_id"], name: "index_fights_on_shiro_id", using: :btree
   add_index "fights", ["team_fight_id"], name: "index_fights_on_team_fight_id", using: :btree
 
+  create_table "locations", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "locations", ["tournament_id"], name: "index_locations_on_tournament_id", using: :btree
+
   create_table "players", force: :cascade do |t|
     t.string   "name"
     t.string   "surname"
@@ -75,9 +84,11 @@ ActiveRecord::Schema.define(version: 20160914065800) do
     t.integer  "aka_team_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "location_id"
   end
 
   add_index "team_fights", ["aka_team_id"], name: "index_team_fights_on_aka_team_id", using: :btree
+  add_index "team_fights", ["location_id"], name: "index_team_fights_on_location_id", using: :btree
   add_index "team_fights", ["shiro_team_id"], name: "index_team_fights_on_shiro_team_id", using: :btree
 
   create_table "team_memberships", force: :cascade do |t|
@@ -159,9 +170,11 @@ ActiveRecord::Schema.define(version: 20160914065800) do
   add_foreign_key "club_admins", "clubs"
   add_foreign_key "club_admins", "users"
   add_foreign_key "fights", "team_fights"
+  add_foreign_key "locations", "tournaments"
   add_foreign_key "players", "clubs"
   add_foreign_key "points", "fights"
   add_foreign_key "points", "players"
+  add_foreign_key "team_fights", "locations"
   add_foreign_key "team_memberships", "players"
   add_foreign_key "team_memberships", "teams"
   add_foreign_key "teams", "tournaments"

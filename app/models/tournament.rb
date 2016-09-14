@@ -1,5 +1,6 @@
 class Tournament < ActiveRecord::Base
   after_commit :add_admin, on: :create
+
   has_many :tournament_participations
   has_many :players, through: :tournament_participations
   has_many :teams
@@ -9,6 +10,7 @@ class Tournament < ActiveRecord::Base
     :group_match_length, :player_age_constraint, :player_age_constraint_value,
     :player_rank_constraint, :player_rank_constraint_value,
     :player_sex_constraint, :player_sex_constraint_value, presence: true
+  has_many :locations
 
   attr_accessor :creator
 
