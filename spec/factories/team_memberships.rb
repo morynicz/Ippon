@@ -4,7 +4,11 @@ FactoryGirl.define do
     team
 
     after(:create) do |team|
-     TournamentParticipation.create(tournament_id: team.tournament.id, player_id: team.player.id)
+      if !TournamentParticipation.exists?(tournament_id: team.tournament.id,
+          player_id: team.player.id)
+        TournamentParticipation.create(tournament_id: team.tournament.id,
+          player_id: team.player.id)
+        end
     end
   end
 end
