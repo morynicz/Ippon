@@ -2,6 +2,9 @@ class Player < ActiveRecord::Base
   belongs_to :club
   validates :name, :surname, :birthday, :rank, :sex, :club_id, presence: true
 
+  has_many :points
+  has_many :fights
+
   enum rank: {
     kyu_6: 0,
     kyu_5: 1,
@@ -23,4 +26,8 @@ class Player < ActiveRecord::Base
     woman: 0,
     man: 1
   }
+
+  def gained_points
+    fights.points - points
+  end
 end
