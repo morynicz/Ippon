@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914054037) do
+ActiveRecord::Schema.define(version: 20160914061119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,18 @@ ActiveRecord::Schema.define(version: 20160914054037) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "fights", force: :cascade do |t|
+    t.integer  "team_fight_id"
+    t.integer  "aka_id",        null: false
+    t.integer  "shiro_id",      null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "fights", ["aka_id"], name: "index_fights_on_aka_id", using: :btree
+  add_index "fights", ["shiro_id"], name: "index_fights_on_shiro_id", using: :btree
+  add_index "fights", ["team_fight_id"], name: "index_fights_on_team_fight_id", using: :btree
 
   create_table "players", force: :cascade do |t|
     t.string   "name"
@@ -135,6 +147,7 @@ ActiveRecord::Schema.define(version: 20160914054037) do
 
   add_foreign_key "club_admins", "clubs"
   add_foreign_key "club_admins", "users"
+  add_foreign_key "fights", "team_fights"
   add_foreign_key "players", "clubs"
   add_foreign_key "team_memberships", "players"
   add_foreign_key "team_memberships", "teams"
