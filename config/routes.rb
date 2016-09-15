@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'
   delete 'teams/:id/delete_member/:player_id' => 'teams#delete_member'
   resources :players
+
+  resources :fights, only: [:show]
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
