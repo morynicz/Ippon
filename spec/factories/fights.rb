@@ -22,5 +22,15 @@ FactoryGirl.define do
           player: fight.shiro)
       end
     end
+
+    factory :fight_with_points do
+      transient do
+        points_count 1
+      end
+
+      after(:create) do |fight, evaluator|
+        FactoryGirl::create_list(:point, evaluator.points_count, fight: fight)
+      end
+    end
   end
 end
