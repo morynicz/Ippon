@@ -95,6 +95,8 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include ControllerAuthHelpers, type: :controller
+  config.include AttributesWithFkHelpers, type: :controller
   config.include FeatureRaceHelpers, type: :feature
+  config.include AttributesWithFkHelpers, type: :feature
 
 end
