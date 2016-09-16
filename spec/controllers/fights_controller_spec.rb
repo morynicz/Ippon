@@ -298,4 +298,73 @@ RSpec.describe FightsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:team_fight) {
+      FactoryGirl::create(:team_fight)
+    }
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: fight_id
+    }
+
+    context "when the fight exists" do
+      let(:fight) {
+        FactoryGirl::create(:fight_with_points, team_fight_id: team_fight.id)
+      }
+      let(:fight_id){fight.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(team_fight.tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted fight" do
+          action
+          expect(Fight.find_by_id(fight.id)).to be_nil
+        end
+
+        it "should destroy all points of this fight" do
+          action
+          expect(Point.exists?(fight_id: fight_id)).to be false
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the fight" do
+          action
+          expect(Fight.exists?(fight.id)).to be true
+        end
+      end
+    end
+
+    context "when the fight doesn't exist" do
+      let(:fight_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(team_fight.tournament.id)
+        end
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
 end
