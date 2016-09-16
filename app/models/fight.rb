@@ -1,4 +1,6 @@
 class Fight < ActiveRecord::Base
+  validates :state, :aka_id, :shiro_id, :team_fight_id, presence: true
+
   belongs_to :team_fight
   belongs_to :aka, class_name: "Player", foreign_key: "aka_id"
   belongs_to :shiro, class_name: "Player", foreign_key: "shiro_id"
