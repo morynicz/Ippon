@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   delete 'teams/:id/delete_member/:player_id' => 'teams#delete_member'
   resources :players
 
-  resources :fights, only: [:show, :create, :update]
+  resources :fights, only: [:show, :create, :update, :destroy]
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

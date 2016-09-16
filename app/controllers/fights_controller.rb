@@ -1,7 +1,7 @@
 class FightsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def show
     @fight = Fight.find(params[:id])
@@ -45,6 +45,16 @@ class FightsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    fight = Fight.find(params[:id])
+    points = Point.where(fight_id: fight.id)
+    for point in points do
+      point.destroy
+    end
+    fight.destroy
+    head :no_content
   end
 
   private
