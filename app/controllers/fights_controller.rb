@@ -1,6 +1,7 @@
 class FightsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!,:authorize_user, only: [:update]
 
   def show
     @fight = Fight.find(params[:id])
@@ -37,9 +38,29 @@ class FightsController < ApplicationController
     end
   end
 
+  def update
+    fight = Fight.find(params[:id])
+    if fight.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def permitted_params
     params.require(:fight).permit(:id, :aka_id, :shiro_id, :state, :team_fight_id)
+  end
+
+  def authorize_user
+    if user_signed_in?
+      user = current_user
+      fight = Fight.find(params[:id])
+      tournament = fight.team_fight.tournament
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id: tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
+    else
+      head :unauthorized
+    end
   end
 end
