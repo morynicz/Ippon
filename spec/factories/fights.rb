@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :fight do
     team_fight
+    state :not_started
     association :aka, factory: :player
     association :shiro, factory: :player
 

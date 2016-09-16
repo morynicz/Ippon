@@ -5,4 +5,10 @@ class Fight < ActiveRecord::Base
 
   has_one :tournament, through: :team_fight
   has_many :points
+
+  enum state: {
+    not_started: 0,
+    started: 1,
+    finished: 2
+  }
 end
