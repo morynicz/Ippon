@@ -134,6 +134,8 @@ RSpec.describe FightsController, type: :controller do
         xhr :post, :create, format: :json, fight: attributes
     end
 
+    subject(:results) {JSON.parse(response.body)}
+
     context "when the user is not authenticated" do
       it "does not create a fight" do
         expect {
@@ -190,7 +192,7 @@ RSpec.describe FightsController, type: :controller do
 
           it "creates a fight with proper values" do
             action
-            f = Fight.last
+            f = Fight.find(results["fight"]["id"])
             compare_hash_with_fight(attributes, f)
           end
         end
