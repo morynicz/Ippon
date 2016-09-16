@@ -16,7 +16,8 @@ RSpec.describe FightsController, type: :controller do
   end
 
   def authorize_user(tournament_id)
-    TournamentAdmin.create(tournament_id: tournament_id, user_id: current_user.id, status: :main)
+    TournamentAdmin.create(tournament_id: tournament_id,
+      user_id: current_user.id, status: :main)
   end
 
   before(:each) do
@@ -88,7 +89,8 @@ RSpec.describe FightsController, type: :controller do
         for point in fight.points do
           expect(results["points"].map(&extract_id)).to include(point.id)
           expect(results["points"].map(&extract_type)).to include(point.type)
-          expect(results["points"].map(&extract_player_id)).to include(point.player_id)
+          expect(results["points"].map(&extract_player_id)).
+            to include(point.player_id)
         end
       end
 
