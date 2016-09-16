@@ -32,6 +32,14 @@ RSpec.describe FightsController, type: :controller do
     expect(hash["sex"]).to eq(player.sex)
   end
 
+  def compare_hash_with_fight(hash, fight)
+    expect(hash["id"]).to eq(fight.id)
+    expect(hash["state"]).to eq(fight.state)
+    expect(hash["shiro_id"]).to eq(fight.shiro_id)
+    expect(hash["aka_id"]).to eq(fight.aka_id)
+    expect(hash["team_fight_id"]).to eq(fight.team_fight_id)
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: fight_id
@@ -53,6 +61,11 @@ RSpec.describe FightsController, type: :controller do
       it "should return result with correct id" do
         action
         expect(results["fight"]["id"]).to eq(fight.id)
+      end
+
+      it "should return result with correct state" do
+        action
+        expect(results["fight"]["state"]).to eq(fight.state)
       end
 
       it "should return result with correct shiro player" do
@@ -112,5 +125,89 @@ RSpec.describe FightsController, type: :controller do
     end
   end
 
+  describe "POST :create" do
+    let(:team_fight) { FactoryGirl::create(:team_fight)}
+    let(:attributes) { attributes_with_foreign_keys(:fight,
+       team_fight_id: team_fight.id)}
+    let(:action) do
+        xhr :post, :create, format: :json, fight: attributes
+    end
 
+    context "when the user is not authenticated" do
+      it "does not create a fight" do
+        expect {
+          action
+        }.to_not change(Fight, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when user is authorized" do
+        before do
+          authorize_user(team_fight.tournament.id)
+        end
+
+        context "with invalid attributes" do
+
+          let(:attributes) do
+            {
+              team_fight_id: '',
+              aka_id: '',
+              shiro_id: '',
+              state: ''
+            }
+          end
+
+          it "does not create a fight" do
+            expect {
+              action
+            }.to_not change(Fight, :count)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+
+        context "with valid attributes" do
+          it "creates a fight" do
+            expect {
+              action
+            }.to change(Fight, :count).by(1)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to be_successful
+          end
+
+          it "creates a fight with proper values" do
+            action
+            f = Fight.last
+            attributes[:id.to_s] = f.id
+            compare_hash_with_fight(attributes, f)
+          end
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not create a fight" do
+          expect {
+            action
+          }.to_not change(Fight, :count)
+        end
+      end
+    end
+  end
 end
