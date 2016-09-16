@@ -210,4 +210,92 @@ RSpec.describe FightsController, type: :controller do
       end
     end
   end
+
+  describe "PATCH update" do
+    let(:team_fight) {
+      FactoryGirl::create(:team_fight)
+    }
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: fight.id, fight: update_attrs
+      fight.reload
+    }
+
+    let(:update_attrs) {
+        attributes_with_foreign_keys(:fight, team_fight_id: team_fight.id)
+    }
+    let(:attrs) {
+      attributes_with_foreign_keys(:fight, team_fight_id: team_fight.id)
+    }
+    context "when the fight exists" do
+      let(:fight) {
+        Fight.create(attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(team_fight.tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update fight attributes" do
+            action
+            compare_hash_with_fight(update_attrs, fight)
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_attrs) {
+            {
+              team_fight_id: '',
+              aka_id: '',
+              shiro_id: '',
+              state: ''
+            }
+          }
+
+          it "should not update team attributes" do
+            action
+            compare_hash_with_fight(attrs, fight)
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should not update team attributes" do
+          action
+          compare_hash_with_fight(attrs, fight)
+        end
+      end
+    end
+
+    context "when the team doesn't exist" do
+      let(:fight_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: fight_id, team: update_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
