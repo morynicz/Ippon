@@ -34,7 +34,6 @@ RSpec.describe FightsController, type: :controller do
   end
 
   def compare_hash_with_fight(hash, fight)
-    expect(hash["id"]).to eq(fight.id)
     expect(hash["state"]).to eq(fight.state)
     expect(hash["shiro_id"]).to eq(fight.shiro_id)
     expect(hash["aka_id"]).to eq(fight.aka_id)
@@ -192,7 +191,6 @@ RSpec.describe FightsController, type: :controller do
           it "creates a fight with proper values" do
             action
             f = Fight.last
-            attributes[:id.to_s] = f.id
             compare_hash_with_fight(attributes, f)
           end
         end
