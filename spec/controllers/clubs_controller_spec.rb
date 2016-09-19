@@ -39,20 +39,26 @@ describe ClubsController do
         expect(response.status).to eq(200)
       end
 
-      it "should return three results" do
-        expect(results.size).to eq(3)
+      it "should return apripriate number of results" do
+        expect(results.size).to eq(Club.all.size)
       end
 
-      it "should include name of the first club" do
-        expect(results.map(&extract_name)).to include(club_list[0].name)
+      it "should include names of all clubs" do
+        for club in club_list do
+          expect(results.map(&extract_name)).to include(club.name)
+        end
       end
 
-      it "should include city of the second club" do
-        expect(results.map(&extract_city)).to include(club_list[1].city)
+      it "should include cities of all clubs" do
+        for club in club_list do
+          expect(results.map(&extract_city)).to include(club.city)
+        end
       end
 
-      it "should include description of the third club" do
-        expect(results.map(&extract_description)).to include(club_list[2].description)
+      it "should include descriptions of all clubs" do
+        for club in club_list do
+          expect(results.map(&extract_description)).to include(club.description)
+        end
       end
     end
   end
@@ -326,15 +332,8 @@ describe ClubsController do
     }
 
     before do
-      user1 = FactoryGirl::create(:user)
-      user2 = FactoryGirl::create(:user)
-      user3 = FactoryGirl::create(:user)
-      user_not_admin1 = FactoryGirl::create(:user)
-      user_not_admin2 = FactoryGirl::create(:user)
-
-      ClubAdmin.create(club_id: club.id, user_id: user1.id)
-      ClubAdmin.create(club_id: club.id, user_id: user2.id)
-      ClubAdmin.create(club_id: club.id, user_id: user3.id)
+      user_not_admin_list = FactoryGirl::create_list(:user,2)
+      club_admin_list = FactoryGirl::create_list(:club_admin, 3, club: club)
     end
 
     subject(:results) {JSON.parse(response.body)}
@@ -375,14 +374,15 @@ describe ClubsController do
           expect(response).to have_http_status :ok
         end
 
-        it "returns three current admins" do
+        it "returns all current admins" do
           action
-          expect(results["admins"].size).to eq(4)
+          expect(results["admins"].size).to eq(ClubAdmin.
+            where(club_id: club.id).size)
         end
 
-        it "returns two non-admin users" do
+        it "returns all non-admin users" do
           action
-          expect(results["users"].size).to eq(2)
+          expect(results["users"].size).to eq((User.all - club.admins).size)
         end
       end
     end
