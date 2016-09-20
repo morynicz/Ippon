@@ -20,6 +20,8 @@ RSpec.describe PointsController, type: :controller do
         xhr :post, :create, format: :json, point: attributes
     end
 
+    subject(:results) {JSON.parse(response.body)}
+
     context "when the user is not authenticated" do
       it "does not create a point" do
         expect {
@@ -73,11 +75,13 @@ RSpec.describe PointsController, type: :controller do
             expect(response).to be_successful
           end
 
-          # it "creates a fight with proper values" do
-          #   action
-          #   f = response.body
-          #   compare_hash_with_fight(attributes, f)
-          # end
+          it "creates a point with proper values" do
+            action
+            pt = Point.find(results["id"])
+            expect(pt.player_id).to eq(attributes["player_id"])
+            expect(pt.fight_id).to eq(attributes["fight_id"])
+            expect(pt.type).to eq(attributes["type"])
+          end
         end
       end
 
