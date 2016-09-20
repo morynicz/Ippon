@@ -17,7 +17,7 @@ class PointsController < ApplicationController
           if @point.valid?
             @point.save
 
-            head :ok
+            render 'show', status: :ok
           else
             head :unprocessable_entity
           end
