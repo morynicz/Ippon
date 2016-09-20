@@ -12,6 +12,54 @@ RSpec.describe PointsController, type: :controller do
       user_id: current_user.id, status: :main)
   end
 
+  describe "GET show" do
+    let(:action) {
+      xhr :get, :show, format: :json, id: point_id
+    }
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the point exists" do
+      let(:point) {
+        FactoryGirl::create(:point)
+      }
+      let(:point_id){point.id}
+
+      it "should return 200 status" do
+        action
+        expect(response.status).to eq(200)
+      end
+
+      it "should return result with correct id" do
+        action
+        expect(results["id"]).to eq(point.id)
+      end
+
+      it "should return result with correct type" do
+        action
+        expect(results["type"]).to eq(point.type)
+      end
+
+      it "should return result with correct player" do
+        action
+        expect(results["player_id"]).to eq(point.player_id)
+      end
+
+      it "should return result with correct fight id" do
+        action
+        expect(results["fight_id"]).to eq(point.fight_id)
+      end
+    end
+
+    context "when point doesn't exist" do
+      let(:point_id) {-9999}
+      it "should respond with 404 status" do
+        action
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
   describe "POST :create" do
     let(:fight) { FactoryGirl::create(:fight)}
     let(:attributes) { attributes_with_foreign_keys(:point,
@@ -96,54 +144,6 @@ RSpec.describe PointsController, type: :controller do
             action
           }.to_not change(Point, :count)
         end
-      end
-    end
-  end
-
-  describe "GET show" do
-    let(:action) {
-      xhr :get, :show, format: :json, id: point_id
-    }
-
-    subject(:results) {JSON.parse(response.body)}
-
-    context "when the point exists" do
-      let(:point) {
-        FactoryGirl::create(:point)
-      }
-      let(:point_id){point.id}
-
-      it "should return 200 status" do
-        action
-        expect(response.status).to eq(200)
-      end
-
-      it "should return result with correct id" do
-        action
-        expect(results["id"]).to eq(point.id)
-      end
-
-      it "should return result with correct type" do
-        action
-        expect(results["type"]).to eq(point.type)
-      end
-
-      it "should return result with correct player" do
-        action
-        expect(results["player_id"]).to eq(point.player_id)
-      end
-
-      it "should return result with correct fight id" do
-        action
-        expect(results["fight_id"]).to eq(point.fight_id)
-      end
-    end
-
-    context "when point doesn't exist" do
-      let(:point_id) {-9999}
-      it "should respond with 404 status" do
-        action
-        expect(response.status).to eq(404)
       end
     end
   end
