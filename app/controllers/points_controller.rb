@@ -2,6 +2,10 @@ class PointsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
 
+  def show
+    @point = Point.find(params[:id])
+  end
+
   def create
     if user_signed_in?
       if permitted_params[:fight_id] != nil &&

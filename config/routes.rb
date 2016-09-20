@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
   resources :fights, only: [:show, :create, :update, :destroy]
 
-  resources :points, only: [:create]
+  resources :points, only: [:show, :create]
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
