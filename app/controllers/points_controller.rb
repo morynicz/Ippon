@@ -1,7 +1,7 @@
 class PointsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def show
     @point = Point.find(params[:id])
@@ -40,6 +40,12 @@ class PointsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    point = Point.find(params[:id])
+    point.destroy
+    head :no_content
   end
 
   private
