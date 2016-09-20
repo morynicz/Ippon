@@ -1,6 +1,9 @@
 class Point < ActiveRecord::Base
+  validates :type, :player_id, :fight_id, presence: true
+
   belongs_to :fight
   belongs_to :player
+  has_one :tournament, through: :fight
 
   #no inheritance planned
   self.inheritance_column = :_type_disabled
