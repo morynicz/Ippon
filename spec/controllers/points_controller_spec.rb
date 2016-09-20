@@ -238,4 +238,68 @@ RSpec.describe PointsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:fight) {
+      FactoryGirl::create(:fight)
+    }
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: point_id
+    }
+
+    context "when the fight exists" do
+      let(:point) {
+        FactoryGirl::create(:point, fight: fight)
+      }
+      let(:point_id){point.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(fight.tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted point" do
+          action
+          expect(Point.find_by_id(point.id)).to be_nil
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the point" do
+          action
+          expect(Point.exists?(point.id)).to be true
+        end
+      end
+    end
+
+    context "when the point doesn't exist" do
+      let(:point_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(fight.tournament.id)
+        end
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
 end
