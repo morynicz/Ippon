@@ -67,7 +67,7 @@ class FightsController < ApplicationController
     if user_signed_in?
       user = current_user
       fight = Fight.find(params[:id])
-      tournament = fight.team_fight.tournament
+      tournament = fight.tournament
       head :unauthorized unless TournamentAdmin.exists?(tournament_id: tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
     else
       head :unauthorized
