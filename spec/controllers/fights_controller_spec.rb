@@ -47,7 +47,7 @@ RSpec.describe FightsController, type: :controller do
 
     subject(:results) {JSON.parse(response.body)}
 
-    context "when the team exists" do
+    context "when the fight exists" do
       let(:fight) {
         FactoryGirl::create(:fight_with_points, points_count: 2)
       }
