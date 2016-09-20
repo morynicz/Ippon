@@ -278,14 +278,14 @@ RSpec.describe FightsController, type: :controller do
           expect(response).to have_http_status :unauthorized
         end
 
-        it "should not update team attributes" do
+        it "should not update fight attributes" do
           action
           compare_hash_with_fight(attrs, fight)
         end
       end
     end
 
-    context "when the team doesn't exist" do
+    context "when the fight doesn't exist" do
       let(:fight_id) {-9999}
 
       let(:action) {
