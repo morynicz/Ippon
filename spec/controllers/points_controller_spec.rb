@@ -12,6 +12,12 @@ RSpec.describe PointsController, type: :controller do
       user_id: current_user.id, status: :main)
   end
 
+  def compare_hash_with_point(hash, point)
+    expect(point.player_id).to eq(hash["player_id"])
+    expect(point.fight_id).to eq(hash["fight_id"])
+    expect(point.type).to eq(hash["type"])
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: point_id
@@ -126,9 +132,7 @@ RSpec.describe PointsController, type: :controller do
           it "creates a point with proper values" do
             action
             pt = Point.find(results["id"])
-            expect(pt.player_id).to eq(attributes["player_id"])
-            expect(pt.fight_id).to eq(attributes["fight_id"])
-            expect(pt.type).to eq(attributes["type"])
+            compare_hash_with_point(attributes, pt)
           end
         end
       end
@@ -143,6 +147,93 @@ RSpec.describe PointsController, type: :controller do
           expect {
             action
           }.to_not change(Point, :count)
+        end
+      end
+    end
+  end
+
+  describe "PUT update" do
+    let(:fight) {
+      FactoryGirl::create(:fight)
+    }
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: point.id, point: update_attrs
+      point.reload
+    }
+
+    let(:update_attrs) {
+        attributes_with_foreign_keys(:point, fight_id: fight.id)
+    }
+    let(:attrs) {
+      attributes_with_foreign_keys(:point, fight_id: fight.id)
+    }
+    context "when the point exists" do
+      let(:point) {
+        Point.create(attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(fight.tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update point attributes" do
+            action
+            compare_hash_with_point(update_attrs, point)
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_attrs) {
+            {
+              type: '',
+              player_id: '',
+              state: ''
+            }
+          }
+
+          it "should not update point attributes" do
+            action
+            compare_hash_with_point(attrs, point)
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should not update team attributes" do
+          action
+          compare_hash_with_point(attrs, point)
+        end
+      end
+    end
+
+    context "when the point doesn't exist" do
+      let(:point_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: point_id, point: update_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
         end
       end
     end
