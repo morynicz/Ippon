@@ -8,6 +8,12 @@ class TeamFight < ActiveRecord::Base
   belongs_to :location
   has_many :fights
 
+  enum state: {
+    not_started: 0,
+    started: 1,
+    finished: 2
+  }
+
   def aka_score
     fights.to_a.sum {|f| f.aka_score}
   end

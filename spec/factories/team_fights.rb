@@ -3,6 +3,7 @@ FactoryGirl.define do
     shiro_team {create(:team)}
     aka_team {create(:team, tournament: shiro_team.tournament)}
     location {create(:location, tournament: shiro_team.tournament)}
+    state :started
 
     factory :team_fight_with_fights_and_points do
       transient do
