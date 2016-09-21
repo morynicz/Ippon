@@ -8,6 +8,9 @@ class Point < ActiveRecord::Base
   #no inheritance planned
   self.inheritance_column = :_type_disabled
 
+  HANSOKU_VALUE = 0.5
+  HIT_VALUE = 1
+
   enum type: {
     men: 0,
     kote: 1,
@@ -21,6 +24,15 @@ class Point < ActiveRecord::Base
       fight.shiro
     else
       fight.aka
+    end
+  end
+
+  def value
+    case type.to_sym
+    when :men, :kote, :do, :tsuki
+      return HIT_VALUE
+    when :hansoku
+      return HANSOKU_VALUE
     end
   end
 end
