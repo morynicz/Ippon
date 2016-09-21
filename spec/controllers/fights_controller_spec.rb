@@ -83,6 +83,16 @@ RSpec.describe FightsController, type: :controller do
         expect(results["fight"]["team_fight_id"]).to eq(fight.team_fight_id)
       end
 
+      it "should return result with correct score for aka team" do
+        action
+        expect(results["fight"]["aka_score"]).to eq(fight.aka_score)
+      end
+
+      it "should return result with correct score for shiro team" do
+        action
+        expect(results["fight"]["shiro_score"]).to eq(fight.shiro_score)
+      end
+
       it "should return points with proper values" do
         action
         for point in fight.points do
