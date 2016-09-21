@@ -13,4 +13,18 @@ class Fight < ActiveRecord::Base
     started: 1,
     finished: 2
   }
+
+  def aka_score
+    player_score(shiro)
+  end
+
+  def shiro_score
+    player_score(aka)
+  end
+  private
+
+  def player_score(player)
+    points.where(player_id: player.id).to_a.sum {|p| p.value}
+  end
+
 end
