@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Point, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   describe "value" do
     context "point type is men" do
       let(:point) { FactoryGirl::create(:point, type: :men)}
@@ -36,6 +34,21 @@ RSpec.describe Point, type: :model do
       let(:point) { FactoryGirl::create(:point, type: :hansoku)}
       it "returns a hit value" do
         expect(point.value).to eq(Point::HANSOKU_VALUE)
+      end
+    end
+  end
+
+  describe "oponent" do
+    context "when called" do
+      let(:fight) {FactoryGirl::create(:fight)}
+      let(:aka_point) {FactoryGirl::create(:point, fight: fight,
+        player: fight.aka)}
+      let(:shiro_point) {FactoryGirl::create(:point, fight: fight,
+        player: fight.shiro)}
+
+      it "returns the correct player" do
+        expect(aka_point.oponent).to eq(fight.shiro)
+        expect(shiro_point.oponent).to eq(fight.aka)
       end
     end
   end
