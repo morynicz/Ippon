@@ -28,6 +28,14 @@ RSpec.describe TeamFightsController, type: :controller do
     @request.env["devise.mapping"] = Devise.mappings[:user]
   end
 
+  def compare_hash_with_team_fight(hash, team_fight)
+    expect(team_fight.aka_team_id).to eq(hash["aka_team_id"])
+    expect(team_fight.shiro_team_id).to eq(hash["shiro_team_id"])
+    expect(team_fight.location_id).to eq(hash["location_id"])
+    expect(team_fight.shiro_score).to eq(hash["shiro_score"])
+    expect(team_fight.aka_score).to eq(hash["aka_score"])
+  end
+
   def compare_hash_with_team(hash, team)
     expect(team.name).to eq(hash["name"])
     expect(team.tournament_id).to eq(hash["tournament_id"])
