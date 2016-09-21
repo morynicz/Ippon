@@ -54,8 +54,8 @@ RSpec.describe PlayersController, type: :controller do
         expect(response.status).to eq(200)
       end
 
-      it "should return ten results" do
-        expect(results.size).to eq(10)
+      it "should return all results" do
+        expect(results.size).to eq(Player.all.size)
       end
 
       it "should include name of the first player" do
