@@ -12,6 +12,8 @@ class Tournament < ActiveRecord::Base
   has_many :team_memberships, through: :teams
   has_many :team_members, through: :team_memberships, source: :player
   has_many :locations
+  has_many :tournament_admins
+  has_many :admins, through: :tournament_admins, source: :user
 
   attr_accessor :creator
 
