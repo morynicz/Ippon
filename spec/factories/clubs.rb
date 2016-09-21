@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :club do
-    name {Faker::Lorem.word}
+    sequence(:name) { |n| "Club #{n}"}
     city {Faker::Address.city}
     description {Faker::Lorem.paragraph}
     factory :club_with_players do
