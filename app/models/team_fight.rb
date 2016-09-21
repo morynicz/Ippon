@@ -7,4 +7,12 @@ class TeamFight < ActiveRecord::Base
   has_one :tournament, through: :shiro_team, source: :tournament
   belongs_to :location
   has_many :fights
+
+  def aka_score
+    fights.to_a.sum {|f| f.aka_score}
+  end
+
+  def shiro_score
+    fights.to_a.sum {|f| f.shiro_score}
+  end
 end
