@@ -4,7 +4,8 @@ RSpec.describe TournamentsController, type: :controller do
   render_views
 
   def authorize_user(tournament_id)
-    TournamentAdmin.create(tournament_id: tournament_id, user_id: current_user.id, status: :main)
+    TournamentAdmin.create(tournament_id: tournament_id,
+      user_id: current_user.id, status: :main)
   end
 
   attribute_list = [:name,
@@ -53,19 +54,24 @@ RSpec.describe TournamentsController, type: :controller do
 
       it "should return result with correct player age constraint" do
         action
-        expect(results["player_age_constraint"]).to eq(tournament.player_age_constraint)
-        expect(results["player_age_constraint_value"]).to eq(tournament.player_age_constraint_value)
+        expect(results["player_age_constraint"]).
+          to eq(tournament.player_age_constraint)
+        expect(results["player_age_constraint_value"]).
+          to eq(tournament.player_age_constraint_value)
       end
 
       it "should return result with correct player rank constraint" do
         action
-        expect(results["player_rank_constraint"]).to eq(tournament.player_rank_constraint)
-        expect(results["player_rank_constraint_value"]).to eq(tournament.player_rank_constraint_value)
+        expect(results["player_rank_constraint"]).
+          to eq(tournament.player_rank_constraint)
+        expect(results["player_rank_constraint_value"]).
+          to eq(tournament.player_rank_constraint_value)
       end
 
       it "should return result with correct player sex constraint" do
         action
-        expect(results["player_sex_constraint"]).to eq(tournament.player_sex_constraint)
+        expect(results["player_sex_constraint"]).
+          to eq(tournament.player_sex_constraint)
       end
     end
 
@@ -142,8 +148,10 @@ RSpec.describe TournamentsController, type: :controller do
         it "makes the creating user an admin" do
           action
           tournament = Tournament.find_by_name(attributes[:name])
-          expect(TournamentAdmin.exists?(user_id: current_user.id, tournament_id: tournament.id)).to be true
-          admin = TournamentAdmin.where(user_id: current_user.id, tournament_id: tournament.id).first
+          expect(TournamentAdmin.exists?(user_id: current_user.id,
+            tournament_id: tournament.id)).to be true
+          admin = TournamentAdmin.where(user_id: current_user.id,
+            tournament_id: tournament.id).first
 
           expect(admin.status).to eq(:main.to_s)
         end
@@ -208,22 +216,31 @@ RSpec.describe TournamentsController, type: :controller do
         expect(response.status).to eq(200)
       end
 
-      it "should return three results" do
-        expect(results.size).to eq(3)
+      it "should return all tournaments in results" do
+        expect(results.size).to eq(Tournament.all.size)
       end
 
       it "should include all the values of all the tournaments" do
         for tournament in tournament_list do
           expect(results.map(&extract_name)).to include(tournament.name)
-          expect(results.map(&extract_group_match_length)).to include(tournament.group_match_length)
-          expect(results.map(&extract_playoff_match_length)).to include(tournament.playoff_match_length)
-          expect(results.map(&extract_team_size)).to include(tournament.team_size)
-          expect(results.map(&extract_player_age_constraint)).to include(tournament.player_age_constraint)
-          expect(results.map(&extract_player_age_constraint_value)).to include(tournament.player_age_constraint_value)
-          expect(results.map(&extract_player_rank_constraint)).to include(tournament.player_rank_constraint)
-          expect(results.map(&extract_player_rank_constraint_value)).to include(tournament.player_rank_constraint_value)
-          expect(results.map(&extract_player_sex_constraint)).to include(tournament.player_sex_constraint)
-          expect(results.map(&extract_player_sex_constraint_value)).to include(tournament.player_sex_constraint_value)
+          expect(results.map(&extract_group_match_length)).
+            to include(tournament.group_match_length)
+          expect(results.map(&extract_playoff_match_length)).
+            to include(tournament.playoff_match_length)
+          expect(results.map(&extract_team_size)).
+            to include(tournament.team_size)
+          expect(results.map(&extract_player_age_constraint)).
+            to include(tournament.player_age_constraint)
+          expect(results.map(&extract_player_age_constraint_value)).
+            to include(tournament.player_age_constraint_value)
+          expect(results.map(&extract_player_rank_constraint)).
+            to include(tournament.player_rank_constraint)
+          expect(results.map(&extract_player_rank_constraint_value)).
+            to include(tournament.player_rank_constraint_value)
+          expect(results.map(&extract_player_sex_constraint)).
+            to include(tournament.player_sex_constraint)
+          expect(results.map(&extract_player_sex_constraint_value)).
+            to include(tournament.player_sex_constraint_value)
         end
       end
     end
@@ -231,7 +248,8 @@ RSpec.describe TournamentsController, type: :controller do
 
   describe "PATCH update" do
     let(:action) {
-      xhr :put, :update, format: :json, id: tournament.id, tournament: update_tournament_attrs
+      xhr :put, :update, format: :json, id: tournament.id,
+        tournament: update_tournament_attrs
       tournament.reload
     }
 
@@ -260,7 +278,8 @@ RSpec.describe TournamentsController, type: :controller do
             action
 
             for attribute in attribute_list
-              expect(tournament.attributes[attribute.to_s]).to eq(update_tournament_attrs[attribute])
+              expect(tournament.attributes[attribute.to_s]).
+                to eq(update_tournament_attrs[attribute])
             end
           end
         end
@@ -284,7 +303,8 @@ RSpec.describe TournamentsController, type: :controller do
           it "should not update tournament attributes" do
             action
             for attribute in attribute_list
-              expect(tournament.attributes[attribute.to_s]).to eq(tournament_attrs[attribute])
+              expect(tournament.attributes[attribute.to_s]).
+                to eq(tournament_attrs[attribute])
             end
           end
 
@@ -304,7 +324,8 @@ RSpec.describe TournamentsController, type: :controller do
         it "should not update tournament attributes" do
           action
           for attribute in attribute_list
-            expect(tournament.attributes[attribute.to_s]).to eq(tournament_attrs[attribute])
+            expect(tournament.attributes[attribute.to_s]).
+              to eq(tournament_attrs[attribute])
           end
         end
       end
@@ -314,7 +335,8 @@ RSpec.describe TournamentsController, type: :controller do
       let(:tournament_id) {-9999}
 
       let(:action) {
-        xhr :put, :update, format: :json, id: tournament_id, tournament: update_tournament_attrs
+        xhr :put, :update, format: :json, id: tournament_id,
+          tournament: update_tournament_attrs
       }
 
       context "when user is not authorized" do
@@ -353,12 +375,14 @@ RSpec.describe TournamentsController, type: :controller do
 
         it "should destroy all memberships of this tournament" do
           action
-          expect(TournamentParticipation.exists?(tournament_id: tournament_id)).to be false
+          expect(TournamentParticipation.exists?(tournament_id: tournament_id)).
+            to be false
         end
 
         it "should delete all admins of this tournament" do
           action
-          expect(TournamentAdmin.exists?(tournament_id: tournament_id)).to be false
+          expect(TournamentAdmin.exists?(tournament_id: tournament_id)).
+            to be false
         end
       end
 
@@ -441,14 +465,15 @@ RSpec.describe TournamentsController, type: :controller do
           expect(response).to have_http_status :ok
         end
 
-        it "returns three current admins" do
+        it "returns all current admins" do
           action
-          expect(results["admins"].size).to eq(4)
+          expect(results["admins"].size).to eq(tournament.admins.size)
         end
 
         it "returns two non-admin users" do
           action
-          expect(results["users"].size).to eq(2)
+          expect(results["users"].size).to eq((User.all - tournament.admins)
+            .size)
         end
       end
     end
@@ -465,7 +490,8 @@ RSpec.describe TournamentsController, type: :controller do
     }
 
     let(:action) {
-      xhr :post, :add_admin, format: :json, id: tournament.id, user_id: tested_user.id
+      xhr :post, :add_admin, format: :json, id: tournament.id,
+        user_id: tested_user.id
     }
 
     context "when user is not authenticated" do
@@ -508,14 +534,17 @@ RSpec.describe TournamentsController, type: :controller do
 
           it "adds the user to admins of given tournament" do
             action
-            expect(TournamentAdmin.where(tournament_id: tournament.id).size).to eq(2)
-            expect(TournamentAdmin.exists?(tournament_id: tournament.id, user_id: tested_user.id)).to be true
+            expect(TournamentAdmin.where(tournament_id: tournament.id).size).
+              to eq(2)
+            expect(TournamentAdmin.exists?(tournament_id: tournament.id,
+              user_id: tested_user.id)).to be true
           end
         end
 
         context "when the user is already an andmin" do
           before do
-            TournamentAdmin.create(tournament_id: tournament.id, user_id: tested_user.id)
+            TournamentAdmin.create(tournament_id: tournament.id,
+            user_id: tested_user.id)
           end
           it "returns bad request status" do
             action
@@ -541,8 +570,10 @@ RSpec.describe TournamentsController, type: :controller do
     }
 
     let(:action) {
-      xhr :delete, :delete_admin, format: :json, id: tournament.id, user_id: tested_user.id
+      xhr :delete, :delete_admin, format: :json, id: tournament.id,
+      user_id: tested_user.id
     }
+
     context "when user is not authenticated" do
       it "returns unauthorized status" do
         action
@@ -590,7 +621,8 @@ RSpec.describe TournamentsController, type: :controller do
 
           context "when deleted admin is not the last" do
             before do
-              TournamentAdmin.create(tournament_id: tournament.id, user_id: tested_user.id)
+              TournamentAdmin.create(tournament_id: tournament.id,
+                user_id: tested_user.id)
             end
 
             it "returns OK status" do
@@ -600,14 +632,17 @@ RSpec.describe TournamentsController, type: :controller do
 
             it "removes the deleted admin from admins of given tournament" do
               action
-              expect(TournamentAdmin.where(tournament_id: tournament.id).size).to eq(1)
-              expect(TournamentAdmin.exists?(tournament_id: tournament.id, user_id: tested_user.id)).to be false
+              expect(TournamentAdmin.where(tournament_id: tournament.id)
+                .size).to eq(1)
+              expect(TournamentAdmin.exists?(tournament_id: tournament.id,
+                user_id: tested_user.id)).to be false
             end
           end
 
           context "when the deleted admin is the last admin" do
             let(:unadmin_self) {
-              xhr :delete, :delete_admin, format: :json, id: tournament.id, user_id: current_user.id
+              xhr :delete, :delete_admin, format: :json, id: tournament.id,
+                user_id: current_user.id
             }
             it "returns bad request status" do
               unadmin_self
@@ -636,7 +671,8 @@ RSpec.describe TournamentsController, type: :controller do
       not_participant_list = FactoryGirl::create_list(:player,30)
 
       for participant in participant_list do
-        TournamentParticipation.create(tournament_id: tournament.id, player_id: participant.id)
+        TournamentParticipation.create(tournament_id: tournament.id,
+          player_id: participant.id)
       end
     end
 
@@ -653,9 +689,10 @@ RSpec.describe TournamentsController, type: :controller do
           expect(results["participants"].size).to eq(15)
         end
 
-        it "returns thirty non-participants users" do
+        it "returns all non-participants users" do
           action
-          expect(results["players"].size).to eq(30)
+          expect(results["players"].size).to eq((Player.all -
+            tournament.players).size)
         end
     end
   end
@@ -671,7 +708,8 @@ RSpec.describe TournamentsController, type: :controller do
     }
 
     let(:action) {
-      xhr :post, :add_participant, format: :json, id: tournament.id, player_id: tested_player.id
+      xhr :post, :add_participant, format: :json, id: tournament.id,
+        player_id: tested_player.id
     }
 
     before do
@@ -718,7 +756,8 @@ RSpec.describe TournamentsController, type: :controller do
 
           it "adds the player to participants of given tournament" do
             action
-            expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: tested_player.id)).to be true
+            expect(TournamentParticipation.exists?(tournament_id: tournament.id,
+              player_id: tested_player.id)).to be true
           end
 
           it "does not change number of participants" do
@@ -730,7 +769,8 @@ RSpec.describe TournamentsController, type: :controller do
 
         context "when the user is already a participant" do
           before do
-            TournamentParticipation.create(tournament_id: tournament.id, player_id: tested_player.id)
+            TournamentParticipation.create(tournament_id: tournament.id,
+              player_id: tested_player.id)
           end
           it "returns bad request status" do
             action
@@ -755,7 +795,8 @@ RSpec.describe TournamentsController, type: :controller do
     }
 
     let(:action) {
-      xhr :delete, :delete_participant, format: :json, id: tournament.id, player_id: player.id
+      xhr :delete, :delete_participant, format: :json, id: tournament.id,
+        player_id: player.id
     }
 
     before do
@@ -807,7 +848,8 @@ RSpec.describe TournamentsController, type: :controller do
 
         context "when the deleted participant is a participant" do
           before do
-            TournamentParticipation.create(tournament_id: tournament.id, player_id: player.id)
+            TournamentParticipation.create(tournament_id: tournament.id,
+              player_id: player.id)
           end
           it "returns OK status" do
             action
@@ -816,7 +858,8 @@ RSpec.describe TournamentsController, type: :controller do
 
           it "removes the deleted participant from participants of given tournament" do
             action
-            expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+            expect(TournamentParticipation.exists?(tournament_id: tournament.id,
+              player_id: player.id)).to be false
           end
 
           context "when deleted participant belongs to a team" do
@@ -832,7 +875,8 @@ RSpec.describe TournamentsController, type: :controller do
             before do
               TeamMembership.create(team_id: team.id, player_id: player.id)
               TeamMembership.create(team_id: team2.id, player_id: player.id)
-              TournamentParticipation.create(tournament_id: tournament2.id, player_id: player.id)
+              TournamentParticipation.create(tournament_id: tournament2.id,
+                player_id: player.id)
             end
 
             it "returns OK status" do
@@ -842,17 +886,20 @@ RSpec.describe TournamentsController, type: :controller do
 
             it "removes the deleted participant from participants of given tournament" do
               action
-              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+              expect(TournamentParticipation.exists?(tournament_id: tournament.
+                id, player_id: player.id)).to be false
             end
 
             it "removes the deleted participant from the team he is member of" do
               action
-              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+              expect(TournamentParticipation.exists?(tournament_id: tournament.
+                id, player_id: player.id)).to be false
             end
 
             it "does not affect the other tournament participations and team memberships of the player" do
               action
-              expect(TournamentParticipation.exists?(tournament_id: tournament.id, player_id: player.id)).to be false
+              expect(TournamentParticipation.exists?(tournament_id: tournament.
+                id, player_id: player.id)).to be false
             end
           end
         end
@@ -871,7 +918,8 @@ RSpec.describe TournamentsController, type: :controller do
     let(:participant_list) {
       participant_list = FactoryGirl::create_list(:player, 30)
       for participant in participant_list do
-        TournamentParticipation.create(tournament_id: tournament.id, player_id: participant.id)
+        TournamentParticipation.create(tournament_id: tournament.id,
+          player_id: participant.id)
       end
     }
 
