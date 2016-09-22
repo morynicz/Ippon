@@ -8,6 +8,8 @@ class TeamFight < ActiveRecord::Base
   has_one :tournament, through: :shiro_team, source: :tournament
   belongs_to :location
   has_many :fights, dependent: :destroy
+  has_one :group_fight
+  has_one :group_tournament
 
   enum state: {
     not_started: 0,
