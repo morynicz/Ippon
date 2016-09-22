@@ -92,46 +92,10 @@ angular.module('ippon').config([
 
 		$urlRouterProvider.otherwise('home');
 
-		$translateProvider.translations('en', {
-			HOME: "Home Page",
-      CLUBS: "Clubs",
-      PLAYERS: "Players",
-
-			LANGUAGE: "Language",
-
-			LOG_IN: "Log In",
-			REGISTER: "Register",
-			LOG_OUT: "Log Out",
-
-			ADD: "Add",
-			EDIT: "Edit",
-			DELETE: "Delete",
-			CANCEL: "Cancel",
-			SAVE: "Save",
-			INDEX: "Index",
-
-			HOME_TITLE: "Ippon Home Page",
-			HOME_TEXT: "Here shall be some links",
-
-			AUTH_EMAIL: "Email",
-			AUTH_USERNAME: "Username",
-			AUTH_PASSWORD: "Password",
-
-			CLUB_NAME: "Name",
-			CLUB_NAME_PLACEHOLDER: "Osoms",
-			CLUB_CITY: "City",
-			CLUB_CITY_PLACEHOLDER: "Samuraiville",
-			CLUB_DESCRIPTION: "Description",
-			CLUB_DESCRIPTION_PLACEHOLDER: "Strongest club around",
-
-      PLAYER_NAME: "Name",
-      PLAYER_SURNAME: "Surname",
-      PLAYER_AGE: "Age",
-      PLAYER_BIRTHDAY: "Birthday",
-      PLAYER_RANK: "Rank",
-      PLAYER_SEX: "Sex",
-      PLAYER_CLUB: "Club"
-		});
+		$translateProvider.translations('en',
+    //this line pastes json fiile with en translation
+      <%= File.open('public/i18n/locale-en.json', 'r') { |f| f.read } %>
+  );
 
 		$translateProvider.useStaticFilesLoader({
 			prefix: "/i18n/locale-",
