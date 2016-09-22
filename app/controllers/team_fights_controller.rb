@@ -1,5 +1,6 @@
 class TeamFightsController < ApplicationController
   before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!,:authorize_user, only: [:update]
 
   def show
     @team_fight = TeamFight.find(params[:id])
@@ -38,6 +39,15 @@ class TeamFightsController < ApplicationController
     end
   end
 
+  def update
+    team_fight = TeamFight.find(params[:id])
+    if team_fight.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def permitted_params
@@ -45,4 +55,15 @@ class TeamFightsController < ApplicationController
       :state, :location_id)
   end
 
+  def authorize_user
+    if user_signed_in?
+      user = current_user
+      team_fight = TeamFight.find(params[:id])
+      tournament = team_fight.tournament
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id:
+        tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
+    else
+      head :unauthorized
+    end
+  end
 end
