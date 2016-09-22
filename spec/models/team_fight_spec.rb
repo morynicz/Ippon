@@ -18,7 +18,15 @@ RSpec.describe TeamFight, type: :model do
         expect(team_fight.shiro_score).to eq(3)
       end
     end
+  end
 
+  describe "tournament" do
+    let(:group_fight){FactoryGirl::create(:group_fight)}
+    context "when called on fight belonging to a group" do
+      it "returns the tournament it belongs to" do
+        expect(group_fight.team_fight.tournament).to eq(group_fight.tournament)
+      end
+    end
   end
 
 end
