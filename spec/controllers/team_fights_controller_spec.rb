@@ -32,8 +32,11 @@ RSpec.describe TeamFightsController, type: :controller do
     expect(team_fight.aka_team_id).to eq(hash["aka_team_id"])
     expect(team_fight.shiro_team_id).to eq(hash["shiro_team_id"])
     expect(team_fight.location_id).to eq(hash["location_id"])
-    expect(team_fight.shiro_score).to eq(hash["shiro_score"])
-    expect(team_fight.aka_score).to eq(hash["aka_score"])
+
+    expect(team_fight.shiro_score).to eq(hash["shiro_score"]) if hash[
+      "shiro_score"] != nil
+    expect(team_fight.aka_score).to eq(hash["aka_score"]) if hash[
+      "aka_score"] != nil
   end
 
   def compare_hash_with_team(hash, team)
@@ -136,6 +139,94 @@ RSpec.describe TeamFightsController, type: :controller do
       it "should respond with 404 status" do
         action
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "POST :create" do
+    #TODO: this will obviously need a rework
+    let(:shiro_team) { FactoryGirl::create(:team)}
+    let(:attributes) { attributes_with_foreign_keys(:team_fight,
+       shiro_team: shiro_team)}
+    let(:action) do
+        xhr :post, :create, format: :json, team_fight: attributes
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "does not create a team fight" do
+        expect {
+          action
+        }.to_not change(TeamFight, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when user is authorized" do
+        before do
+          authorize_user(shiro_team.tournament.id)
+        end
+
+        context "with invalid attributes" do
+
+          let(:attributes) do
+            {
+              location_id: '',
+              aka_team_id: '',
+              shiro_team_id: '',
+              state: ''
+            }
+          end
+
+          it "does not create a team fight" do
+            expect {
+              action
+            }.to_not change(TeamFight, :count)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+
+        context "with valid attributes" do
+          it "creates a team fight" do
+            expect {
+              action
+            }.to change(TeamFight, :count).by(1)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to be_successful
+          end
+
+          it "creates a fight with proper values" do
+            action
+            tf = TeamFight.find(results["team_fight"]["id"])
+            compare_hash_with_team_fight(attributes, tf)
+          end
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not create a team fight" do
+          expect {
+            action
+          }.to_not change(TeamFight, :count)
+        end
       end
     end
   end
