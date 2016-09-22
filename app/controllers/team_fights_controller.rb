@@ -1,6 +1,6 @@
 class TeamFightsController < ApplicationController
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def show
     @team_fight = TeamFight.find(params[:id])
@@ -46,6 +46,12 @@ class TeamFightsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    team_fight = TeamFight.find(params[:id])
+    team_fight.destroy
+    head :no_content
   end
 
   private
