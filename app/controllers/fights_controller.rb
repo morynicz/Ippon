@@ -49,10 +49,6 @@ class FightsController < ApplicationController
 
   def destroy
     fight = Fight.find(params[:id])
-    points = Point.where(fight_id: fight.id)
-    for point in points do
-      point.destroy
-    end
     fight.destroy
     head :no_content
   end

@@ -6,7 +6,7 @@ class Fight < ActiveRecord::Base
   belongs_to :shiro, class_name: "Player", foreign_key: "shiro_id"
 
   has_one :tournament, through: :team_fight
-  has_many :points
+  has_many :points, dependent: :destroy
 
   enum state: {
     not_started: 0,
