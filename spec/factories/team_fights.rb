@@ -1,9 +1,20 @@
 FactoryGirl.define do
   factory :team_fight do
+    transient do
+      tournament {FactoryGirl::create(:tournament)}
+    end
     shiro_team {create(:team)}
-    aka_team {create(:team, tournament: shiro_team.tournament)}
-    location {create(:location, tournament: shiro_team.tournament)}
+    aka_team {create(:team, tournament: tournament)}
+    location {create(:location, tournament: tournament)}
     state :started
+
+    after(:create) do |team_fight, evaluator|
+      g = FactoryGirl::create(:group, tournament: team_fight.shiro_team.
+        tournament)
+      GroupFight.create(group: g, team_fight: team_fight)
+      GroupMember.create(group: g, team: team_fight.aka_team)
+      GroupMember.create(group: g, team: team_fight.shiro_team)
+    end
 
     factory :team_fight_with_fights_and_points do
       transient do
