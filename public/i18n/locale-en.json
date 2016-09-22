@@ -1,6 +1,7 @@
 {
     "CLUBS": "Clubs",
     "HOME": "Home Page",
+    "PLAYERS": "Players",
 
     "LANGUAGE": "Language",
 
@@ -27,5 +28,18 @@
     "CLUB_CITY": "City",
     "CLUB_CITY_PLACEHOLDER": "Samuraiville",
     "CLUB_DESCRIPTION": "Description",
-    "CLUB_DESCRIPTION_PLACEHOLDER": "Strongest club around"
+    "CLUB_DESCRIPTION_PLACEHOLDER": "Strongest club around",
+
+    "PLAYER_NAME":  "Name",
+    "PLAYER_NAME_PLACEHOLDER": "John",
+    "PLAYER_SURNAME": "Surname",
+    "PLAYER_SURNAME_PLACEHOLDER": "Smith",
+    "PLAYER_SEX": "Gender",
+    "PLAYER_BIRTHDAY": "Birthday",
+    "PLAYER_RANK": "Rank",
+    "PLAYER_CLUB": "Club",
+
+    "TEAM_NAME": "Name",
+    "TEAM_NAME_PLACEHOLDER": "Dragonflies",
+    "TEAM_MEMBERS": "Members"
 }
