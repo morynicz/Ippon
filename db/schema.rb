@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922123616) do
+ActiveRecord::Schema.define(version: 20160922124112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,16 @@ ActiveRecord::Schema.define(version: 20160922123616) do
   add_index "fights", ["aka_id"], name: "index_fights_on_aka_id", using: :btree
   add_index "fights", ["shiro_id"], name: "index_fights_on_shiro_id", using: :btree
   add_index "fights", ["team_fight_id"], name: "index_fights_on_team_fight_id", using: :btree
+
+  create_table "group_fights", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "team_fight_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "group_fights", ["group_id"], name: "index_group_fights_on_group_id", using: :btree
+  add_index "group_fights", ["team_fight_id"], name: "index_group_fights_on_team_fight_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.integer  "tournament_id"
@@ -181,6 +191,8 @@ ActiveRecord::Schema.define(version: 20160922123616) do
   add_foreign_key "club_admins", "clubs"
   add_foreign_key "club_admins", "users"
   add_foreign_key "fights", "team_fights"
+  add_foreign_key "group_fights", "groups"
+  add_foreign_key "group_fights", "team_fights"
   add_foreign_key "groups", "tournaments"
   add_foreign_key "locations", "tournaments"
   add_foreign_key "players", "clubs"
