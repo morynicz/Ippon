@@ -7,7 +7,7 @@ class TeamFight < ActiveRecord::Base
   has_many :aka_members, through: :aka_team, source: :players
   belongs_to :location
   has_many :fights, dependent: :destroy
-  has_one :group_fight
+  has_one :group_fight, dependent: :destroy
   has_one :group, through: :group_fight
 
   def tournament
