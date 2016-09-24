@@ -3,6 +3,7 @@ class Point < ActiveRecord::Base
 
   belongs_to :fight
   belongs_to :player
+  has_one :tournament, through: :fight
 
   #no inheritance planned
   self.inheritance_column = :_type_disabled
@@ -17,10 +18,6 @@ class Point < ActiveRecord::Base
     tsuki: 3,
     hansoku: 4
   }
-
-  def tournament
-    fight.tournament
-  end
 
   def oponent
     if player.id == fight.aka.id

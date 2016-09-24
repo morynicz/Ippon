@@ -52,7 +52,6 @@ RSpec.describe TeamFightsController, type: :controller do
     subject(:results) {JSON.parse(response.body)}
 
     context "when the fight exists" do
-      let(:tournament) {FactoryGirl::create(:tournament, team_size: 3)}
       let(:team_fight) {
         FactoryGirl::create(:team_fight)
       }
@@ -144,10 +143,9 @@ RSpec.describe TeamFightsController, type: :controller do
   end
 
   describe "POST :create" do
-    #TODO: this will obviously need a rework
-    let(:shiro_team) { FactoryGirl::create(:team)}
+    let(:tournament) {FactoryGirl::create(:tournament)}
     let(:attributes) { attributes_with_foreign_keys(:team_fight,
-       shiro_team: shiro_team)}
+       tournament: tournament)}
     let(:action) do
         xhr :post, :create, format: :json, team_fight: attributes
     end
@@ -170,7 +168,7 @@ RSpec.describe TeamFightsController, type: :controller do
     context "when the user is authenticated", authenticated: true do
       context "when user is authorized" do
         before do
-          authorize_user(shiro_team.tournament.id)
+          authorize_user(tournament.id)
         end
 
         context "with invalid attributes" do
@@ -233,13 +231,6 @@ RSpec.describe TeamFightsController, type: :controller do
 
   describe "PATCH update" do
     let(:tournament) {FactoryGirl::create(:tournament)}
-    let(:shiro_team1) {
-      FactoryGirl::create(:team, tournament: tournament)
-    }
-
-    let(:shiro_team2) {
-      FactoryGirl::create(:team, tournament: tournament)
-    }
 
     let(:action) {
       xhr :put, :update, format: :json, id: team_fight.id,
@@ -248,10 +239,10 @@ RSpec.describe TeamFightsController, type: :controller do
     }
 
     let(:update_attrs) {
-        attributes_with_foreign_keys(:team_fight, shiro_team_id: shiro_team1.id)
+        attributes_with_foreign_keys(:team_fight, tournament: tournament)
     }
     let(:attrs) {
-      attributes_with_foreign_keys(:team_fight, shiro_team_id: shiro_team2.id)
+      attributes_with_foreign_keys(:team_fight, tournament: tournament)
     }
     context "when the team fight exists" do
       let(:team_fight) {
@@ -326,9 +317,7 @@ RSpec.describe TeamFightsController, type: :controller do
   end
 
   describe "DELETE: destroy" do
-    let(:shiro_team) {
-      FactoryGirl::create(:team)
-    }
+    let(:tournament) {FactoryGirl::create(:tournament)}
 
     let(:action) {
         xhr :delete, :destroy, format: :json, id: team_fight_id
@@ -337,13 +326,13 @@ RSpec.describe TeamFightsController, type: :controller do
     context "when the team fight exists" do
       let(:team_fight) {
         FactoryGirl::create(:team_fight_with_fights_and_points,
-          shiro_team: shiro_team)
+          tournament: tournament)
       }
       let(:team_fight_id){team_fight.id}
 
       context "when the user is authorized", authenticated: true do
         before do
-          authorize_user(shiro_team.tournament.id)
+          authorize_user(tournament.id)
         end
         it "should respond with 204 status" do
           action
@@ -385,7 +374,7 @@ RSpec.describe TeamFightsController, type: :controller do
 
       context "when the user is authorized", authenticated: true do
         before do
-          authorize_user(shiro_team.tournament.id)
+          authorize_user(tournament.id)
         end
         it "should respond with not found status" do
           action

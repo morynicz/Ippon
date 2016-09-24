@@ -4,9 +4,8 @@ RSpec.describe TeamFight, type: :model do
   describe "aka and shiro score" do
     let(:tournament){FactoryGirl::create(:tournament, team_size: 3)}
     let(:team_fight){
-      t = FactoryGirl::create(:team, tournament: tournament)
       FactoryGirl::create(:team_fight_with_fights_and_points,
-        aka_points: 5, shiro_points: 3, shiro_team: t)}
+        aka_points: 5, shiro_points: 3, tournament: tournament)}
 
     context "when aka_score called" do
       it "returns 5 points for aka" do

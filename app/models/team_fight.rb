@@ -1,4 +1,5 @@
 class TeamFight < ActiveRecord::Base
+  validate :team_tournaments_match?
   validates :state, :aka_team_id, :shiro_team_id, :location_id, presence: true
   belongs_to :shiro_team, class_name: "Team", foreign_key: "shiro_team_id"
   belongs_to :aka_team, class_name: "Team", foreign_key: "aka_team_id"
@@ -9,10 +10,7 @@ class TeamFight < ActiveRecord::Base
   has_many :fights, dependent: :destroy
   has_one :group_fight, dependent: :destroy
   has_one :group, through: :group_fight
-
-  def tournament
-    group.tournament
-  end
+  has_one :tournament, through: :shiro_team
 
   enum state: {
     not_started: 0,
@@ -26,5 +24,12 @@ class TeamFight < ActiveRecord::Base
 
   def shiro_score
     fights.to_a.sum {|f| f.shiro_score}
+  end
+
+  def team_tournaments_match?
+    if shiro_team == nil || aka_team == nil ||
+        shiro_team.tournament.id != aka_team.tournament.id
+      errors.add(:aka_team_id, "cannot belong to other tournament than shiro team")
+    end
   end
 end
