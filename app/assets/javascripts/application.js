@@ -20,4 +20,5 @@
 //= require bootstrap-sass-official/assets/javascripts/bootstrap
 //= require angular-translate/angular-translate
 //= require angular-translate-loader-static-files/angular-translate-loader-static-files
+//= require angular-flash-alert/dist/angular-flash
 //= require_tree .

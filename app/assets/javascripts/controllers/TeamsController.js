@@ -5,7 +5,8 @@ angular.module('ippon').controller('TeamsController',[
   '$resource',
   '$state',
   'Auth',
-  function($scope, $stateParams, $location, $resource, $state, Auth){
+  'Flash',
+  function($scope, $stateParams, $location, $resource, $state, Auth, Flash){
 
     var teamResource = $resource("/teams/:teamId",
     {
@@ -46,6 +47,7 @@ angular.module('ippon').controller('TeamsController',[
         $scope.team = null;
         $scope.members = null;
         $scope.is_admin = false;
+        Flash.create('danger', 'Get team failed: ' + httpResponse.status + ': ' + httpResponse.statusText);
       });
     }
 
@@ -74,6 +76,7 @@ angular.module('ippon').controller('TeamsController',[
         $scope.players = results;
       }, function(httpResponse) {
         $scope.players = null;
+        Flash.create('danger', 'Get avaliable players failed: ' + httpResponse);
       });
     }
 
@@ -90,7 +93,7 @@ angular.module('ippon').controller('TeamsController',[
 
     $scope.save = function() {
       var onError = function(_httpResponse) {
-        //TODO flash.error
+        Flash.create('danger', 'Save team failed: ' + httpResponse);
       };
 
       if($scope.team.id) {
