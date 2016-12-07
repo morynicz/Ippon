@@ -5,8 +5,8 @@ angular.module('ippon').controller('TeamsController',[
   '$resource',
   '$state',
   'Auth',
-  'Flash',
-  function($scope, $stateParams, $location, $resource, $state, Auth, Flash){
+  'FlashingService',
+  function($scope, $stateParams, $location, $resource, $state, Auth, FlashingService){
 
     var teamResource = $resource("/teams/:teamId",
     {
@@ -33,6 +33,8 @@ angular.module('ippon').controller('TeamsController',[
       }
     });
 
+    var flashRestFailed = FlashingService.flashRestFailed;
+
     var getTeam = function(teamId, next) {
       teamResource.get({
         teamId: teamId
@@ -47,7 +49,7 @@ angular.module('ippon').controller('TeamsController',[
         $scope.team = null;
         $scope.members = null;
         $scope.is_admin = false;
-        Flash.create('danger', 'Get team failed: ' + httpResponse.status + ': ' + httpResponse.statusText);
+        flashRestFailed('getTeam', httpResponse);
       });
     }
 
@@ -76,7 +78,7 @@ angular.module('ippon').controller('TeamsController',[
         $scope.players = results;
       }, function(httpResponse) {
         $scope.players = null;
-        Flash.create('danger', 'Get avaliable players failed: ' + httpResponse);
+        flashRestFailed('getPlayers', httpResponse);
       });
     }
 
@@ -93,7 +95,7 @@ angular.module('ippon').controller('TeamsController',[
 
     $scope.save = function() {
       var onError = function(_httpResponse) {
-        Flash.create('danger', 'Save team failed: ' + httpResponse);
+        flashRestFailed('saveTeam', _httpResponse);
       };
 
       if($scope.team.id) {
