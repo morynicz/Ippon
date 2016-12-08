@@ -5,7 +5,8 @@ angular.module('ippon').controller('ClubsController',[
   '$resource',
   '$state',
   'Auth',
-function($scope, $stateParams, $location, $resource, $state, Auth){
+  'FlashingService',
+function($scope, $stateParams, $location, $resource, $state, Auth, FlashingService){
   var controllerRoot = "/clubs/";
   var club = $resource(controllerRoot + ':clubId',
     {
@@ -72,7 +73,8 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         }
       }, function(httpResponse) {
         $scope.club = null;
-        //flash.error = 'There is no club with Id + $routeParams.clubId'
+        FlashingService.flashRestFailed("{{'FIND' | translate}}",
+          "{{'CLUB'  |translate}}", httpResponse);
       });
 
     }
@@ -111,7 +113,8 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
 
   $scope.save = function() {
     var onError = function(_httpResponse) {
-      //TODO flash.error
+      FlashingService.flashRestFailed("{{'SAVE' | translate}}",
+        "{{'CLUB'  |translate}}", _httpResponse);
     }
 
     if($scope.club.id) {
@@ -143,6 +146,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
             $scope.admins = results.admins;
             $scope.users = results.users;
           });
+      }, function(httpResponse) {
+        FlashingService.flashRestFailed("{{'SAVE' | translate}}",
+          "{{'CLUB' |translate}}", httpResponse);
       });
 
   }
@@ -157,6 +163,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
           $scope.admins = results.admins;
           $scope.users = results.users;
         });
+    }, function(httpResponse) {
+      FlashingService.flashRestFailed("{{'DELETE' | translate}}",
+        "{{'CLUB' |translate}}", httpResponse);
     });
 
   }
