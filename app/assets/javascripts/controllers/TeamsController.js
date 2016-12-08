@@ -33,8 +33,6 @@ angular.module('ippon').controller('TeamsController',[
       }
     });
 
-    var flashRestFailed = FlashingService.flashRestFailed;
-
     var getTeam = function(teamId, next) {
       teamResource.get({
         teamId: teamId
@@ -49,7 +47,8 @@ angular.module('ippon').controller('TeamsController',[
         $scope.team = null;
         $scope.members = null;
         $scope.is_admin = false;
-        flashRestFailed('getTeam', httpResponse);
+        FlashingService.flashRestFailed("{{'FIND' | translate}}",
+          "{{'TEAM'  |translate}}", httpResponse);
       });
     }
 
@@ -78,7 +77,8 @@ angular.module('ippon').controller('TeamsController',[
         $scope.players = results;
       }, function(httpResponse) {
         $scope.players = null;
-        flashRestFailed('getPlayers', httpResponse);
+        FlashingService.flashRestFailed("{{'FIND' | translate}}",
+          "{{'PLAYER' |translate}}", httpResponse);
       });
     }
 
@@ -95,7 +95,8 @@ angular.module('ippon').controller('TeamsController',[
 
     $scope.save = function() {
       var onError = function(_httpResponse) {
-        flashRestFailed('saveTeam', _httpResponse);
+        FlashingService.flashRestFailed("{{'SAVE' | translate}}",
+          "{{'TEAM' |translate}}", httpResponse);
       };
 
       if($scope.team.id) {
