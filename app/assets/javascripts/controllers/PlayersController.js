@@ -5,7 +5,8 @@ angular.module('ippon').controller('PlayersController',[
   '$resource',
   '$state',
   'Auth',
-function($scope, $stateParams, $location, $resource, $state, Auth){
+  'FlashingService',
+function($scope, $stateParams, $location, $resource, $state, Auth, FlashingService){
   var controllerRoot = "/players/";
   var player = $resource(controllerRoot + ':playerId',
     {
@@ -62,6 +63,9 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         $scope.player.birthday = new Date($scope.player.birthday);
         club.get({clubId: player.club_id}, function(club) {
           $scope.player.club = club;
+        }, function(httpResponse) {
+          FlashingService.flashRestFailed("{{'FIND' | translate}}",
+            "{{'CLUB' |translate}}", httpResponse);
         });
 
         if($state.is('players_show')) {
@@ -71,7 +75,8 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
         }
       }, function(httpResponse) {
         $scope.player = null;
-        //flash.error = 'There is no club with Id + $routeParams.clubId'
+        FlashingService.flashRestFailed("{{'FIND' | translate}}",
+          "{{'PLAYER' |translate}}", httpResponse);
       });
     }
   } else {
@@ -122,7 +127,8 @@ function($scope, $stateParams, $location, $resource, $state, Auth){
 
   $scope.save = function() {
     var onError = function(_httpResponse) {
-      //TODO flash.error
+      FlashingService.flashRestFailed("{{'FIND' | translate}}",
+        "{{'PLAYER' |translate}}", _httpResponse);
     }
 
     if($scope.player.id) {
