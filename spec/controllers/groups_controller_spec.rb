@@ -32,7 +32,7 @@ RSpec.describe GroupsController, type: :controller do
 
   describe "GET show" do
     let(:action) {
-      xhr :get, :show, format: :json, id: tournament.id, group_id: group_id
+      xhr :get, :show, format: :json, tournament_id: tournament.id, group_id: group_id
     }
 
     let(:tournament) {
