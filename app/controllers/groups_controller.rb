@@ -10,4 +10,13 @@ class GroupsController < ApplicationController
       @isAdmin = false
     end
   end
+
+  def index
+    tournament = Tournament.find(params[:tournament_id])
+    if tournament != nil
+      @groups = tournament.groups
+    else
+      head :not_found
+    end
+  end
 end
