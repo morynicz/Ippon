@@ -63,8 +63,7 @@ RSpec.describe GroupsController, type: :controller do
     @request.env["devise.mapping"] = Devise.mappings[:user]
   end
 
-  def compare_group_with_hash(hash, group)
-    expect(group.id).to eq(hash["id"])
+  def compare_hash_with_group(hash, group)
     expect(group.name).to eq(hash["name"])
     expect(group.tournament_id).to eq(hash["tournament_id"])
   end
@@ -206,6 +205,91 @@ RSpec.describe GroupsController, type: :controller do
 
         for group in group_list do
           check_array_for_team_fights(extracted_teamfights, group.team_fights)
+        end
+      end
+    end
+  end
+
+  describe "POST :create" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+    let(:attributes) { attributes_with_foreign_keys(:group,
+       tournament: tournament)}
+    let(:action) do
+        xhr :post, :create, format: :json, group: attributes, tournament_id: tournament.id
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "does not create a team fight" do
+        expect {
+          action
+        }.to_not change(TeamFight, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "with invalid attributes" do
+
+          let(:attributes) do
+            {
+              name: '',
+              tournament_id: ''
+            }
+          end
+
+          it "does not create a group" do
+            expect {
+              action
+            }.to_not change(Group, :count)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+
+        context "with valid attributes" do
+          it "creates a group" do
+            expect {
+              action
+            }.to change(Group, :count).by(1)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to be_successful
+          end
+
+          it "creates a group with proper values" do
+            action
+            created = Group.find(results["group"]["id"])
+            compare_hash_with_group(attributes, created)
+          end
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not create a group" do
+          expect {
+            action
+          }.to_not change(Group, :count)
         end
       end
     end
