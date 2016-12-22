@@ -112,19 +112,14 @@ RSpec.describe GroupsController, type: :controller do
 
       it 'should return all group members' do
         action
-        for team in group.teams do
-          expect(results["teams"].map(&extract_name)).to include(team.name)
-          expect(results["teams"].map(&extract_id)).to include(team.id)
-        end
+        extracted_teams = results["teams"]
+        check_array_for_teams(extracted_teams, group.teams)
       end
 
       it 'should return all team fights' do
         action
-        for team_fight in group.team_fights do
-          expect(results["team_fights"].map(&extract_id)).to include(team_fight.id)
-          expect(results["team_fights"].map(&extract_shiro_team_id)).to include(team_fight.shiro_team_id)
-          expect(results["team_fights"].map(&extract_aka_team_id)).to include(team_fight.aka_team_id)
-        end
+        extracted_teamfights = results["team_fights"]
+        check_array_for_team_fights(extracted_teamfights, group.team_fights)
       end
 
       context "when the user is not an admin" do
