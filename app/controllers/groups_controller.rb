@@ -1,9 +1,10 @@
 class GroupsController < ApplicationController
 
   def show
-    @group = Group.find(params[:group_id])
+    @group = Group.find(params[:id])
     @teams = @group.teams
     @team_fights = @group.team_fights
+
     if user_signed_in? && @group != nil
       @isAdmin = TournamentAdmin.exists?(tournament_id: params[:tournament_id], user_id: current_user.id, status: TournamentAdmin.statuses[:main])
     else

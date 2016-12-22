@@ -15,7 +15,10 @@ Rails.application.routes.draw do
   delete 'clubs/:id/admins/:user_id' => 'clubs#delete_admin'
   get 'clubs/:id/players' => 'clubs#players'
 
-  resources :tournaments, only: [:show, :create, :index, :update, :destroy]
+  resources :tournaments, only: [:show, :create, :index, :update, :destroy] do
+    resources :groups, only: [:show, :index]
+  end
+
   get 'tournaments/:id/admins' => 'tournaments#admins'
   post 'tournaments/:id/admins/:user_id' => 'tournaments#add_admin'
   delete 'tournaments/:id/admins/:user_id' => 'tournaments#delete_admin'
@@ -24,9 +27,8 @@ Rails.application.routes.draw do
   post 'tournaments/:id/participants/:player_id' => 'tournaments#add_participant'
   delete 'tournaments/:id/participants/:player_id' => 'tournaments#delete_participant'
 
-  get 'tournaments/:tournament_id/groups' => 'groups#index'
-  get 'tournaments/:tournament_id/groups/:group_id' => 'groups#show'
-
+#  get 'tournaments/:tournament_id/groups' => 'groups#index'
+#  get 'tournaments/:tournament_id/groups/:group_id' => 'groups#show'
   resources :teams, only: [:show, :create, :update, :destroy]
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'
   delete 'teams/:id/delete_member/:player_id' => 'teams#delete_member'
