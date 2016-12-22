@@ -181,14 +181,30 @@ RSpec.describe GroupsController, type: :controller do
         group_list
         action
 
-        extracted_teams = results.map(&extract_teams).flatten
-        extracted_teamfights = results.map(&extract_team_fights).flatten
-
         for group in group_list do
           expect(results.map(&extract_group).map(&extract_name)).to include(group.name)
           expect(results.map(&extract_group).map(&extract_id)).to include(group.id)
+        end
+      end
 
+      it "should contain all the teams which are members of all groups" do
+        group_list
+        action
+
+        extracted_teams = results.map(&extract_teams).flatten
+
+        for group in group_list do
           check_array_for_teams(extracted_teams, group.teams)
+        end
+      end
+
+      it "should contain all the team fights of all the groups" do
+        group_list
+        action
+
+        extracted_teamfights = results.map(&extract_team_fights).flatten
+
+        for group in group_list do
           check_array_for_team_fights(extracted_teamfights, group.team_fights)
         end
       end
