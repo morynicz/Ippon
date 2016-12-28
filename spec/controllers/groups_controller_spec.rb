@@ -380,4 +380,79 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: group_id,
+          tournament_id: tournament.id
+    }
+
+    context "when the group exists" do
+      let(:group) {
+        FactoryGirl::create(:group_with_fights,
+          tournament: tournament)
+      }
+      let(:group_id){group.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should not be able to find deleted group" do
+          action
+          expect(Group.find_by_id(group.id)).to be_nil
+        end
+
+        it "should destroy all memberships of this group" do
+          action
+          expect(GroupMember.exists?(group_id: group_id)).to be false
+        end
+
+        it "should destroy all group fights of this group" do
+          action
+          expect(GroupFight.exists?(group_id: group_id)).to be false
+        end
+
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the fight" do
+          action
+          expect(Group.exists?(group.id)).to be true
+        end
+      end
+    end
+
+    context "when the group doesn't exist" do
+      let(:group_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
 end
