@@ -344,7 +344,7 @@ RSpec.describe TeamFightsController, type: :controller do
           expect(TeamFight.find_by_id(team_fight.id)).to be_nil
         end
 
-        it "should destroy all points of fights of this fight" do
+        it "should destroy all fights of this teamfight" do
           action
           expect(Fight.exists?(team_fight_id: team_fight_id)).to be false
         end
