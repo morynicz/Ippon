@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update]
+  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def show
     @group = Group.find(params[:id])
@@ -50,6 +50,12 @@ class GroupsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def destroy
+    group = Group.find(params[:id])
+    group.destroy
+    head :no_content
   end
 
   private
