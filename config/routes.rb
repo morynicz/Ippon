@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'clubs/:id/players' => 'clubs#players'
 
   resources :tournaments, only: [:show, :create, :index, :update, :destroy] do
-    resources :groups, only: [:show, :create, :index]
+    resources :groups, only: [:show, :create, :index, :update]
   end
 
   get 'tournaments/:id/admins' => 'tournaments#admins'

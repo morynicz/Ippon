@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!,:authorize_user, only: [:update]
 
   def show
     @group = Group.find(params[:id])
@@ -42,6 +43,15 @@ class GroupsController < ApplicationController
     end
   end
 
+  def update
+    group = Group.find(params[:id])
+    if group.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def permitted_params
@@ -50,10 +60,8 @@ class GroupsController < ApplicationController
 
   def authorize_user
     if user_signed_in?
-      user = current_user
-      group = Group.find(params[:id])
-      tournament = Group.tournament
-      head :unauthorized unless TournamentAdmin.exists?(tournament_id: tournament.id, user_id: user.id, status: TournamentAdmin.statuses[:main])
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id: params[:tournament_id],
+        user_id: current_user.id, status: TournamentAdmin.statuses[:main])
     else
       head :unauthorized
     end
