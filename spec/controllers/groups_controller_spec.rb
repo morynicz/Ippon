@@ -294,4 +294,90 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
+
+  describe "PATCH update" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: group.id,
+        tournament_id: tournament.id, group: update_attrs
+      group.reload
+    }
+
+    let(:update_attrs) {
+        attributes_with_foreign_keys(:group, tournament: tournament)
+    }
+    let(:attrs) {
+      attributes_with_foreign_keys(:group, tournament: tournament)
+    }
+    context "when the group exists" do
+      let(:group) {
+        Group.create(attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update the attributes" do
+            action
+            compare_hash_with_group(update_attrs, group)
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_attrs) do
+            {
+              name: '',
+              tournament_id: ''
+            }
+          end
+
+          it "should not update the attributes" do
+            action
+            compare_hash_with_group(attrs, group)
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should not update the attributes" do
+          action
+          compare_hash_with_group(attrs, group)
+        end
+      end
+    end
+
+    context "when the group doesn't exist" do
+      let(:group_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: group_id,
+          tournament_id: tournament.id, group: update_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
