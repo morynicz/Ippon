@@ -47,6 +47,53 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_teams do
+      transient do
+        teams_count 15
+      end
+
+      after(:create) do |tournament, evaluator|
+        create_list(:team_with_players, evaluator.teams_count, tournament: tournament)
+      end
+    end
+
+    trait :with_groups do
+      transient do
+        group_count 4
+      end
+
+      after(:create) do |tournament, evaluator|
+        members = tournament.teams
+        for part in members.in_groups(evaluator.group_count, false) do
+          create(:group_with_members_list_and_fights, tournament: tournament, members: part)
+        end
+      end
+    end
+
+    trait :with_playoffs do
+      transient do
+        number_of_players 5
+      end
+
+      after(:create) do |tournament, evaluator|
+        base_size = 2**(Math::log(evaluator.number_of_players, 2).ceil - 1)
+        playoffs = []
+
+        if tournament.teams.size < evaluator.number_of_players
+          create_list(:team, evaluator.number_of_players, tournament: tournament)
+        end
+        teams = tournament.teams.shuffle
+
+        evaluator.number_of_players.times {
+          playoffs << teams.shift
+        }
+        playoffs = create_list(:playoff_fight, base_size, tournament: tournament)
+        build_playoff_next_level(playoffs)
+      end
+    end
+
     factory :tournament_with_participants_and_admins, traits: [:with_participants, :with_admins]
+    factory :tournament_with_playoffs, traits: [:with_playoffs]
+    factory :tournament_with_all, traits: [:with_teams, :with_admins, :with_groups, :with_playoffs]
   end
 end
