@@ -70,7 +70,7 @@ RSpec.describe GroupsController, type: :controller do
 
   describe "GET show" do
     let(:action) {
-      xhr :get, :show, format: :json, tournament_id: tournament.id, id: group_id
+      xhr :get, :show, format: :json, id: group_id
     }
 
     let(:tournament) {
@@ -300,7 +300,7 @@ RSpec.describe GroupsController, type: :controller do
 
     let(:action) {
       xhr :put, :update, format: :json, id: group.id,
-        tournament_id: tournament.id, group: update_attrs
+        group: update_attrs
       group.reload
     }
 
@@ -369,7 +369,7 @@ RSpec.describe GroupsController, type: :controller do
 
       let(:action) {
         xhr :put, :update, format: :json, id: group_id,
-          tournament_id: tournament.id, group: update_attrs
+          group: update_attrs
       }
 
       context "when user is not authorized" do
@@ -385,8 +385,7 @@ RSpec.describe GroupsController, type: :controller do
     let(:tournament) {FactoryGirl::create(:tournament)}
 
     let(:action) {
-        xhr :delete, :destroy, format: :json, id: group_id,
-          tournament_id: tournament.id
+        xhr :delete, :destroy, format: :json, id: group_id
     }
 
     context "when the group exists" do

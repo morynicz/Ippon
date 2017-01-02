@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
     @team_fights = @group.team_fights
 
     if user_signed_in? && @group != nil
-      @isAdmin = TournamentAdmin.exists?(tournament_id: params[:tournament_id], user_id: current_user.id, status: TournamentAdmin.statuses[:main])
+      @isAdmin = TournamentAdmin.exists?(tournament_id: @group.tournament.id, user_id: current_user.id, status: TournamentAdmin.statuses[:main])
     else
       @isAdmin = false
     end
@@ -66,7 +66,8 @@ class GroupsController < ApplicationController
 
   def authorize_user
     if user_signed_in?
-      head :unauthorized unless TournamentAdmin.exists?(tournament_id: params[:tournament_id],
+      group = Group.find(params[:id])
+      head :unauthorized unless TournamentAdmin.exists?(tournament_id: group.tournament.id,
         user_id: current_user.id, status: TournamentAdmin.statuses[:main])
     else
       head :unauthorized
