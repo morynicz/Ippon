@@ -1,0 +1,2 @@
+class GroupFightsController < ApplicationController
+end
