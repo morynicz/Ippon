@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922124601) do
+ActiveRecord::Schema.define(version: 20161228173101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,22 @@ ActiveRecord::Schema.define(version: 20160922124601) do
   end
 
   add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree
+
+  create_table "playoff_fights", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.integer  "team_fight_id"
+    t.integer  "previous_aka_fight_id"
+    t.integer  "previous_shiro_fight_id"
+    t.integer  "location_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "playoff_fights", ["location_id"], name: "index_playoff_fights_on_location_id", using: :btree
+  add_index "playoff_fights", ["previous_aka_fight_id"], name: "index_playoff_fights_on_previous_aka_fight_id", using: :btree
+  add_index "playoff_fights", ["previous_shiro_fight_id"], name: "index_playoff_fights_on_previous_shiro_fight_id", using: :btree
+  add_index "playoff_fights", ["team_fight_id"], name: "index_playoff_fights_on_team_fight_id", using: :btree
+  add_index "playoff_fights", ["tournament_id"], name: "index_playoff_fights_on_tournament_id", using: :btree
 
   create_table "points", force: :cascade do |t|
     t.integer  "fight_id"
@@ -209,6 +225,9 @@ ActiveRecord::Schema.define(version: 20160922124601) do
   add_foreign_key "groups", "tournaments"
   add_foreign_key "locations", "tournaments"
   add_foreign_key "players", "clubs"
+  add_foreign_key "playoff_fights", "locations"
+  add_foreign_key "playoff_fights", "team_fights"
+  add_foreign_key "playoff_fights", "tournaments"
   add_foreign_key "points", "fights"
   add_foreign_key "points", "players"
   add_foreign_key "team_fights", "locations"
