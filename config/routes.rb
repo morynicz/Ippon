@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   resources :groups, only: [:show, :update, :destroy]
 
+  resources :group_fights, only: [:show]
+
   get 'tournaments/:id/admins' => 'tournaments#admins'
   post 'tournaments/:id/admins/:user_id' => 'tournaments#add_admin'
   delete 'tournaments/:id/admins/:user_id' => 'tournaments#delete_admin'
