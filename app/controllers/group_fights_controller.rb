@@ -9,4 +9,13 @@ class GroupFightsController < ApplicationController
       @isAdmin = false
     end
   end
+
+  def index
+    group = Group.find(params[:group_id])
+    if group != nil
+      @group_fights = group.group_fights
+    else
+      head :not_found
+    end
+  end
 end

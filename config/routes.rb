@@ -19,7 +19,9 @@ Rails.application.routes.draw do
     resources :groups, only: [:create, :index]
   end
 
-  resources :groups, only: [:show, :update, :destroy]
+  resources :groups, only: [:show, :update, :destroy] do
+    resources :group_fights, only: [:index]
+  end
 
   resources :group_fights, only: [:show]
 
