@@ -1,3 +1,11 @@
+def build_playoff_next_level(matches_list)
+  res =  matches_list.each_slice(2).map { |e|
+    create(:playoff_fight, tournament: e[0].tournament, previous_aka_fight: e[0],
+      previous_shiro_fight: e[1], team_fight: nil, location: e[0].tournament.locations.shuffle.first)
+    }
+  build_playoff_next_level(res) unless res.size < 2
+end
+
 FactoryGirl.define do
   factory :tournament do
     state :setup
@@ -12,10 +20,9 @@ FactoryGirl.define do
     player_rank_constraint 0
     player_rank_constraint_value 0
 
-    factory :tournament_with_participants_and_admins do
+    trait :with_participants do
       transient do
         members_count 15
-        admins_count 5
       end
 
       after(:create) do |tournament, evaluator|
@@ -23,7 +30,15 @@ FactoryGirl.define do
         for member in members do
           TournamentParticipation.create(player_id: member.id, tournament_id: tournament.id)
         end
+      end
+    end
 
+    trait :with_admins do
+      transient do
+        admins_count 5
+      end
+
+      after(:create) do |tournament, evaluator|
         admins = create_list(:user, evaluator.admins_count)
 
         for admin in admins do
@@ -31,5 +46,7 @@ FactoryGirl.define do
         end
       end
     end
+
+    factory :tournament_with_participants_and_admins, traits: [:with_participants, :with_admins]
   end
 end
