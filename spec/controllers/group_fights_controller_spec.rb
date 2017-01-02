@@ -21,6 +21,45 @@ RSpec.describe GroupFightsController, type: :controller do
     expect(hash["aka_score"]).to eq(team_fight.aka_score)
   end
 
+  def extract_id
+    ->(object) { object["id"]}
+  end
+
+  def extract_aka_team_id
+    ->(object) { object["aka_team_id"]}
+  end
+
+  def extract_shiro_team_id
+    ->(object) { object["shiro_team_id"]}
+  end
+
+  def extract_shiro_id
+    ->(object) {object["shiro_id"]}
+  end
+
+  def extract_aka_id
+    ->(object) {object["aka_id"]}
+  end
+
+  def extract_state
+    ->(object) {object["state"]}
+  end
+
+  def extract_team_fight
+    ->(object) {object["team_fight"]}
+  end
+
+  def extract_group_fight
+    ->(object) {object["group_fight"]}
+  end
+
+  def expect_hash_include_team_fight(hash,  team_fight)
+    expect(hash.map(&extract_id)).to include(team_fight.id)
+    expect(hash.map(&extract_state)).to include(team_fight.state)
+    expect(hash.map(&extract_shiro_team_id)).to include(team_fight.shiro_team_id)
+    expect(hash.map(&extract_aka_team_id)).to include(team_fight.aka_team_id)
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: group_fight_id
@@ -90,6 +129,62 @@ RSpec.describe GroupFightsController, type: :controller do
       it "should respond with 404 status" do
         action
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "GET index" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:group) {
+      FactoryGirl::create(:group, tournament: tournament)
+    }
+
+    let(:group_fights) {
+      FactoryGirl::create_list(:group_fight,10, group: group)
+    }
+
+    let(:action) {
+      xhr :get, :index, format: :json, group_id: group.id
+    }
+
+    subject(:results) { JSON.parse(response.body)}
+
+    context "when we want the full list" do
+      it "should return 200 status" do
+        group_fights
+        action
+        expect(response.status).to eq(200)
+      end
+
+      it "should return 10 results" do
+        group_fights
+        action
+        expect(results.size).to eq(group.group_fights.size)
+      end
+
+      it "should include name and ids of the group fights" do
+        group_fights
+        action
+
+        group_fight_ids = results.map(&extract_group_fight).map(&extract_id)
+
+        for group_fight in group_fights do
+          expect(group_fight_ids).to include(group_fight.id)
+        end
+      end
+
+      it "should contain all the team fights of all the group fights" do
+        group_fights
+        action
+
+        team_fights = results.map(&extract_team_fight)
+
+        for group_fight in group_fights do
+          expect_hash_include_team_fight(team_fights, group_fight.team_fight)
+        end
       end
     end
   end
