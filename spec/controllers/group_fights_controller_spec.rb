@@ -60,6 +60,11 @@ RSpec.describe GroupFightsController, type: :controller do
     expect(hash.map(&extract_aka_team_id)).to include(team_fight.aka_team_id)
   end
 
+  def expect_hash_eq_group_fight(hash, group_fight)
+    expect(group_fight.group_id).to eq(hash[:group_id])
+    expect(group_fight.team_fight_id).to eq(hash[:team_fight_id])
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: group_fight_id
@@ -184,6 +189,98 @@ RSpec.describe GroupFightsController, type: :controller do
 
         for group_fight in group_fights do
           expect_hash_include_team_fight(team_fights, group_fight.team_fight)
+        end
+      end
+    end
+  end
+
+describe "POST :create" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+    let(:group) {
+      FactoryGirl::create(:group, tournament: tournament)
+    }
+    let(:team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:attributes) { FactoryGirl::attributes_for(:group_fight,
+       team_fight_id: team_fight.id, group_id: group.id)}
+
+    let(:action) do
+        xhr :post, :create, format: :json, group_fight: attributes,
+          group_id: group.id
+    end
+
+    subject(:results) {JSON.parse(response.body)}
+
+    context "when the user is not authenticated" do
+      it "does not create a group fight" do
+        expect {
+          action
+        }.to_not change(GroupFight, :count)
+      end
+
+      it "denies access" do
+        action
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "when the user is authenticated", authenticated: true do
+      context "when user is authorized" do
+        before do
+          authorize_user(tournament.id)
+        end
+
+        context "with invalid attributes" do
+
+          let(:attributes) do
+            {
+              group_id: '',
+              team_fight_id: '',
+            }
+          end
+
+          it "does not create a group fight" do
+            expect {
+              action
+            }.to_not change(GroupFight, :count)
+          end
+
+          it "returns the correct status" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+
+        context "with valid attributes" do
+          it "creates a team fight" do
+            expect {
+              action
+            }.to change(GroupFight, :count).by(1)
+          end
+
+          it "returns the correct status" do
+            action
+            response.inspect
+            expect(response).to be_successful
+          end
+
+          it "creates a fight with proper values" do
+            action
+            gf = GroupFight.find(results["group_fight"]["id"])
+            expect_hash_eq_group_fight(attributes, gf)
+          end
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "does not create a group fight" do
+          expect {
+            action
+          }.to_not change(GroupFight, :count)
         end
       end
     end
