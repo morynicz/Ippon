@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups, only: [:show, :update, :destroy] do
-    resources :group_fights, only: [:index]
+    resources :group_fights, only: [:index, :create]
   end
 
   resources :group_fights, only: [:show]
