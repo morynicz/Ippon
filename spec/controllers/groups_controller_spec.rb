@@ -224,7 +224,7 @@ RSpec.describe GroupsController, type: :controller do
       it "does not create a team fight" do
         expect {
           action
-        }.to_not change(TeamFight, :count)
+        }.to_not change(Group, :count)
       end
 
       it "denies access" do
