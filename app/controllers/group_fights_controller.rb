@@ -1,5 +1,6 @@
 class GroupFightsController < ApplicationController
   before_filter :authenticate_user!, only: [:create]
+  before_filter :authenticate_user!, :authorize_user, only: [:update]
 
   def show
     @group_fight = GroupFight.find(params[:id])
@@ -37,6 +38,15 @@ class GroupFightsController < ApplicationController
       end
     else
       head :unauthorized
+    end
+  end
+
+  def update
+    group_fight = GroupFight.find(params[:id])
+    if group_fight.update_attributes(permitted_params)
+      head :no_content
+    else
+      head :unprocessable_entity
     end
   end
 
