@@ -285,4 +285,98 @@ describe "POST :create" do
       end
     end
   end
+
+  describe "PATCH update" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+    let(:group) {
+      FactoryGirl::create(:group, tournament: tournament)
+    }
+    let(:team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:update_team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:attributes) { FactoryGirl::attributes_for(:group_fight,
+       team_fight_id: team_fight.id, group_id: group.id)}
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: group_fight.id,
+        group_fight: update_attrs
+      group_fight.reload
+    }
+
+    let(:update_attrs) {
+      FactoryGirl::attributes_for(:group_fight,
+         team_fight_id: team_fight.id, group_id: group.id)
+    }
+    let(:attrs) {
+      FactoryGirl::attributes_for(:group_fight,
+         team_fight_id: update_team_fight.id, group_id: group.id)
+    }
+    context "when the group fight exists" do
+      let(:group_fight) {
+        GroupFight.create(attrs)
+      }
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        context "when the update atttributes are valid" do
+          it "should return correct status" do
+            action
+            expect(response.status).to eq(204)
+          end
+
+          it "should update group fight attributes" do
+            action
+            expect_hash_eq_group_fight(update_attrs, group_fight)
+          end
+        end
+
+        context "when the update attributes are not valid" do
+          let(:update_attrs) {
+            {
+              group_id: '',
+              team_fight_id: ''
+            }
+          }
+
+          it "should not update group fight attributes" do
+            action
+            expect_hash_eq_group_fight(attrs, group_fight)
+          end
+
+          it "should return unporcessable entity" do
+            action
+            expect(response).to have_http_status :unprocessable_entity
+          end
+        end
+      end
+
+      context "when the user isn't authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should not update group fight attributes" do
+          action
+          expect_hash_eq_group_fight(attrs, group_fight)
+        end
+      end
+    end
+
+    context "when the group fight doesn't exist" do
+      let(:group_fight_id) {-9999}
+
+      let(:action) {
+        xhr :put, :update, format: :json, id: group_fight_id, group_fight: update_attrs
+      }
+
+      context "when user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+  end
 end
