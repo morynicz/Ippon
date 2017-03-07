@@ -304,7 +304,7 @@ RSpec.describe TeamFightsController, type: :controller do
       let(:team_fight_id) {-9999}
 
       let(:action) {
-        xhr :put, :update, format: :json, id: team_fight_id, team: update_attrs
+        xhr :put, :update, format: :json, id: team_fight_id, team_fight: update_attrs
       }
 
       context "when user is not authorized" do
