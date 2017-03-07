@@ -379,4 +379,77 @@ describe "POST :create" do
       end
     end
   end
+
+  describe "DELETE: destroy" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+    let(:group) {
+      FactoryGirl::create(:group, tournament: tournament)
+    }
+    let(:group_fight) { FactoryGirl::create(:group_fight, group: group)}
+
+    let(:action) {
+        xhr :delete, :destroy, format: :json, id: group_fight_id
+    }
+
+    context "when the group fight exists" do
+      let(:group_fight) {
+        FactoryGirl::create(:group_fight,
+          tournament: tournament)
+      }
+      let(:group_fight_id){group_fight.id}
+      let(:team_fight_id){group_fight.team_fight.id}
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with 204 status" do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it "should delete group fight" do
+          action
+          expect(GroupFight.find_by_id(group_fight.id)).to be_nil
+        end
+
+        it "should destroy all fights of this group fight" do
+          action
+          expect(TeamFight.exists?(id: team_fight_id)).to be false
+        end
+      end
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+        it "should not delete the fight" do
+          action
+          expect(GroupFight.exists?(group_fight.id)).to be true
+        end
+      end
+    end
+
+    context "when the group fight doesn't exist" do
+      let(:group_fight_id) {-9999}
+
+      context "when the user is not authorized" do
+        it "should respond with unauthorized status" do
+          action
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+
+      context "when the user is authorized", authenticated: true do
+        before do
+          authorize_user(tournament.id)
+        end
+        it "should respond with not found status" do
+          action
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
 end
