@@ -380,6 +380,12 @@ describe "POST :create" do
     end
   end
 
+  it_behaves_like "tournament_deletable" do
+    let(:tournament) { FactoryGirl::create(:tournament)}
+    let(:group) {FactoryGirl::create(:group, tournament: tournament)}
+    let(:resource) { FactoryGirl::create(:group_fight, group: group)}
+  end
+
   describe "DELETE: destroy" do
     let(:tournament) {FactoryGirl::create(:tournament)}
     let(:group) {
@@ -390,14 +396,10 @@ describe "POST :create" do
     let(:action) {
         xhr :delete, :destroy, format: :json, id: group_fight_id
     }
+    let(:group_fight_id){group_fight.id}
+    let(:team_fight_id){group_fight.team_fight.id}
 
     context "when the group fight exists" do
-      let(:group_fight) {
-        FactoryGirl::create(:group_fight,
-          tournament: tournament)
-      }
-      let(:group_fight_id){group_fight.id}
-      let(:team_fight_id){group_fight.team_fight.id}
 
       context "when the user is authorized", authenticated: true do
         before do
