@@ -69,6 +69,7 @@ group :development, :test do
   gem 'phantomjs'
   gem 'faker'
   gem 'test_after_commit'
+  gem 'railroady'
 end
 
 gem "codeclimate-test-reporter", group: :test, require: nil
