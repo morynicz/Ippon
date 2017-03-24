@@ -29,4 +29,19 @@ RSpec.describe TeamFight, type: :model do
     end
   end
 
+  describe "destroy" do
+    context "when has assigned group fight" do
+      let(:group_fight){FactoryGirl::create(:group_fight)}
+      let(:team_fight){group_fight.team_fight}
+
+      it "deletes it's group fight" do
+        group_fight_id = group_fight.id
+
+        team_fight.destroy
+
+        expect(GroupFight.exists?(group_fight_id)).to be false
+      end
+    end
+  end
+
 end

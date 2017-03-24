@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupFight, type: :model do
-    describe "delete" do
+    describe "destroy" do
       context "when the group fight is deleted" do
         let(:group_fight) { FactoryGirl::create(:group_fight)}
         it "deletes it's team fight" do

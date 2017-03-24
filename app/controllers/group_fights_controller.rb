@@ -52,7 +52,6 @@ class GroupFightsController < ApplicationController
 
   def destroy
     group_fight = GroupFight.find(params[:id])
-    group_fight.team_fight.destroy
     group_fight.destroy
     head :no_content
   end
