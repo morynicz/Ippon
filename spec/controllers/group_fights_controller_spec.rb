@@ -65,6 +65,36 @@ RSpec.describe GroupFightsController, type: :controller do
     expect(group_fight.team_fight_id).to eq(hash[:team_fight_id])
   end
 
+  def get_resource_id_from_results(results)
+    results["group_fight"]["id"]
+  end
+
+  def expect_hash_eq_resource_create(hash, group_fight)
+    expect_hash_eq_group_fight(hash, group_fight)
+  end
+
+
+  it_behaves_like "tournament_createable" do
+    let(:tournament) { FactoryGirl::create(:tournament) }
+    let(:group) { FactoryGirl::create(:group, tournament: tournament) }
+    let(:team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:attributes) { FactoryGirl::attributes_for(:group_fight,
+      team_fight_id: team_fight.id, group_id: group.id)}
+
+    let(:action) do
+      xhr :post, :create, format: :json, group_fight: attributes,
+      group_id: group.id
+    end
+
+    let(:bad_attributes) do
+      {
+        group_id: '',
+        team_fight_id: '',
+      }
+    end
+    let(:resource_class) { GroupFight }
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: group_fight_id
