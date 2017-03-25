@@ -4,6 +4,7 @@ class Player < ActiveRecord::Base
 
   has_many :points
   has_many :fights
+  has_many :tournament_participations
 
   enum rank: {
     kyu_6: 0,
