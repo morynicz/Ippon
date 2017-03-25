@@ -65,6 +65,10 @@ RSpec.describe GroupFightsController, type: :controller do
     expect(group_fight.team_fight_id).to eq(hash[:team_fight_id])
   end
 
+  def get_resource_from_results(results)
+    results["group_id"]
+  end
+
   def get_resource_id_from_results(results)
     results["group_fight"]["id"]
   end
@@ -73,6 +77,11 @@ RSpec.describe GroupFightsController, type: :controller do
     expect_hash_eq_group_fight(hash, group_fight)
   end
 
+  def expect_result_with_correct_resource(result, group_fight)
+    expect(results["group_fight"]["group_id"]).to eq(group_fight.group_id)
+    expect(results["group_fight"]["team_fight_id"]).to eq(group_fight.team_fight_id)
+    expect_hash_eq_teamfight(results["team_fight"], group_fight.team_fight)
+  end
 
   it_behaves_like "tournament_createable" do
     let(:tournament) { FactoryGirl::create(:tournament) }
@@ -93,6 +102,13 @@ RSpec.describe GroupFightsController, type: :controller do
       }
     }
     let(:resource_class) { GroupFight }
+  end
+
+  it_behaves_like "tournament_showable" do
+    let(:action) { xhr :get, :show, format: :json, id: resource_id }
+    let(:tournament) { FactoryGirl::create(:tournament) }
+    let(:group) { FactoryGirl::create(:group, tournament: tournament) }
+    let(:resource) { FactoryGirl::create(:group_fight, tournament: tournament) }
   end
 
   it_behaves_like "tournament_updateable" do
@@ -262,7 +278,7 @@ RSpec.describe GroupFightsController, type: :controller do
     end
   end
 
-describe "POST :create" do
+  describe "POST :create" do
     let(:tournament) {FactoryGirl::create(:tournament)}
     let(:group) {
       FactoryGirl::create(:group, tournament: tournament)
