@@ -86,13 +86,45 @@ RSpec.describe GroupFightsController, type: :controller do
       group_id: group.id
     end
 
-    let(:bad_attributes) do
+    let(:bad_attributes) {
       {
         group_id: '',
         team_fight_id: '',
       }
-    end
+    }
     let(:resource_class) { GroupFight }
+  end
+
+  it_behaves_like "tournament_updateable" do
+    let(:tournament) {FactoryGirl::create(:tournament)}
+    let(:group) {
+      FactoryGirl::create(:group, tournament: tournament)
+    }
+    let(:team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:update_team_fight) { FactoryGirl::create(:team_fight, tournament: tournament)}
+    let(:attributes) { FactoryGirl::attributes_for(:group_fight,
+       team_fight_id: team_fight.id, group_id: group.id)}
+
+    let(:action) {
+      xhr :put, :update, format: :json, id: resource_id,
+        group_fight: update_attrs
+    }
+
+    let(:update_attrs) {
+      FactoryGirl::attributes_for(:group_fight,
+         team_fight_id: team_fight.id, group_id: group.id)
+    }
+    let(:attrs) {
+      FactoryGirl::attributes_for(:group_fight,
+         team_fight_id: update_team_fight.id, group_id: group.id)
+    }
+    let(:bad_attributes) {
+      {
+        group_id: '',
+        team_fight_id: '',
+      }
+    }
+    let(:resource_class){GroupFight}
   end
 
   it_behaves_like "tournament_deletable" do
