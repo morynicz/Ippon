@@ -95,6 +95,12 @@ RSpec.describe GroupFightsController, type: :controller do
     let(:resource_class) { GroupFight }
   end
 
+  it_behaves_like "tournament_deletable" do
+    let(:tournament) { FactoryGirl::create(:tournament)}
+    let(:group) {FactoryGirl::create(:group, tournament: tournament)}
+    let(:resource) { FactoryGirl::create(:group_fight, group: group)}
+  end
+
   describe "GET show" do
     let(:action) {
       xhr :get, :show, format: :json, id: group_fight_id
@@ -408,12 +414,6 @@ describe "POST :create" do
         end
       end
     end
-  end
-
-  it_behaves_like "tournament_deletable" do
-    let(:tournament) { FactoryGirl::create(:tournament)}
-    let(:group) {FactoryGirl::create(:group, tournament: tournament)}
-    let(:resource) { FactoryGirl::create(:group_fight, group: group)}
   end
 
   describe "DELETE: destroy" do
