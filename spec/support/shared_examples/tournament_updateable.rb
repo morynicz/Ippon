@@ -25,7 +25,7 @@ shared_examples_for "tournament_updateable" do
         context "when the update attributes are not valid" do
           let(:update_attrs) { bad_attributes }
 
-          it "should not update group fight attributes" do
+          it "should not update resource attributes" do
             action
             resource.reload
             expect_hash_eq_resource(attrs, resource)
@@ -54,7 +54,7 @@ shared_examples_for "tournament_updateable" do
       end
     end
 
-    context "when the group fight doesn't exist" do
+    context "when the resource doesn't exist" do
       let(:resource_id) {-9999}
 
       context "when user is not authorized" do
