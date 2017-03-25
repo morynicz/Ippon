@@ -69,7 +69,7 @@ RSpec.describe GroupFightsController, type: :controller do
     results["group_fight"]["id"]
   end
 
-  def expect_hash_eq_resource_create(hash, group_fight)
+  def expect_hash_eq_resource(hash, group_fight)
     expect_hash_eq_group_fight(hash, group_fight)
   end
 

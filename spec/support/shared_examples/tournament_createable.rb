@@ -54,7 +54,7 @@ shared_examples_for "tournament_createable" do
           it "creates a resource with proper values" do
             action
             res = resource_class.find(get_resource_id_from_results(results))
-            expect_hash_eq_resource_create(attributes, res)
+            expect_hash_eq_resource(attributes, res)
           end
         end
       end
@@ -65,7 +65,7 @@ shared_examples_for "tournament_createable" do
           expect(response).to have_http_status :unauthorized
         end
 
-        it "does not create a group fight" do
+        it "does not create a resource" do
           expect {
             action
           }.to_not change(resource_class, :count)
