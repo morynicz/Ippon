@@ -1,7 +1,7 @@
 def build_playoff_next_level(matches_list)
   res =  matches_list.each_slice(2).map { |e|
     create(:playoff_fight, tournament: e[0].tournament, previous_aka_fight: e[0],
-      previous_shiro_fight: e[1], team_fight: nil, location: e[0].tournament.locations.shuffle.first)
+      previous_shiro_fight: e[1], team_fight: nil)
     }
   build_playoff_next_level(res) unless res.size < 2
 end
