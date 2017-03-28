@@ -1,6 +1,7 @@
 class PlayoffFight < ActiveRecord::Base
+  validates :tournament_id, presence: true
   belongs_to :tournament
-  belongs_to :team_fight
+  belongs_to :team_fight, dependent: :destroy
   belongs_to :previous_shiro_fight, class_name: "PlayoffFight", foreign_key: "previous_shiro_fight_id"
   belongs_to :previous_aka_fight, class_name: "PlayoffFight", foreign_key: "previous_aka_fight_id"
 

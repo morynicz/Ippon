@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :tournaments, only: [:show, :create, :index, :update, :destroy] do
     resources :groups, only: [:create, :index]
+    resources :playoff_fights, only: [:create, :index]
   end
 
   resources :groups, only: [:show, :update, :destroy] do
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
   end
 
   resources :group_fights, only: [:show, :update, :destroy]
+  resources :playoff_fights, only: [:show, :update, :destroy]
 
   get 'tournaments/:id/admins' => 'tournaments#admins'
   post 'tournaments/:id/admins/:user_id' => 'tournaments#add_admin'

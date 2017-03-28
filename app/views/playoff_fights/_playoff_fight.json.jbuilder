@@ -1,0 +1,1 @@
+json.(playoff_fight, :id, :tournament_id, :team_fight_id, :previous_aka_fight_id, :previous_shiro_fight_id)
