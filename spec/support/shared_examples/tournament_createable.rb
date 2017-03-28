@@ -5,6 +5,7 @@ shared_examples_for "tournament_createable" do
 
     context "when the user is not authenticated" do
       it "does not create a resource" do
+        attributes
         expect {
           action
         }.to_not change(resource_class, :count)
@@ -40,6 +41,7 @@ shared_examples_for "tournament_createable" do
 
         context "with valid attributes" do
           it "creates a resource" do
+            attributes
             expect {
               action
             }.to change(resource_class, :count).by(1)
@@ -66,6 +68,7 @@ shared_examples_for "tournament_createable" do
         end
 
         it "does not create a resource" do
+          attributes
           expect {
             action
           }.to_not change(resource_class, :count)
