@@ -11,6 +11,7 @@ class TeamFight < ActiveRecord::Base
   has_one :group_fight, dependent: :delete #circular dependency
   has_one :group, through: :group_fight
   has_one :tournament, through: :shiro_team
+  has_one :playoff_fight, dependent: :delete
 
   enum state: {
     not_started: 0,

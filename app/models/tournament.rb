@@ -15,6 +15,8 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_admins
   has_many :admins, through: :tournament_admins, source: :user
   has_many :groups, dependent: :destroy
+  has_many :group_fights, through: :groups
+  has_many :playoff_fights
 
   attr_accessor :creator
 
