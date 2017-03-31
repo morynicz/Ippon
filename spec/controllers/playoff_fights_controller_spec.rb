@@ -49,8 +49,8 @@ RSpec.describe PlayoffFightsController, type: :controller do
       ->(object) {object["team_fight"]}
     end
 
-    def extract_group_fight
-      ->(object) {object["group_fight"]}
+    def extract_playoff_fight
+      ->(object) {object["playoff_fight"]}
     end
 
     def expect_hash_include_team_fight(hash,  team_fight)
@@ -149,4 +149,56 @@ RSpec.describe PlayoffFightsController, type: :controller do
       let(:tournament) { FactoryGirl::create(:tournament)}
       let(:resource) { FactoryGirl::create(:playoff_fight, tournament: tournament)}
     end
+
+describe "GET index" do
+  let(:tournament) {
+    FactoryGirl::create(:tournament)
+  }
+
+  let(:playoff_fights) {
+    FactoryGirl::create_list(:playoff_fight,10, tournament: tournament)
+  }
+
+  let(:action) {
+    xhr :get, :index, format: :json, tournament_id: tournament.id
+  }
+
+  subject(:results) { JSON.parse(response.body)}
+
+  context "when we want the full list" do
+    it "should return 200 status" do
+      playoff_fights
+      action
+      expect(response.status).to eq(200)
+    end
+
+    it "should return 10 results" do
+      playoff_fights
+      action
+      expect(results.size).to eq(tournament.playoff_fights.size)
+    end
+
+    it "should include name and ids of the group fights" do
+      playoff_fights
+      action
+
+      playoff_fight_ids = results.map(&extract_playoff_fight).map(&extract_id)
+
+      for playoff_fight in playoff_fights do
+        expect(playoff_fight_ids).to include(playoff_fight.id)
+      end
+    end
+
+    it "should contain all the team fights of all the group fights" do
+      playoff_fights
+      action
+
+      team_fights = results.map(&extract_team_fight)
+
+      for playoff_fight in playoff_fights do
+        expect_hash_include_team_fight(team_fights, playoff_fight.team_fight)
+      end
+    end
+  end
+end
 end
