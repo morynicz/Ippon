@@ -14,7 +14,7 @@ class PlayoffFightsController < ApplicationController
   end
 
   def index
-    torunament = Tournament.find(params[:torunament_id])
+    tournament = Tournament.find(params[:tournament_id])
     if tournament != nil
       @playoff_fights = tournament.playoff_fights
     else
