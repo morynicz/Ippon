@@ -29,6 +29,15 @@ class TeamsController < ApplicationController
     end
   end
 
+  def index
+    tournament = Tournament.find(params[:tournament_id])
+    if tournament != nil
+      @teams = tournament.teams
+    else
+      head :not_found
+    end
+  end
+
   def create
     if user_signed_in?
       if permitted_params[:tournament_id] != nil

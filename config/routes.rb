@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :tournaments, only: [:show, :create, :index, :update, :destroy] do
     resources :groups, only: [:create, :index]
     resources :playoff_fights, only: [:create, :index]
+    resources :teams, only: [:index]
   end
 
   resources :groups, only: [:show, :update, :destroy] do
