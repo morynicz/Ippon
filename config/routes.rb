@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :tournaments, only: [:show, :create, :index, :update, :destroy] do
     resources :groups, only: [:create, :index]
     resources :playoff_fights, only: [:create, :index]
-    resources :teams, only: [:index]
+    resources :teams, only: [:index, :create]
   end
 
   resources :groups, only: [:show, :update, :destroy] do
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   post 'tournaments/:id/participants/:player_id' => 'tournaments#add_participant'
   delete 'tournaments/:id/participants/:player_id' => 'tournaments#delete_participant'
 
-  resources :teams, only: [:show, :create, :update, :destroy]
+  resources :teams, only: [:show, :update, :destroy]
   put 'teams/:id/add_member/:player_id' => 'teams#add_member'
   delete 'teams/:id/delete_member/:player_id' => 'teams#delete_member'
   resources :players

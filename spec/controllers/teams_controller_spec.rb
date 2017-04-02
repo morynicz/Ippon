@@ -202,7 +202,7 @@ RSpec.describe TeamsController, type: :controller do
 
     let(:attributes) {  FactoryGirl.attributes_for(:team, tournament_id: tournament.id) }
     let(:action) do
-        xhr :post, :create, format: :json, team: attributes
+        xhr :post, :create, format: :json, team: attributes, tournament_id: tournament.id
     end
 
     context "when the user is not authenticated" do
