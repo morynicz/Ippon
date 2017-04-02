@@ -27,6 +27,34 @@ RSpec.describe TeamsController, type: :controller do
     ->(object) {object["club_id"]}
   end
 
+  def extract_id
+    ->(object) { object["id"]}
+  end
+
+  def extract_name
+    ->(object) { object["name"]}
+  end
+
+  def extract_players
+    ->(object) { object["players"]}
+  end
+
+  def extract_team
+    ->(object) { object["team"] }
+  end
+
+  def check_array_for_players(result, expected)
+    for player in expected do
+      expect(result.map(&extract_name)).to include(player.name)
+      expect(result.map(&extract_surname)).to include(player.surname)
+      expect(result.map(&extract_birthday)).to include(player.birthday)
+      expect(result.map(&extract_rank)).to include(player.rank)
+      expect(result.map(&extract_sex)).to include(player.sex)
+      expect(result.map(&extract_club)).to include(player.club)
+      expect(result.map(&extract_id)).to include(player.id)
+    end
+  end
+
   def authorize_user(tournament_id)
     TournamentAdmin.create(tournament_id: tournament_id, user_id: current_user.id, status: :main)
   end
@@ -112,6 +140,57 @@ RSpec.describe TeamsController, type: :controller do
       it "should respond with 404 status" do
         action
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "GET index" do
+    let(:tournament) {
+      FactoryGirl::create(:tournament)
+    }
+
+    let(:team_list) {
+      FactoryGirl::create_list(:team, 10, tournament: tournament)
+    }
+
+    let(:action) {
+      xhr :get, :index, format: :json, tournament_id: tournament.id
+    }
+
+    subject(:results) { JSON.parse(response.body)}
+
+    context "when we want the full list" do
+      it "should return 200 status" do
+        team_list
+        action
+        expect(response.status).to eq(200)
+      end
+
+      it "should return 10 results" do
+        team_list
+        action
+        expect(results.size).to eq(tournament.teams.size)
+      end
+
+      it "should include name and id of the team" do
+        team_list
+        action
+
+        for team in team_list do
+          expect(results.map(&extract_team).map(&extract_name)).to include(team.name)
+          expect(results.map(&extract_team).map(&extract_id)).to include(team.id)
+        end
+      end
+
+      it "should contain all the members of all teams" do
+        team_list
+        action
+
+        extracted_players = results.map(&extract_players).flatten
+
+        for team in team_list do
+          check_array_for_players(extracted_players, team.players)
+        end
       end
     end
   end
