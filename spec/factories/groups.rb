@@ -27,7 +27,7 @@ FactoryGirl.define do
     end
 
     factory :group_with_members_list, traits: [:with_members]
-    factory :group_with_members_list_and_fights, traits: [:with_members]
+    factory :group_with_members_list_and_fights, traits: [:with_members, :with_fights]
 
     factory :group_with_members do
       transient do

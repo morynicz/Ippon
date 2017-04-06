@@ -115,7 +115,7 @@ RSpec.describe PlayoffFightsController, type: :controller do
     it_behaves_like "tournament_showable" do
       let(:action) { xhr :get, :show, format: :json, id: resource_id }
       let(:tournament) { FactoryGirl::create(:tournament) }
-      let(:resource) { FactoryGirl::create(:playoff_fight, tournament: tournament) }
+      let(:resource) { FactoryGirl::create(:playoff_fight_with_team_fight, tournament: tournament) }
     end
 
     it_behaves_like "tournament_updateable" do
@@ -147,7 +147,7 @@ RSpec.describe PlayoffFightsController, type: :controller do
 
     it_behaves_like "tournament_deletable" do
       let(:tournament) { FactoryGirl::create(:tournament)}
-      let(:resource) { FactoryGirl::create(:playoff_fight, tournament: tournament)}
+      let(:resource) { FactoryGirl::create(:playoff_fight_with_team_fight, tournament: tournament)}
     end
 
 describe "GET index" do
@@ -156,7 +156,7 @@ describe "GET index" do
   }
 
   let(:playoff_fights) {
-    FactoryGirl::create_list(:playoff_fight,10, tournament: tournament)
+    FactoryGirl::create_list(:playoff_fight_with_team_fight,10, tournament: tournament)
   }
 
   let(:action) {
