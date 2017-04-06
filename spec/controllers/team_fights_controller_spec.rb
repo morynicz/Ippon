@@ -176,8 +176,8 @@ RSpec.describe TeamFightsController, type: :controller do
           let(:attributes) do
             {
               location_id: '',
-              aka_team_id: '',
-              shiro_team_id: '',
+              aka_team_id: nil,
+              shiro_team_id: nil,
               state: ''
             }
           end
@@ -269,8 +269,8 @@ RSpec.describe TeamFightsController, type: :controller do
           let(:update_attrs) {
             {
               location_id: '',
-              aka_team_id: '',
-              shiro_team_id: '',
+              aka_team_id: nil,
+              shiro_team_id: nil,
               state: ''
             }
           }
