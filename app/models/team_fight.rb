@@ -28,7 +28,7 @@ class TeamFight < ActiveRecord::Base
   end
 
   def team_tournaments_match?
-    if shiro_team == nil || aka_team == nil ||
+    if shiro_team != nil && aka_team != nil &&
         shiro_team.tournament.id != aka_team.tournament.id
       errors.add(:aka_team_id, "cannot belong to other tournament than shiro team")
     end
