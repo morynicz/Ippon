@@ -1,6 +1,6 @@
 def build_playoff_next_level(matches_list)
   res =  matches_list.each_slice(2).map { |e|
-    create(:playoff_fight, tournament: e[0].tournament, previous_aka_fight: e[0],
+    FactoryGirl::create(:playoff_fight, tournament: e[0].tournament, previous_aka_fight: e[0],
       previous_shiro_fight: e[1], team_fight: nil)
     }
   build_playoff_next_level(res) unless res.size < 2
@@ -76,18 +76,30 @@ FactoryGirl.define do
       end
 
       after(:create) do |tournament, evaluator|
-        base_size = 2**(Math::log(evaluator.number_of_players, 2).ceil - 1)
-        playoffs = []
-
+        base_size = 2**(Math::log(evaluator.number_of_players, 2).ceil)
+        playoff_teams = []
         if tournament.teams.size < evaluator.number_of_players
           create_list(:team, evaluator.number_of_players, tournament: tournament)
         end
         teams = tournament.teams.shuffle
 
         evaluator.number_of_players.times {
-          playoffs << teams.shift
+          playoff_teams << teams.shift
         }
-        playoffs = create_list(:playoff_fight, base_size, tournament: tournament)
+
+        playoffs = create_list(:playoff_fight, base_size / 2, tournament: tournament)
+
+        for playoff in playoffs do
+          team = playoff_teams.shift
+          team_fight = create(:team_fight, aka_team_id: team.id, shiro_team_id: nil, tournament: tournament)
+          playoff.team_fight = team_fight
+        end
+
+        for playoff in playoffs do
+          break if playoff_teams.empty?
+          team = playoff_teams.shift
+          playoff.team_fight.shiro_team_id = team.id
+        end
         build_playoff_next_level(playoffs)
       end
     end
