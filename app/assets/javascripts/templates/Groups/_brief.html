@@ -1,0 +1,13 @@
+<section class="well col-md-6 col-md-offset-3">
+ <h1
+  class="h3"
+  style="margin-top: 0">
+  <a
+   class="col-md-4"
+   href=""
+   ng-click="view_group(group.id)"> {{element.group.name}}</a>
+ </h1>
+ <ul class="list-unstyled">
+  <li ng-repeat="team in element.teams"><ippon-team-line team="team"></ippon-team-line></li>
+ </ul>
+</section>
