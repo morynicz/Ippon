@@ -30,6 +30,12 @@ before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :ad
 
   def show
     @tournament = Tournament.find(params[:id])
+
+    if user_signed_in? && @tournament != nil
+      @isAdmin = TournamentAdmin.exists?(tournament_id: @tournament.id, user_id: current_user.id, status: TournamentAdmin.statuses[:main])
+    else
+      @isAdmin = false
+    end
   end
 
   def index

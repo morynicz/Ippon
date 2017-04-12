@@ -73,6 +73,23 @@ RSpec.describe TournamentsController, type: :controller do
         expect(results["player_sex_constraint"]).
           to eq(tournament.player_sex_constraint)
       end
+
+      context "when the user is not an admin" do
+        it "should return admin status false" do
+          action
+          expect(results["is_admin"]).to be false
+        end
+      end
+
+      context "when the user is an admin", authenticated: true do
+        context "when the user is not an admin" do
+          it "should return admin status true" do
+            authorize_user(tournament.id)
+            action
+            expect(results["is_admin"]).to be true
+          end
+        end
+      end
     end
 
     context "when tournament doesn't exist" do
