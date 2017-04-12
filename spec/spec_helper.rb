@@ -76,7 +76,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with :truncation
     DatabaseCleaner.clean_with :transaction
-    FactoryGirl.lint
   end
 
   config.after(:each) do
