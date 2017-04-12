@@ -1,0 +1,15 @@
+   <div class="playoff">
+    <ul
+     class="round round-{{$index + 1}}"
+     ng-repeat="playoff_level in levels | orderBy:'$index':true">
+     <li
+      class="spacer"
+      ng-repeat-start="playoff in playoff_level">&nbsp;</li>
+     <li class="game game-top">{{playoff.team_fight.aka_team_name}}<span>{{playoff.team_fight.aka_score}}</span></li>
+     <li class="game game-spacer">&nbsp;</li>
+     <li
+      class="game game-bottom"
+      ng-repeat-end>{{playoff.team_fight.shiro_team_name}}<span>{{playoff.team_fight.shiro_score}}</span></li>
+     <li class="spacer">&nbsp;</li>
+    </ul>
+   </div>
