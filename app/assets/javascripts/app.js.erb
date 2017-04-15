@@ -32,26 +32,26 @@ angular.module('ippon').config([
       templateUrl: 'auth/_register.html',
       controller: 'AuthController'
     })
-		.state('clubs', {
-			url: '/clubs',
-			templateUrl: 'Clubs/_index.html',
-			controller: 'ClubsController'
-		})
-		.state('clubs_new',{
-			url: '/clubs/new',
-			templateUrl: 'Clubs/_form.html',
-			controller: 'ClubsController'
-		})
-		.state('clubs_show',{
-			url: '/clubs/:clubId',
-			templateUrl: 'Clubs/_show.html',
-			controller: 'ClubsController'
-		})
-		.state('clubs_edit', {
-			url: '/clubs/:clubId/edit',
-			templateUrl: 'Clubs/_form.html',
-			controller: 'ClubsController'
-		})
+    .state('clubs', {
+    	url: '/clubs',
+    	templateUrl: 'Clubs/_index.html',
+    	controller: 'ClubsController'
+    })
+    .state('clubs_new',{
+    	url: '/clubs/new',
+    	templateUrl: 'Clubs/_form.html',
+    	controller: 'ClubsController'
+    })
+    .state('clubs_show',{
+    	url: '/clubs/:clubId',
+    	templateUrl: 'Clubs/_show.html',
+    	controller: 'ClubsController'
+    })
+    .state('clubs_edit', {
+    	url: '/clubs/:clubId/edit',
+    	templateUrl: 'Clubs/_form.html',
+    	controller: 'ClubsController'
+    })
     .state('players', {
       url: '/players',
       templateUrl: 'Players/_index.html',
@@ -89,6 +89,11 @@ angular.module('ippon').config([
       url: '/teams/:teamId/edit',
       templateUrl: 'Teams/_form.html',
       controller: 'TeamsController'
+    })
+    .state('tournaments_show',{
+      url: '/tournaments/:tournamentId',
+      templateUrl: 'Tournaments/_show.html',
+      controller: 'TournamentsController'
     });
 
 		$urlRouterProvider.otherwise('home');
@@ -107,3 +112,7 @@ angular.module('ippon').config([
 		$translateProvider.preferredLanguage('en');
 
 	}]);
+
+app.config(function($logProvider){
+    $logProvider.debugEnabled(true);
+});

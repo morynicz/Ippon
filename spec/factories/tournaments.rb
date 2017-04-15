@@ -78,6 +78,7 @@ FactoryGirl.define do
       after(:create) do |tournament, evaluator|
         base_size = 2**(Math::log(evaluator.number_of_players, 2).ceil)
         playoff_teams = []
+
         if tournament.teams.size < evaluator.number_of_players
           create_list(:team, evaluator.number_of_players, tournament: tournament)
         end
@@ -86,19 +87,22 @@ FactoryGirl.define do
         evaluator.number_of_players.times {
           playoff_teams << teams.shift
         }
-
         playoffs = create_list(:playoff_fight, base_size / 2, tournament: tournament)
 
         for playoff in playoffs do
           team = playoff_teams.shift
+          puts "tf"
           team_fight = create(:team_fight, aka_team_id: team.id, shiro_team_id: nil, tournament: tournament)
           playoff.team_fight = team_fight
+          playoff.save
         end
-
+        puts"wtf #{playoffs.size}"
         for playoff in playoffs do
+puts "tf2s: #{playoff_teams.size}"
           break if playoff_teams.empty?
           team = playoff_teams.shift
           playoff.team_fight.shiro_team_id = team.id
+          playoff.team_fight.save
         end
         build_playoff_next_level(playoffs)
       end
