@@ -34,15 +34,28 @@
 //= require angular-mocks/angular-mocks
 
 beforeEach(function() {
-  return jasmine.addMatchers({
-    toEqualData: function(util, customEqualityTesters) {
-      return {
-        compare: function(actual, expected) {
-          var result = {};
-          result.pass = angular.equals(actual, expected);
-          return result;
+    return jasmine.addMatchers({
+        toEqualData : function(util, customEqualityTesters) {
+            return {
+                compare : function(actual, expected) {
+                    var result = {};
+                    result.pass = angular.equals(actual, expected);
+                    return result;
+                }
+            };
+        },
+        toContainDataFromArray : function(util, customEqualityTesters) {
+            return {
+                compare : function(actual, expected) {
+                    var result = {};
+                    result.pass = false;
+                    for (var i = 0; i < expected.lenght; i = i + 1) {
+                        expect(actual).toContain(expected[i]);
+                    }
+                    result.pass = true;
+                    return result;
+                }
+            };
         }
-      };
-    }
-  });
+    });
 });
