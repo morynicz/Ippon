@@ -93,12 +93,14 @@ FactoryGirl.define do
           team = playoff_teams.shift
           team_fight = create(:team_fight, aka_team_id: team.id, shiro_team_id: nil, tournament: tournament)
           playoff.team_fight = team_fight
+          playoff.save
         end
 
         for playoff in playoffs do
           break if playoff_teams.empty?
           team = playoff_teams.shift
           playoff.team_fight.shiro_team_id = team.id
+          playoff.team_fight.save
         end
         build_playoff_next_level(playoffs)
       end
