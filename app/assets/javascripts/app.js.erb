@@ -112,3 +112,7 @@ angular.module('ippon').config([
 		$translateProvider.preferredLanguage('en');
 
 	}]);
+
+app.config(function($logProvider){
+    $logProvider.debugEnabled(true);
+});
