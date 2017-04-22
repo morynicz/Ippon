@@ -898,4 +898,44 @@ describe(
           });
         });
       });
+
+      describe('create', function() {
+        var newTournament = {
+          name: "Czar Par",
+          team_size: 3,
+          playoff_match_length: 4,
+          group_match_length: 3,
+          player_age_constraint: 0,
+          player_age_constraint_value: 0,
+          player_rank_constraint: 1,
+          player_rank_constraint_value: 5,
+          player_sex_constraint: 0,
+          player_sex_constraint_value: 0,
+        };
+
+        beforeEach(function() {
+          setupController('tournaments_new', false);
+          var request = new RegExp("tournaments");
+          httpBackend.expectPOST(request).respond(201, newTournament);
+        });
+
+        it('post to the backend', function() {
+          scope.tournament.name = newTournament.name;
+          scope.tournament.team_size = newTournament.team_size;
+          scope.tournament.playoff_match_length = newTournament.playoff_match_length;
+          scope.tournament.group_match_length = newTournament.group_match_length;
+          scope.tournament.player_age_constraint = newTournament.player_age_constraint;
+          scope.tournament.player_age_constraint_value = newTournament.player_age_constraint_value;
+          scope.tournament.player_rank_constraint = newTournament.player_rank_constraint;
+          scope.tournament.player_rank_constraint_value = newTournament.player_rank_constraint_value;
+          scope.tournament.player_sex_constraint = newTournament.player_sex_constraint;
+          scope.tournament.player_sex_constraint_value = newTournament.player_sex_constraint_value;
+
+          scope.save();
+          scope.$apply();
+          httpBackend.flush();
+          expect('#' + location.path()).toBe(state.href('tournaments_show'));
+          expect(state.is('tournaments_show')).toBe(true);
+        });
+      });
     });
