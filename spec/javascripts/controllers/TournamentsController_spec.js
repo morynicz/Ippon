@@ -919,7 +919,7 @@ describe(
           httpBackend.expectPOST(request).respond(201, newTournament);
         });
 
-        it('post to the backend', function() {
+        it('posts to the backend', function() {
           scope.tournament.name = newTournament.name;
           scope.tournament.team_size = newTournament.team_size;
           scope.tournament.playoff_match_length = newTournament.playoff_match_length;
