@@ -90,6 +90,11 @@ angular.module('ippon').config([
       templateUrl: 'Teams/_form.html',
       controller: 'TeamsController'
     })
+    .state('tournaments_new',{
+      url: '/tournaments/new',
+      templateUrl: 'Tournaments/_form.html',
+      controller: 'TournamentsController'
+    })
     .state('tournaments_show',{
       url: '/tournaments/:tournamentId',
       templateUrl: 'Tournaments/_show.html',

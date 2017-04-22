@@ -13,9 +13,13 @@ angular
             function($scope, $stateParams, $location, $resource, $state, Auth,
                 FlashingService) {
 
-              var tournamentResource = $resource("tournaments/:tournamentId", {
+              var tournamentsResource = $resource("tournaments/:tournamentId", {
                 tournamentId : "@id",
                 format : "json"
+              }, {
+                'create' : {
+                  method : 'POST'
+                }
               });
 
               var groupsResource = $resource(
@@ -49,7 +53,7 @@ angular
                   });
 
               var getTournament = function(tournamentId, next) {
-                tournamentResource.get({
+                tournamentsResource.get({
                   tournamentId : tournamentId
                 }, function(response) {
                   $scope.tournament = response;
@@ -209,5 +213,24 @@ angular
                 getTeams($stateParams.tournamentId, preparePlayoffTree);
                 getParticipants($stateParams.tournamentId);
                 getPlayoffFights($stateParams.tournamentId, preparePlayoffTree);
+              } else {
+                $scope.tournament = {};
               }
+
+              $scope.save = function() {
+                var onError = function(_httpResponse) {
+                  FlashingService.flashRestFailed("{{'SAVE' | translate}}",
+                      "{{'TOURNAMENT' |translate}}", httpResponse);
+                };
+
+                if ($scope.tournament.id) {
+                } else {
+                  tournamentsResource.create($scope.tournament, function(
+                      newTournament) {
+                    $state.go('tournaments_show', {
+                      tournamentId : newTournament.id
+                    });
+                  }, onError);
+                }
+              };
             } ]);
