@@ -19,6 +19,9 @@ angular
               }, {
                 'create' : {
                   method : 'POST'
+                },
+                'save' : {
+                  method : 'PUT'
                 }
               });
 
@@ -207,12 +210,16 @@ angular
                 }
               }
 
-              if ($stateParams.tournamentId && $state.is('tournaments_show')) {
-                getTournament($stateParams.tournamentId);
-                getGroups($stateParams.tournamentId);
-                getTeams($stateParams.tournamentId, preparePlayoffTree);
-                getParticipants($stateParams.tournamentId);
-                getPlayoffFights($stateParams.tournamentId, preparePlayoffTree);
+              if ($stateParams.tournamentId && ($state.is('tournaments_show') || $state.is('tournaments_edit'))) {
+                if($state.is('tournaments_show')) {
+                  getTournament($stateParams.tournamentId);
+                  getGroups($stateParams.tournamentId);
+                  getTeams($stateParams.tournamentId, preparePlayoffTree);
+                  getParticipants($stateParams.tournamentId);
+                  getPlayoffFights($stateParams.tournamentId, preparePlayoffTree);
+                } else {
+                  getTournament($stateParams.tournamentId);
+                }
               } else {
                 $scope.tournament = {};
               }
@@ -224,6 +231,11 @@ angular
                 };
 
                 if ($scope.tournament.id) {
+                  tournamentsResource.save($scope.tournament, function() {
+                    $state.go('tournaments_show', {
+                      tournamentId : $scope.tournament.id
+                    });
+                  }, onError);
                 } else {
                   tournamentsResource.create($scope.tournament, function(
                       newTournament) {

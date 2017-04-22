@@ -99,6 +99,11 @@ angular.module('ippon').config([
       url: '/tournaments/:tournamentId',
       templateUrl: 'Tournaments/_show.html',
       controller: 'TournamentsController'
+    })
+    .state('tournaments_edit', {
+      url: '/tournaments/:tournamentId/edit',
+      templateUrl: 'Tournaments/_form.html',
+      controller: 'TournamentsController'
     });
 
 		$urlRouterProvider.otherwise('home');
