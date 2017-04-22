@@ -131,7 +131,7 @@ angular
                 buildPlayoffMap();
                 var playoffs = $scope.playoff_fights;
 
-                var playoff_map = Object.assign({}, $scope.playoff_map);
+                var playoff_map = jQuery.extend({}, $scope.playoff_map);
 
                 for (playoff in playoff_map) {
                   if (null != playoff_map[playoff].playoff_fight.previous_aka_fight_id)
