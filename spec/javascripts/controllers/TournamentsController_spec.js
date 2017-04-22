@@ -938,4 +938,55 @@ describe(
           expect(state.is('tournaments_show')).toBe(true);
         });
       });
+
+      describe('update', function() {
+        var updatedTournament = {
+            name: "Czar Par",
+            team_size: 3,
+            playoff_match_length: 4,
+            group_match_length: 3,
+            player_age_constraint: 0,
+            player_age_constraint_value: 0,
+            player_rank_constraint: 1,
+            player_rank_constraint_value: 5,
+            player_sex_constraint: 0,
+            player_sex_constraint_value: 0,
+          };
+
+        beforeEach(function() {
+          setupController('tournaments_edit', fakeTournamentId);
+          expectGetTournament(fakeTournamentId, 200, fakeTournament);
+          httpBackend.flush();
+          var request = new RegExp("tournaments/");
+          httpBackend.expectPUT(request).respond(204);
+        });
+
+        it('posts to the backend', function() {
+          scope.tournament.name = updatedTournament.name;
+          scope.tournament.team_size = updatedTournament.team_size;
+          scope.tournament.playoff_match_length = updatedTournament.playoff_match_length;
+          scope.tournament.group_match_length = updatedTournament.group_match_length;
+          scope.tournament.player_age_constraint = updatedTournament.player_age_constraint;
+          scope.tournament.player_age_constraint_value = updatedTournament.player_age_constraint_value;
+          scope.tournament.player_rank_constraint = updatedTournament.player_rank_constraint;
+          scope.tournament.player_rank_constraint_value = updatedTournament.player_rank_constraint_value;
+          scope.tournament.player_sex_constraint = updatedTournament.player_sex_constraint;
+          scope.tournament.player_sex_constraint_value = updatedTournament.player_sex_constraint_value;
+          scope.save();
+          httpBackend.flush();
+          expect('#'+location.path()).toBe(state.href('tournaments_show',{tournamentId: scope.tournament.id}));
+          expect(state.is('tournaments_show')).toBe(true);
+
+          expect(scope.tournament.name).toBe(updatedTournament.name);
+          expect(scope.tournament.team_size).toBe(updatedTournament.team_size);
+          expect(scope.tournament.playoff_match_length).toBe(updatedTournament.playoff_match_length);
+          expect(scope.tournament.group_match_length).toBe(updatedTournament.group_match_length);
+          expect(scope.tournament.player_age_constraint).toBe(updatedTournament.player_age_constraint);
+          expect(scope.tournament.player_age_constraint_value).toBe(updatedTournament.player_age_constraint_value);
+          expect(scope.tournament.player_rank_constraint).toBe(updatedTournament.player_rank_constraint);
+          expect(scope.tournament.player_rank_constraint_value).toBe(updatedTournament.player_rank_constraint_value);
+          expect(scope.tournament.player_sex_constraint).toBe(updatedTournament.player_sex_constraint);
+          expect(scope.tournament.player_sex_constraint_value).toBe(updatedTournament.player_sex_constraint_value);
+        });
+      });
     });
