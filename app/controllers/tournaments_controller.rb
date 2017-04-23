@@ -157,7 +157,9 @@ before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :ad
   end
 
   def permitted_params
-    par = params.require(:tournament).permit(:name,:playoff_match_length,:group_match_length,:team_size,:player_age_constraint,:player_age_constraint_value,:player_rank_constraint, :player_rank_constraint_value, :player_sex_constraint, :player_sex_constraint_value)
+    par = params.require(:tournament).permit(:name,:playoff_match_length,:group_match_length,:team_size,:player_age_constraint,
+      :player_age_constraint_value, :player_rank_constraint, :player_rank_constraint_value, :player_sex_constraint,
+      :player_sex_constraint_value, :address, :city, :date)
     par[:state] = :registration
     par
   end
