@@ -9,7 +9,10 @@ end
 FactoryGirl.define do
   factory :tournament do
     state :setup
-    name {"#{Faker::Address.city} Shiai"}
+    city {Faker::Address.city}
+    name {"#{city} Shiai"}
+    sequence(:address) {|n| "Somestreet #{n}"}
+    date {Faker::Date.between(5.years.ago, 5.years.from_now)}
     playoff_match_length 3
     group_match_length 3
     team_size 3
