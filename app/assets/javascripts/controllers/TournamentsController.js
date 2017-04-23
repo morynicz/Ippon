@@ -245,4 +245,9 @@ angular
                   }, onError);
                 }
               };
+
+              $scope["delete"] = function() {
+                tournamentsResource.delete({tournamentId: $scope.tournament.id});
+                $state.go('home');
+              }
             } ]);
