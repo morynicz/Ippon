@@ -2,9 +2,11 @@ class Player < ActiveRecord::Base
   belongs_to :club
   validates :name, :surname, :birthday, :rank, :sex, :club_id, presence: true
 
-  has_many :points
-  has_many :fights
-  has_many :tournament_participations
+  has_many :points, dependent: :destroy
+  has_many :fights_aka_side, dependent: :nullify, class_name: "Fight", foreign_key: "aka_id"
+  has_many :fights_shiro_side, dependent: :nullify, class_name: "Fight", foreign_key: "shiro_id"
+  has_many :tournament_participations, dependent: :destroy
+  has_many :team_memberships, dependent: :destroy
 
   enum rank: {
     kyu_6: 0,
@@ -30,5 +32,9 @@ class Player < ActiveRecord::Base
 
   def gained_points
     fights.points - points
+  end
+
+  def fights
+    fights_shiro_side + fights_aka_side
   end
 end
