@@ -23,4 +23,26 @@ describe Club do
       }.not_to change(ClubAdmin, :count)
     end
   end
+
+  describe "Destruction" do
+    let(:club) {FactoryGirl::create(:club_with_players_and_admins)}
+    let(:club_id) {club.id}
+    let(:players) {club.players.to_ary}
+
+    it "destroys all it's admins" do
+      club_id
+      club.destroy
+      expect(ClubAdmin.where(club_id: club_id)).to be_empty
+    end
+
+    it "nullifies all it's players" do
+      players
+      club.destroy
+
+      for player in players do
+        expect(Player.exists?(player.id)).to be(true)
+        expect(Player.find(player.id).club_id).to be(nil)
+      end
+    end
+  end
 end

@@ -1,7 +1,7 @@
 class Club < ActiveRecord::Base
-  has_many :club_admins
+  has_many :club_admins, dependent: :destroy
   has_many :admins, through: :club_admins, source: :user
-  has_many :players
+  has_many :players, dependent: :nullify
   after_commit :add_admin, on: :create
   attr_accessor :creator
   validates :name, :city, presence: true
