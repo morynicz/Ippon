@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound do
     respond_to do |type|
-      type.all {render :nothing => true, :status => 404}
+      type.all {head :not_found}
     end
   end
 
