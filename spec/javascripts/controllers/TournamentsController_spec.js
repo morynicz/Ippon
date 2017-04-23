@@ -766,6 +766,7 @@ describe(
 
           $templateCache.put('Tournaments/_show.html', '');
           $templateCache.put('Tournaments/_form.html', '');
+          $templateCache.put('Tournaments/_index.html', '');
 
           state.go(stateName);
           $rootScope.$apply();
@@ -831,6 +832,13 @@ describe(
         httpBackend.expectGET(request).respond(status, response);
       };
 
+      var expectGetTournaments = function(status, tournaments) {
+        var request = new RegExp("tournaments");
+        var response = tournaments ? tournaments : [];
+
+        httpBackend.expectGET(request).respond(status, response);
+      };
+
       var expectGetTournamentNotFound = function(tournamentId) {
         var request = new RegExp("tournaments/" + tournamentId);
         httpBackend.expectGET(request).respond(404, null);
@@ -849,7 +857,45 @@ describe(
         }
         fail("Flash with severity: "+severity+" and text containing: " + method+" "+target+" "+error+ " not found");
       }
-      
+
+      describe('index', function(){
+        var tournaments = [
+          {
+            name: "Genryoku",
+            team_size: 3,
+            playoff_match_length: 4,
+            group_match_length: 3,
+            player_age_constraint: 0,
+            player_age_constraint_value: 0,
+            player_rank_constraint: 1,
+            player_rank_constraint_value: 5,
+            player_sex_constraint: 0,
+            player_sex_constraint_value: 0,
+          },
+          {
+            name: "Czar Par",
+            team_size: 2,
+            playoff_match_length: 4,
+            group_match_length: 3,
+            player_age_constraint: 0,
+            player_age_constraint_value: 0,
+            player_rank_constraint: 1,
+            player_rank_constraint_value: 5,
+            player_sex_constraint: 0,
+            player_sex_constraint_value: 0,
+          }
+        ];
+
+        beforeEach(function(){
+          setupController('tournaments');
+          expectGetTournaments(200,tournaments);
+          httpBackend.flush();
+        });
+        it('calls the back-end', function() {
+          expect(scope.tournaments).toEqualData(tournaments);
+        });
+      });
+
       describe('show', function() {
         describe('tournament is found', function() {
           beforeEach(function() {
