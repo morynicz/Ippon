@@ -17,7 +17,7 @@ describe ClubsController do
     }
     before do
       club_list
-      xhr :get, :index, format: :json
+      get :index, params: {format: :json}
     end
 
     subject(:results) { JSON.parse(response.body)}
@@ -65,7 +65,7 @@ describe ClubsController do
 
   describe "show" do
     before do
-      xhr :get, :show, format: :json, id: club_id
+      get :show, params: {format: :json,id: club_id}
     end
 
     subject(:results) {JSON.parse(response.body)}
@@ -106,7 +106,7 @@ describe ClubsController do
   end
 
   def prepare_update(club_id, club)
-    xhr :put, :update, format: :json, id: club_id, club: club
+    put :update, params: {format: :json, id: club_id, club: club}
   end
 
   describe "update" do
@@ -208,7 +208,7 @@ describe ClubsController do
   end
 
   def prepare_destroy(club_id)
-    xhr :delete, :destroy, format: :json, id: club_id
+    delete :destroy, params: {format: :json, id: club_id}
   end
 
   describe "destroy" do
@@ -271,7 +271,7 @@ describe ClubsController do
   describe "POST :create" do
     let(:attributes) {  FactoryGirl.attributes_for(:club) }
     let(:action) do
-        xhr :post, :create, format: :json, club: attributes
+        post :create, params: {format: :json, club: attributes}
     end
 
     context "when the user is not authenticated" do
@@ -328,7 +328,7 @@ describe ClubsController do
       FactoryGirl::create(:club)
     }
     let(:action) {
-      xhr :get, :admins, format: :json, id: club.id
+      get :admins, params: {format: :json, id: club.id}
     }
 
     before do
@@ -399,7 +399,7 @@ describe ClubsController do
     }
 
     let(:action) {
-      xhr :post, :add_admin, format: :json, id: club.id, user_id: tested_user.id
+      post :add_admin, params:{ format: :json, id: club.id, user_id: tested_user.id}
     }
 
     context "when user is not authenticated" do
@@ -475,7 +475,7 @@ describe ClubsController do
     }
 
     let(:action) {
-      xhr :delete, :delete_admin, format: :json, id: club.id, user_id: tested_user.id
+      delete :delete_admin, params: {format: :json, id: club.id, user_id: tested_user.id}
     }
     context "when user is not authenticated" do
       it "returns unauthorized status" do
@@ -541,7 +541,7 @@ describe ClubsController do
 
           context "when the deleted admin is the last admin" do
             let(:unadmin_self) {
-              xhr :delete, :delete_admin, format: :json, id: club.id, user_id: current_user.id
+              delete :delete_admin, params: {format: :json, id: club.id, user_id: current_user.id}
             }
             it "returns bad request status" do
               unadmin_self
@@ -559,7 +559,7 @@ describe ClubsController do
 
   describe "GET: players" do
     let(:action) {
-      xhr :get, :players, format: :json, id: club.id
+      get :players, params: {format: :json, id: club.id}
     }
 
     def extract_name
@@ -673,7 +673,7 @@ describe ClubsController do
       club.id
     }
     let(:action) {
-      xhr :get, :is_admin, format: :json, id: club_id
+      get :is_admin, params: {format: :json, id: club_id}
     }
 
     subject(:results){JSON.parse(response.body)}
@@ -724,7 +724,7 @@ describe ClubsController do
 
   describe "GET where_admin" do
     let(:action) {
-      xhr :get, :where_admin, format: :json
+      get :where_admin, params: {format: :json}
     }
 
     subject(:results) { JSON.parse(response.body)}
@@ -797,7 +797,7 @@ describe ClubsController do
 
   describe "GET is_admin_for_any" do
     let(:action) {
-      xhr :get, :is_admin_for_any, format: :json
+      get :is_admin_for_any, params: {format: :json}
     }
     let(:club) {FactoryGirl::create(:club_with_admins)}
 
