@@ -188,7 +188,10 @@ describe(
         "player_rank_constraint" : 0,
         "player_rank_constraint_value" : 0,
         "player_sex_constraint" : 0,
-        "player_sex_constraint_value" : 0
+        "player_sex_constraint_value" : 0,
+        "city" : "Somewhereville",
+        "address" : "Somestreet 33",
+        "date" : "2017-05-04"
       };
 
       var fakeGroups = [ {
@@ -871,6 +874,9 @@ describe(
             player_rank_constraint_value: 5,
             player_sex_constraint: 0,
             player_sex_constraint_value: 0,
+            city: "Somewhereville",
+            address: "Somestreet 33",
+            date: "2017-05-04"
           },
           {
             name: "Czar Par",
@@ -883,6 +889,9 @@ describe(
             player_rank_constraint_value: 5,
             player_sex_constraint: 0,
             player_sex_constraint_value: 0,
+            city: "Kochankow",
+            address: "Zakochana 15",
+            date: "2019-02-14"
           }
         ];
 
@@ -997,6 +1006,9 @@ describe(
             player_rank_constraint_value: 5,
             player_sex_constraint: 0,
             player_sex_constraint_value: 0,
+            city: "Somewhereville",
+            address: "Somestreet 33",
+            date: "2017-05-04"
           };
 
         beforeEach(function() {
