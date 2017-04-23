@@ -6,17 +6,17 @@ class Tournament < ActiveRecord::Base
 
   after_commit :add_admin, on: :create
 
-  has_many :tournament_participations
+  has_many :tournament_participations, dependent: :destroy
   has_many :players, through: :tournament_participations
-  has_many :teams
+  has_many :teams, dependent: :destroy
   has_many :team_memberships, through: :teams
   has_many :team_members, through: :team_memberships, source: :player
-  has_many :locations
-  has_many :tournament_admins
+  has_many :locations, dependent: :destroy
+  has_many :tournament_admins, dependent: :destroy
   has_many :admins, through: :tournament_admins, source: :user
   has_many :groups, dependent: :destroy
   has_many :group_fights, through: :groups
-  has_many :playoff_fights
+  has_many :playoff_fights, dependent: :destroy
 
   attr_accessor :creator
 

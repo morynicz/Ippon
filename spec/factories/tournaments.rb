@@ -111,6 +111,6 @@ FactoryGirl.define do
 
     factory :tournament_with_participants_and_admins, traits: [:with_participants, :with_admins]
     factory :tournament_with_playoffs, traits: [:with_playoffs]
-    factory :tournament_with_all, traits: [:with_teams, :with_admins, :with_groups, :with_playoffs]
+    factory :tournament_with_all, traits: [:with_teams, :with_admins, :with_groups, :with_playoffs, :with_participants]
   end
 end
