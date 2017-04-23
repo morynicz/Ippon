@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
 
-  before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :add_member, :delete_member]
+  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!,:authorize_user, only: [:update, :destroy, :add_member, :delete_member]
 
   def authorize_user
     if user_signed_in?

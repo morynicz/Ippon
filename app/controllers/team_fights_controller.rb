@@ -1,6 +1,6 @@
 class TeamFightsController < ApplicationController
-  before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy]
+  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!,:authorize_user, only: [:update, :destroy]
 
   def show
     @team_fight = TeamFight.find(params[:id])

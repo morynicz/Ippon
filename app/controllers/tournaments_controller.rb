@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
-before_filter :authenticate_user!, only: [:create]
-before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin, :add_participant, :delete_participant]
+before_action :authenticate_user!, only: [:create]
+before_action :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin, :add_participant, :delete_participant]
 
   def authorize_user
     if user_signed_in?

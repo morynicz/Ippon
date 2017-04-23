@@ -1,6 +1,6 @@
 class PlayoffFightsController < ApplicationController
-  before_filter :authenticate_user!, only: [:create]
-  before_filter :authenticate_user!, :authorize_user, only: [:update, :destroy]
+  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, :authorize_user, only: [:update, :destroy]
 
   def show
     @playoff_fight = PlayoffFight.find(params[:id])

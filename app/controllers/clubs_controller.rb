@@ -1,6 +1,6 @@
 class ClubsController < ApplicationController
-  before_filter :authenticate_user!, only: [:create, :is_admin, :where_admin]
-  before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
+  before_action :authenticate_user!, only: [:create, :is_admin, :where_admin]
+  before_action :authenticate_user!,:authorize_user, only: [:update, :destroy, :admins, :add_admin, :delete_admin]
 
   def authorize_user
     if user_signed_in?
