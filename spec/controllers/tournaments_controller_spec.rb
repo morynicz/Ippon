@@ -74,6 +74,24 @@ RSpec.describe TournamentsController, type: :controller do
           to eq(tournament.player_sex_constraint)
       end
 
+      it "should return result with correct city" do
+        action
+        expect(results["city"]).
+          to eq(tournament.city)
+      end
+
+      it "should return result with correct address" do
+        action
+        expect(results["address"]).
+          to eq(tournament.address)
+      end
+
+      it "should return result with correct date" do
+        action
+        expect(results["date"]).
+          to eq(tournament.date.to_s(:db))
+      end
+
       context "when the user is not an admin" do
         it "should return admin status false" do
           action
@@ -117,7 +135,7 @@ RSpec.describe TournamentsController, type: :controller do
 
       it "denies access" do
         action
-        expect(response).to have_http_status :unauthorized
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -135,7 +153,10 @@ RSpec.describe TournamentsController, type: :controller do
             player_sex_constraint: '',
             player_sex_constraint_value: '',
             player_rank_constraint: '',
-            player_rank_constraint_value: ''
+            player_rank_constraint_value: '',
+            date: '',
+            address: '',
+            city: ''
           }
         end
 
@@ -313,7 +334,10 @@ RSpec.describe TournamentsController, type: :controller do
               player_sex_constraint: '',
               player_sex_constraint_value: '',
               player_rank_constraint: '',
-              player_rank_constraint_value: ''
+              player_rank_constraint_value: '',
+              date: '',
+              address: '',
+              city: ''
             }
           end
 
