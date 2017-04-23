@@ -221,6 +221,15 @@ angular
                   getTournament($stateParams.tournamentId);
                 }
               } else {
+                if($state.is('tournaments')) {
+                  tournamentsResource.query(function(response) {
+                    $scope.tournaments = response;
+                  },  function(httpResponse) {
+                    FlashingService.flashRestFailed("{{'GET' | translate}}",
+                        "{{'TOURNAMENTS' | translate }}", httpResponse);
+                    $scope.tournaments = null;
+                  })
+                }
                 $scope.tournament = {};
               }
 
