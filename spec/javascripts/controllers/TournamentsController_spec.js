@@ -989,4 +989,26 @@ describe(
           expect(scope.tournament.player_sex_constraint_value).toBe(updatedTournament.player_sex_constraint_value);
         });
       });
+
+      describe('delete', function() {
+        beforeEach(function() {
+          setupController('tournaments_show', fakeTournamentId);
+          expectGetTournament(fakeTournamentId, 200, fakeTournament);
+          expectGetGroups(fakeTournamentId, 200, fakeGroups);
+          expectGetTeams(fakeTournamentId, 200, fakeTeams);
+          expectGetParticipants(fakeTournamentId, 200, fakeParticipants, []);
+          fakeTournament.is_admin = false;
+          expectGetPlayoffFights(fakeTournamentId, 200, fakePlayoffFights);
+          httpBackend.flush();
+          var request = new RegExp("tournaments/" + scope.tournament.id);
+          httpBackend.expectDELETE(request).respond(204);
+        });
+
+        it('posts to the backend', function() {
+          scope["delete"]();
+          scope.$apply();
+          httpBackend.flush();
+          expect('#'+ location.path()).toBe(state.href('home'));
+        });
+      });
     });
