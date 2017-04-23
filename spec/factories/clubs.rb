@@ -3,7 +3,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Club #{n}"}
     city {Faker::Address.city}
     description {Faker::Lorem.paragraph}
-    factory :club_with_players do
+    trait :with_players do
       transient do
         players_count 5
       end
@@ -13,7 +13,7 @@ FactoryGirl.define do
       end
     end
 
-    factory :club_with_admins do
+    trait :with_admins do
       transient do
         admins_count 3
       end
@@ -25,5 +25,9 @@ FactoryGirl.define do
         end
       end
     end
+
+    factory :club_with_players, traits: [:with_players]
+    factory :club_with_admins, traits: [:with_admins]
+    factory :club_with_players_and_admins, traits: [:with_players, :with_admins]
   end
 end
