@@ -19,7 +19,7 @@ FactoryGirl.define do
       after(:create) do |group, evaluator|
         members = group.group_members
 
-        members.combination(2) {|c|
+        members.to_ary.combination(2) {|c|
           tf = FactoryGirl::create(:team_fight, tournament: group.tournament, aka_team: c[0].team, shiro_team: c[1].team)
           GroupFight.create(group_id: group.id, team_fight_id: tf.id)
         }
@@ -46,7 +46,7 @@ FactoryGirl.define do
         after(:create) do |group, evaluator|
           members = group.group_members
 
-          members.combination(2) {|c|
+          members.to_ary.combination(2) {|c|
             tf = FactoryGirl::create(:team_fight, tournament: group.tournament, aka_team: c[0].team, shiro_team: c[1].team)
             GroupFight.create(group_id: group.id, team_fight_id: tf.id)
           }
