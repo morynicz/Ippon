@@ -1,0 +1,24 @@
+<header class="row">
+ <h1 class="text-center col-md-6 col-md-offset-3">{{'TOURNAMENTS' |
+  translate}}</h1>
+</header>
+
+<section class="row">
+ <div
+  ng-show="isAdmin"
+  class="form-group col-md-6 col-md-offset-3 text-center">
+  <button
+   ng-click="newPlayer()"
+   class="btn btn-info btn-lg"
+   id="new-tournament">{{'ADD' | translate}}</button>
+ </div>
+</section>
+
+<section
+ class="row"
+ ng-if="tournaments.length">
+ <ul class="list-unstyled">
+  <li ng-repeat="tournament in tournaments"><ippon-tournament-line
+    tournament="tournament"></ippon-tournament-line></li>
+ </ul>
+</section>
