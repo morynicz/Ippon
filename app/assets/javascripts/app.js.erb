@@ -11,8 +11,7 @@ angular.module('ippon').config([
 	'$stateProvider',
 	'$urlRouterProvider',
 	'$translateProvider',
-	'$logProvider'
-	function($stateProvider, $urlRouterProvider, $translateProvider, $logProvider) {
+	function($stateProvider, $urlRouterProvider, $translateProvider) {
 		$stateProvider.state('home',{
 			url: '/home',
 			templateUrl: 'Home/_index.html',
@@ -127,5 +126,5 @@ angular.module('ippon').config([
 		$translateProvider.useSanitizeValueStrategy('escape');
 		$translateProvider.preferredLanguage('en');
 
-		$logProvider.debugEnabled(true);
+		//$logProvider.debugEnabled(true);
 	}]);
