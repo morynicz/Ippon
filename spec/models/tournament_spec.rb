@@ -31,4 +31,29 @@ RSpec.describe Tournament, type: :model do
       end
     end
   end
+
+  describe "Creation" do
+    let(:creator) {
+      FactoryGirl::create(:user)
+    }
+
+    let(:tournament_attrs) {
+      FactoryGirl::attributes_for(:tournament)
+    }
+    context "with creator specified" do
+      it "Adds creator as an admin after the club is created" do
+        tournament_attrs["creator"] = creator
+        tournament = Tournament.create(tournament_attrs)
+        expect(TournamentAdmin.exists?(tournament_id: tournament.id, user_id: creator.id)).to be true
+      end
+    end
+
+    context "without creator specified" do
+      it "Does not change admn count after the tournament is created" do
+        expect {
+          Tournament.create(tournament_attrs)
+        }.not_to change(TournamentAdmin, :count)
+      end
+    end
+  end
 end
