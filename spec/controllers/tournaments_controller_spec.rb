@@ -8,16 +8,21 @@ RSpec.describe TournamentsController, type: :controller do
       user_id: current_user.id, status: :main)
   end
 
-  attribute_list = [:name,
-  :playoff_match_length,
-  :group_match_length,
-  :team_size,
-  :player_age_constraint,
-  :player_age_constraint_value,
-  :player_sex_constraint,
-  :player_sex_constraint_value,
-  :player_rank_constraint,
-  :player_rank_constraint_value]
+  def expectTournamentDataEqHash(tournament, tournament_attrs)
+    expect(tournament.name).to eq(tournament_attrs[:name])
+    expect(tournament.date).to eq(tournament_attrs[:date])
+    expect(tournament.address).to eq(tournament_attrs[:address])
+    expect(tournament.city).to eq(tournament_attrs[:city])
+    expect(tournament.playoff_match_length).to eq(tournament_attrs[:playoff_match_length])
+    expect(tournament.group_match_length).to eq(tournament_attrs[:group_match_length])
+    expect(tournament.team_size).to eq(tournament_attrs[:team_size])
+    expect(tournament.player_age_constraint).to eq(tournament_attrs[:player_age_constraint])
+    expect(tournament.player_age_constraint_value).to eq(tournament_attrs[:player_age_constraint_value])
+    expect(tournament.player_sex_constraint).to eq(tournament_attrs[:player_sex_constraint])
+    expect(tournament.player_sex_constraint_value).to eq(tournament_attrs[:player_sex_constraint_value])
+    expect(tournament.player_rank_constraint).to eq(tournament_attrs[:player_rank_constraint])
+    expect(tournament.player_rank_constraint_value).to eq(tournament_attrs[:player_rank_constraint_value])
+  end
 
   describe "GET show" do
     let(:action) {
@@ -314,11 +319,7 @@ RSpec.describe TournamentsController, type: :controller do
 
           it "should update tournament attributes" do
             action
-
-            for attribute in attribute_list
-              expect(tournament.attributes[attribute.to_s]).
-                to eq(update_tournament_attrs[attribute])
-            end
+            expectTournamentDataEqHash(tournament, update_tournament_attrs)
           end
         end
 
@@ -343,10 +344,7 @@ RSpec.describe TournamentsController, type: :controller do
 
           it "should not update tournament attributes" do
             action
-            for attribute in attribute_list
-              expect(tournament.attributes[attribute.to_s]).
-                to eq(tournament_attrs[attribute])
-            end
+            expectTournamentDataEqHash(tournament, tournament_attrs)
           end
 
           it "should return unporcessable entity" do
@@ -364,10 +362,7 @@ RSpec.describe TournamentsController, type: :controller do
 
         it "should not update tournament attributes" do
           action
-          for attribute in attribute_list
-            expect(tournament.attributes[attribute.to_s]).
-              to eq(tournament_attrs[attribute])
-          end
+          expectTournamentDataEqHash(tournament, tournament_attrs)
         end
       end
     end

@@ -30,11 +30,46 @@ class Tournament < ActiveRecord::Base
     closed: 6
   }
 
-  enum constraint: {
-    no_constraint: 0,
-    less_or_equal: 1,
-    greater_or_equal: 2,
-    equal: 3
+  enum player_age_constraint: {
+    age_no_constraint: 0,
+    age_less_or_equal: 1,
+    age_greater_or_equal: 2,
+    age_equal: 3
+  }
+
+  enum player_rank_constraint: {
+  rank_no_constraint: 0,
+  rank_less_or_equal: 1,
+  rank_greater_or_equal: 2,
+  rank_equal: 3
+}
+
+enum player_sex_constraint: {
+  sex_no_constraint: 0,
+  sex_equal: 1
+}
+
+  enum player_rank_constraint_value: {
+    kyu_6: 0,
+    kyu_5: 1,
+    kyu_4: 2,
+    kyu_3: 3,
+    kyu_2: 4,
+    kyu_1: 5,
+    dan_1: 6,
+    dan_2: 7,
+    dan_3: 8,
+    dan_4: 9,
+    dan_5: 10,
+    dan_6: 11,
+    dan_7: 12,
+    dan_8: 13
+  }
+
+  enum player_sex_constraint_value: {
+    woman_only: 0,
+    man_only: 1,
+    all_allowed: 2
   }
 
   def add_admin
