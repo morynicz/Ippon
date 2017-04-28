@@ -18,7 +18,6 @@ RSpec.describe TournamentsController, type: :controller do
     expect(tournament.team_size).to eq(tournament_attrs[:team_size])
     expect(tournament.player_age_constraint).to eq(tournament_attrs[:player_age_constraint])
     expect(tournament.player_age_constraint_value).to eq(tournament_attrs[:player_age_constraint_value])
-    expect(tournament.player_sex_constraint).to eq(tournament_attrs[:player_sex_constraint])
     expect(tournament.player_sex_constraint_value).to eq(tournament_attrs[:player_sex_constraint_value])
     expect(tournament.player_rank_constraint).to eq(tournament_attrs[:player_rank_constraint])
     expect(tournament.player_rank_constraint_value).to eq(tournament_attrs[:player_rank_constraint_value])
@@ -71,12 +70,6 @@ RSpec.describe TournamentsController, type: :controller do
           to eq(tournament.player_rank_constraint)
         expect(results["player_rank_constraint_value"]).
           to eq(tournament.player_rank_constraint_value)
-      end
-
-      it "should return result with correct player sex constraint" do
-        action
-        expect(results["player_sex_constraint"]).
-          to eq(tournament.player_sex_constraint)
       end
 
       it "should return result with correct city" do
@@ -155,7 +148,6 @@ RSpec.describe TournamentsController, type: :controller do
             team_size: 0,
             player_age_constraint: '',
             player_age_constraint_value: '',
-            player_sex_constraint: '',
             player_sex_constraint_value: '',
             player_rank_constraint: '',
             player_rank_constraint_value: '',
@@ -245,10 +237,6 @@ RSpec.describe TournamentsController, type: :controller do
       ->(object) {object["player_rank_constraint_value"]}
     end
 
-    def extract_player_sex_constraint
-      ->(object) {object["player_sex_constraint"]}
-    end
-
     def extract_player_sex_constraint_value
       ->(object) {object["player_sex_constraint_value"]}
     end
@@ -280,8 +268,6 @@ RSpec.describe TournamentsController, type: :controller do
             to include(tournament.player_rank_constraint)
           expect(results.map(&extract_player_rank_constraint_value)).
             to include(tournament.player_rank_constraint_value)
-          expect(results.map(&extract_player_sex_constraint)).
-            to include(tournament.player_sex_constraint)
           expect(results.map(&extract_player_sex_constraint_value)).
             to include(tournament.player_sex_constraint_value)
         end
@@ -332,7 +318,6 @@ RSpec.describe TournamentsController, type: :controller do
               team_size: 0,
               player_age_constraint: '',
               player_age_constraint_value: '',
-              player_sex_constraint: '',
               player_sex_constraint_value: '',
               player_rank_constraint: '',
               player_rank_constraint_value: '',

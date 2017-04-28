@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170423143755) do
+ActiveRecord::Schema.define(version: 20170428053534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,7 +185,6 @@ ActiveRecord::Schema.define(version: 20170423143755) do
     t.integer  "team_size"
     t.integer  "player_age_constraint"
     t.integer  "player_age_constraint_value"
-    t.integer  "player_sex_constraint"
     t.integer  "player_sex_constraint_value"
     t.integer  "player_rank_constraint"
     t.integer  "player_rank_constraint_value"

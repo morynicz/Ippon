@@ -18,7 +18,6 @@ FactoryGirl.define do
     team_size 3
     player_age_constraint {Tournament.player_age_constraints.invert[Faker::Number.between(0,3)]}
     player_age_constraint_value {Faker::Number.between(5,35)}
-    player_sex_constraint {Tournament.player_sex_constraints.invert[Faker::Number.between(0,1)]}
     player_sex_constraint_value {Tournament.player_sex_constraint_values.invert[Faker::Number.between(0,2)]}
     player_rank_constraint {Tournament.player_rank_constraints.invert[Faker::Number.between(0,3)]}
     player_rank_constraint_value {Tournament.player_rank_constraint_values.invert[Faker::Number.between(0,13)]}

@@ -2,7 +2,7 @@ class Tournament < ActiveRecord::Base
   validates :name, :team_size, :playoff_match_length,
     :group_match_length, :player_age_constraint, :player_age_constraint_value,
     :player_rank_constraint, :player_rank_constraint_value,
-    :player_sex_constraint, :player_sex_constraint_value, :date, :city, :address, presence: true
+    :player_sex_constraint_value, :date, :city, :address, presence: true
 
   after_commit :add_admin, on: :create
 
@@ -42,11 +42,6 @@ class Tournament < ActiveRecord::Base
   rank_less_or_equal: 1,
   rank_greater_or_equal: 2,
   rank_equal: 3
-}
-
-enum player_sex_constraint: {
-  sex_no_constraint: 0,
-  sex_equal: 1
 }
 
   enum player_rank_constraint_value: {
