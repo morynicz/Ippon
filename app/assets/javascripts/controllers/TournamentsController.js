@@ -60,7 +60,9 @@ angular
                   tournamentId : tournamentId
                 }, function(response) {
                   $scope.tournament = response;
+                  $scope.tournament.date = new Date($scope.tournament.date);
                   $scope.is_admin = response.is_admin;
+                  $scope.tournament.player_sex_constraint = "sex_equal"
                 }, function(httpResponse) {
                   FlashingService.flashRestFailed("{{'GET' | translate}}",
                       "{{'TOURNAMENT' | translate }}", httpResponse);
@@ -134,7 +136,9 @@ angular
               }
 
               var buildPlayoffTree = function() {
-
+                if(0==$scope.playoff_fights.length) {
+                  return;
+                }
                 buildPlayoffMap();
                 var playoffs = $scope.playoff_fights;
 
@@ -231,10 +235,17 @@ angular
                   })
                 }
                 $scope.tournament = {};
+                if($state.is('tournaments_new')) {
+                  $scope.tournament.player_sex_constraint_value = "all_allowed";
+                  $scope.tournament.player_age_constraint = 'age_no_constraint';
+                  $scope.tournament.player_age_constraint_value = 0;
+                  $scope.tournament.player_rank_constraint = 'rank_no_constraint';
+                  $scope.tournament.player_rank_constraint_value = 'dan_1';
+                }
               }
 
               $scope.save = function() {
-                var onError = function(_httpResponse) {
+                var onError = function(httpResponse) {
                   FlashingService.flashRestFailed("{{'SAVE' | translate}}",
                       "{{'TOURNAMENT' |translate}}", httpResponse);
                 };
@@ -256,7 +267,93 @@ angular
               };
 
               $scope["delete"] = function() {
-                tournamentsResource.delete({tournamentId: $scope.tournament.id});
-                $state.go('home');
+                tournamentsResource.delete({tournamentId: $scope.tournament.id}, function(response) {
+                  $state.go('home');
+                });
+              }
+
+              $scope.signedIn = Auth.isAuthenticated;
+
+              $scope.newTournament = function() {
+                $state.go('tournaments_new');
+              }
+
+              $scope.edit = function() {
+                $state.go('tournaments_edit',{tournamentId: $scope.tournament.id});
+              };
+
+              $scope.ageConstraints = [
+                'age_no_constraint',
+                'age_less_or_equal',
+                'age_greater_or_equal',
+                'age_equal'
+              ]
+
+              $scope.rankConstraints = [
+                'rank_no_constraint',
+                'rank_less_or_equal',
+                'rank_greater_or_equal',
+                'rank_equal'
+              ]
+
+              $scope.mapAgeConstraints = function(constraint) {
+                switch(constraint) {
+                  case 'age_no_constraint': return "-";
+                  case 'age_less_or_equal': return "<=";
+                  case 'age_greater_or_equal': return ">=";
+                  case 'age_equal': return "==";
+                  default: return constraint;
+                }
+              }
+
+              $scope.mapRankConstraints = function(constraint) {
+                switch(constraint) {
+                  case 'rank_no_constraint': return "-";
+                  case 'rank_less_or_equal': return "<=";
+                  case 'rank_greater_or_equal': return ">=";
+                  case 'rank_equal': return "==";
+                  default: return constraint;
+                }
+              }
+
+              $scope.ranks = [
+                'kyu_6',
+                'kyu_5',
+                'kyu_4',
+                'kyu_3',
+                'kyu_2',
+                'kyu_1',
+                'dan_1',
+                'dan_2',
+                'dan_3',
+                'dan_4',
+                'dan_5',
+                'dan_6',
+                'dan_7',
+                'dan_8'
+              ];
+
+              $scope.mapRanks = function(rank) {
+                switch(rank) {
+                  case "dan_8": return '8 DAN';
+                  case "dan_7": return '7 DAN';
+                  case "dan_6": return '6 DAN';
+                  case "dan_5": return '5 DAN';
+                  case "dan_4": return '4 DAN';
+                  case "dan_3": return '3 DAN';
+                  case "dan_2": return '2 DAN';
+                  case "dan_1": return '1 DAN';
+                  case "kyu_1": return '1 KYU';
+                  case "kyu_2": return '2 KYU';
+                  case "kyu_3": return '3 KYU';
+                  case "kyu_4": return '4 KYU';
+                  case "kyu_5": return '5 KYU';
+                  case "kyu_6": return '6 KYU';
+                  default: return rank;
+                }
+              }
+
+              $scope.viewTournament = function(tournamentId) {
+                $state.go('tournaments_show', {tournamentId: tournamentId});
               }
             } ]);

@@ -38,11 +38,11 @@ class Tournament < ActiveRecord::Base
   }
 
   enum player_rank_constraint: {
-  rank_no_constraint: 0,
-  rank_less_or_equal: 1,
-  rank_greater_or_equal: 2,
-  rank_equal: 3
-}
+    rank_no_constraint: 0,
+    rank_less_or_equal: 1,
+    rank_greater_or_equal: 2,
+    rank_equal: 3
+  }
 
   enum player_rank_constraint_value: {
     kyu_6: 0,

@@ -1,0 +1,227 @@
+<form
+ class="form-horizontal"
+ role="form"
+ class="edit-user"
+ name="tournament-form">
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="name"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_NAME'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="name"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_NAME_PLACEHOLDER' | translate}}"
+    ng-model="tournament.name">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="address"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_ADDRESS'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="address"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_ADDRESS_PLACEHOLDER' | translate}}"
+    ng-model="tournament.address">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="city"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_CITY'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="city"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_CITY_PLACEHOLDER' | translate}}"
+    ng-model="tournament.city">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="date"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_DATE'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="date"
+    id="exampleInput"
+    name="date"
+    ng-model="tournament.date"
+    placeholder="2010-12-31"
+    required="true" />
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="playoff-fight-length"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_PLAYOFF_FIGHT_LENGTH'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="playoff-fight-length"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_PLAYOFF_FIGHT_LENGTH_PLACEHOLDER' | translate}}"
+    ng-model="tournament.playoff_match_length">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="group-fight-length"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_GROUP_FIGHT_LENGTH'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="group-fight-length"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_GROUP_FIGHT_LENGTH_PLACEHOLDER' | translate}}"
+    ng-model="tournament.group_match_length">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="team-size"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_TEAM_SIZE'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="text"
+    name="team-size"
+    class="form-control"
+    placeholder="{{'TOURNAMENT_TEAM_SIZE_PLACEHOLDER' | translate}}"
+    ng-model="tournament.team_size">
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="sex-constraint-value"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_PLAYER_SEX_CONSTRAINT'|translate}} </label>
+  <div class="col-md-5">
+   <input
+    type="radio"
+    id="button-sex-man"
+    ng-model="tournament.player_sex_constraint_value"
+    value="man_only" />{{'TOURNAMENT_MEN_ONLY' | translate}} <input
+    type="radio"
+    id="button-sex-woman"
+    ng-model="tournament.player_sex_constraint_value"
+    value="woman_only" />{{'TOURNAMENT_WOMEN_ONLY' | translate}} <input
+    type="radio"
+    id="button-sex-mixed"
+    ng-model="tournament.player_sex_constraint_value"
+    value="all_allowed" />{{'TOURNAMENT_MIXED' | translate}}<br />
+  </div>
+ </div>
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="age-constraint"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_PLAYER_AGE_CONSTRAINT'|translate}} </label>
+  <div class="col-md-5">
+   <select
+    id="age-constraint-select"
+    ng-model="tournament.player_age_constraint"
+    class="form-control"
+    name="age-constraint"
+    ng-options="constraint as mapAgeConstraints(constraint) for constraint in ageConstraints"></select>
+  </div>
+ </div>
+ <div ng-hide="tournament.player_age_constraint == 'age_no_constraint'">
+  <div
+   class="form-group"
+   ng-class="{'has-warning has-feedback':errors.name}">
+   <label
+    for="age-constraint-value"
+    class="col-md-2 control-label col-md-offset-2">
+    {{'TOURNAMENT_PLAYER_AGE_CONSTRAINT_VALUE'|translate}} </label>
+   <div class="col-md-5">
+    <input
+     type="text"
+     name="age-constraint-value"
+     class="form-control"
+     placeholder="{{'TOURNAMENT_PLAYER_AGE_CONSTRAINT_VALUE_PLACEHOLDER' | translate}}"
+     ng-model="tournament.player_age_constraint_value">
+   </div>
+  </div>
+ </div>
+ "
+ <div
+  class="form-group"
+  ng-class="{'has-warning has-feedback':errors.name}">
+  <label
+   for="rank-constraint"
+   class="col-md-2 control-label col-md-offset-2">
+   {{'TOURNAMENT_PLAYER_RANK_CONSTRAINT'|translate}} </label>
+  <div class="col-md-5">
+   <select
+    id="rank-constraint-select"
+    ng-model="tournament.player_rank_constraint"
+    class="form-control"
+    name="rank-constraint"
+    ng-options="constraint as mapRankConstraints(constraint) for constraint in rankConstraints"></select>
+  </div>
+ </div>
+ <div
+  ng-hide="tournament.player_rank_constraint == 'rank_no_constraint'">
+  <div
+   class="form-group"
+   ng-class="{'has-warning has-feedback':errors.name}">
+   <label
+    for="rank-constrint-value"
+    class="col-md-2 control-label col-md-offset-2">
+    {{'PLAYER_RANK'|translate}} </label>
+   <div class="col-md-5">
+    <select
+     id="rank-select"
+     ng-model="tournament.player_rank_constraint_value"
+     class="form-control"
+     name="rank-constraint-value"
+     ng-options="rank as mapRanks(rank) for rank in ranks"></select>
+   </div>
+  </div>
+ </div>
+ <div class="form-group">
+  <div class="col-md-offset-2 col-md-3">
+   <button
+    class="btn btn-default"
+    type="button"
+    ng-click="cancel()"
+    id="cancel-tournament">{{'CANCEL'|translate}}</button>
+  </div>
+  <div class="col-md-4 text-right">
+   <button
+    class="btn btn-primary"
+    ng-click="save()"
+    id="save-tournament">{{'SAVE'|translate}}</button>
+  </div>
+ </div>
+</form>

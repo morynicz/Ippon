@@ -53,16 +53,7 @@ before_filter :authenticate_user!,:authorize_user, only: [:update, :destroy, :ad
 
   def destroy
     tournament = Tournament.find(params[:id])
-    participations = TournamentParticipation.where(tournament_id: tournament.id)
-    for participation in participations do
-      participation.destroy
-    end
-
-    admins = TournamentAdmin.where(tournament_id: tournament.id)
-    for admin in admins do
-      admin.destroy
-    end
-    tournament.destroy
+    tournament.destroy!
     head :no_content
   end
 

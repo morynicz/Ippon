@@ -1,71 +1,70 @@
-<section class="col-md-6 col-md-offset-3">
+<section class="col-md-8 col-md-offset-3">
  <article class="panel panel-info">
   <header class="panel-heading">
    <h1>{{tournament.name}}</h1>
   </header>
-  <p class="panel-body">
-  <div ng-if="tournament.team_size > 1">{{'TEAM_SIZE' | translate
-   }}: {{tournament.team_size}}</div>
-  <div ng-if="tournament.player_age_constraint != 0">
-   {{'TOURNAMENT_PLAYER_AGE_CONSTRAINT' | translate }}:
-   {{tournament.player_age_contraint_value}}</div>
-  <div ng-if="tournament.player_rank_constraint > 0">
-   {{'TOURNAMENT_PLAYER_RANK_CONTRAINT' | translate }}:
-   {{tournament.player_rank_contraint_value}}</div>
-  <div ng-if="tournament.player_sex_constraint > 0">
-   {{'TOURNAMENT_PLAYER_SEX_CONSTRINAT' | translate }}:
-   {{tournament.player_sex_constraint_value}}</div>
-  <div>{{'TOURNAMENT_GROUP_MATCH_LENGHT' | translate }}:
-   {{tournament.group_match_length}}</div>
-  <div>{{'TOURNAMENT_PLAYOFF_MATCH_LENGHT' | translate }}:
-   {{tournament.playoff_match_length}}</div>
-
-  <section
-   class="row"
-   ng-if="playoff_fights.length">
-   <div class="h3">{{'TOURNAMENT_PLAYOFF_FIGHTS'|translate}}</div>
-   <ippon-playoff-tree levels="leveled_playoffs"></ippon-playoff-tree>
-  </section>
-  <section
-   class="row"
-   ng-if="groups.length">
-   <div class="h3">{{'TOURNAMENT_GROUPS'|translate}}</div>
-   <ul class="list-unstyled">
-    <li ng-repeat="group in groups"><ippon-group-brief
-      element="group"></ippon-group-brief> <!-- <section class="well col-md-6 col-md-offset-3">
-      <h1
-       class="h3"
-       style="margin-top: 0">
-       <a
-        class="col-md-4"
-        href=""
-        ng-click="view_group(group.id)"> {{group.group.name}}</a>
-      </h1>
-      <ul class="list-unstyled">
-       <li ng-repeat="team in group.teams"><ippon-team-line team="team"></ippon-team-line></li>
-      </ul>
-     </section> --></li>
-   </ul>
-  </section>
-  <section
-   class="row"
-   ng-if="teams.length">
-   <div class="h3">{{'TOURNAMENT_TEAMS'|translate}}</div>
-   <ul class="list-unstyled">
-    <li ng-repeat="el in teams"><ippon-team-brief element="el">
-     </ippon-team></li>
-   </ul>
-  </section>
-  <section
-   class="row"
-   ng-if="participants.length">
-   <div class="h3">{{'TOURNAMENT_PARTICIPANTS'|translate}}</div>
-   <ul class="list-unstyled">
-    <li ng-repeat="player in participants"><ippon-player-line
-      player="player"> </ippon-player></li>
-   </ul>
-  </section>
-  </p>
+  <div class="panel-body">
+   <div class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_CITY'|translate}}:</div>
+    <div class="col-md-3 col-md-offset-1">{{tournament.city}}</div>
+   </div>
+   <div class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_DATE'|translate}}:</div>
+    <div class="col-md-3 col-md-offset-1">{{tournament.date | date
+     : "yyyy-MM-dd Z"}}</div>
+   </div>
+   <div class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_ADDRESS'|translate}}:</div>
+    <div class="col-md-3 col-md-offset-1">{{tournament.address}}</div>
+   </div>
+   <div
+    ng-if="tournament.team_size > 1"
+    class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_TEAM_SIZE' | translate }}:</div>
+    <div class="col-md-3 col-md-offset-1">{{tournament.team_size}}</div>
+   </div>
+   <div
+    ng-hide="tournament.player_age_constraint == 'age_no_constraint'"
+    class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_PLAYER_AGE_CONSTRAINT' |
+     translate }}:</div>
+    <div class="col-md-3 col-md-offset-1">
+     {{mapAgeConstraints(tournament.player_age_constraint)}} {{tournament.player_age_constraint_value}}</div>
+   </div>
+   <div
+    ng-hide="tournament.player_rank_constraint == 'rank_no_constraint'"
+    class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_PLAYER_RANK_CONSTRAINT' |
+     translate }}:</div>
+    <div class="col-md-3 col-md-offset-1">
+     {{mapRankConstraints(tournament.player_rank_constraint)}} {{mapRanks(tournament.player_rank_constraint_value)}}</div>
+   </div>
+   <div
+    ng-hide="tournament.player_sex_constraint_value == 'all_allowed'"
+    class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_PLAYER_SEX_CONSTRAINT' |
+     translate }}:</div>
+    <div
+     ng-if="tournament.player_sex_constraint_value == 'woman_only'"
+     class="col-md-3 col-md-offset-1">{{'TOURNAMENT_WOMEN_ONLY' |
+     translate}}</div>
+    <div
+     ng-if="tournament.player_sex_constraint_value == 'man_only'"
+     class="col-md-3 col-md-offset-1">{{'TOURNAMENT_MEN_ONLY' |
+     translate}}</div>
+   </div>
+   <div class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_GROUP_FIGHT_LENGTH' |
+     translate }}:</div>
+    <div class="col-md-3 col-md-offset-1">
+     {{tournament.group_match_length}}</div>
+   </div>
+   <div class="col-md-7">
+    <div class="col-md-3">{{'TOURNAMENT_PLAYOFF_FIGHT_LENGTH' |
+     translate }}:</div>
+    <div class="col-md-3 col-md-offset-1">
+     {{tournament.playoff_match_length}}</div>
+   </div>
  </article>
  <section>
   <div class="col-md-9">
@@ -79,8 +78,41 @@
     <button
      ng-click="delete()"
      class="btn btn-danger"
-     id="delete-team">{{'DELETE' | translate}}</button>
+     id="delete-tournament">{{'DELETE' | translate}}</button>
    </div>
   </div>
+ </section>
+ <section
+  class="row"
+  ng-if="playoff_fights.length">
+  <div class="h3">{{'TOURNAMENT_PLAYOFF_FIGHTS'|translate}}</div>
+  <ippon-playoff-tree levels="leveled_playoffs"></ippon-playoff-tree>
+ </section>
+ <section
+  class="row"
+  ng-if="groups.length">
+  <div class="h3">{{'TOURNAMENT_GROUPS'|translate}}</div>
+  <ul class="list-unstyled">
+   <li ng-repeat="group in groups"><ippon-group-brief
+     element="group"></ippon-group-brief></li>
+  </ul>
+ </section>
+ <section
+  class="row"
+  ng-if="teams.length">
+  <div class="h3">{{'TOURNAMENT_TEAMS'|translate}}</div>
+  <ul class="list-unstyled">
+   <li ng-repeat="el in teams"><ippon-team-brief element="el">
+    </ippon-team></li>
+  </ul>
+ </section>
+ <section
+  class="row"
+  ng-if="participants.length">
+  <div class="h3">{{'TOURNAMENT_PARTICIPANTS'|translate}}</div>
+  <ul class="list-unstyled">
+   <li ng-repeat="player in participants"><ippon-player-line
+     player="player"> </ippon-player></li>
+  </ul>
  </section>
 </section>

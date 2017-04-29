@@ -918,7 +918,16 @@ describe(
           });
           it('loads the given tournament', function() {
             httpBackend.flush();
-            expect(scope.tournament).toEqualData(fakeTournament);
+            expect(scope.tournament.name).toEqualData(fakeTournament.name);
+            expect(scope.tournament.city).toEqualData(fakeTournament.city);
+            expect(scope.tournament.address).toEqualData(fakeTournament.address);
+            expect(scope.tournament.playoff_match_lenght).toEqualData(fakeTournament.playoff_match_lenght);
+            expect(scope.tournament.group_match_length).toEqualData(fakeTournament.group_match_length);
+            expect(scope.tournament.player_age_constraint).toEqualData(fakeTournament.player_age_constraint);
+            expect(scope.tournament.player_age_constraint_value).toEqualData(fakeTournament.player_age_constraint_value);
+            expect(scope.tournament.player_rank_constraint).toEqualData(fakeTournament.player_rank_constraint);
+            expect(scope.tournament.player_rank_constraint_value).toEqualData(fakeTournament.player_rank_constraint_value);
+            expect(scope.tournament.player_sex_constraint_value).toEqualData(fakeTournament.player_sex_constraint_value);
             expect(scope.playoff_fights).toContainDataFromArray(
                 fakePlayoffFights);
             expect(scope.groups).toEqualData(fakeGroups);
