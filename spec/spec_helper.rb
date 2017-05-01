@@ -98,5 +98,5 @@ RSpec.configure do |config|
   config.include AttributesWithFkHelpers, type: :controller
   config.include FeatureRaceHelpers, type: :feature
   config.include AttributesWithFkHelpers, type: :feature
-
+  config.include TournamentsPresenceHelpers, type: :feature
 end
