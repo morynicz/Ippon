@@ -265,6 +265,14 @@ angular
                 }
               };
 
+              $scope.index = function() {
+                $state.go('tournaments');
+              }
+
+              $scope.viewTournament = function(tournamentId) {
+                $state.go('tournaments_show', {tournamentId: tournamentId});
+              }
+
               $scope.cancel = function() {
                 if($scope.tournament.id) {
                   $state.go('tournaments_show',{tournamentId: $scope.tournament.id});
@@ -358,9 +366,5 @@ angular
                   case "kyu_6": return '6 KYU';
                   default: return rank;
                 }
-              }
-
-              $scope.viewTournament = function(tournamentId) {
-                $state.go('tournaments_show', {tournamentId: tournamentId});
               }
             } ]);
