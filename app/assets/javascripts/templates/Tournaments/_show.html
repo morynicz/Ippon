@@ -29,7 +29,8 @@
     <div class="col-md-3">{{'TOURNAMENT_PLAYER_AGE_CONSTRAINT' |
      translate }}:</div>
     <div class="col-md-3 col-md-offset-1">
-     {{mapAgeConstraints(tournament.player_age_constraint)}} {{tournament.player_age_constraint_value}}</div>
+     {{mapAgeConstraints(tournament.player_age_constraint)}}
+     {{tournament.player_age_constraint_value}}</div>
    </div>
    <div
     ng-hide="tournament.player_rank_constraint == 'rank_no_constraint'"
@@ -37,7 +38,8 @@
     <div class="col-md-3">{{'TOURNAMENT_PLAYER_RANK_CONSTRAINT' |
      translate }}:</div>
     <div class="col-md-3 col-md-offset-1">
-     {{mapRankConstraints(tournament.player_rank_constraint)}} {{mapRanks(tournament.player_rank_constraint_value)}}</div>
+     {{mapRankConstraints(tournament.player_rank_constraint)}}
+     {{mapRanks(tournament.player_rank_constraint_value)}}</div>
    </div>
    <div
     ng-hide="tournament.player_sex_constraint_value == 'all_allowed'"
@@ -45,11 +47,11 @@
     <div class="col-md-3">{{'TOURNAMENT_PLAYER_SEX_CONSTRAINT' |
      translate }}:</div>
     <div
-     ng-if="tournament.player_sex_constraint_value == 'woman_only'"
+     ng-if="tournament.player_sex_constraint_value == 'women_only'"
      class="col-md-3 col-md-offset-1">{{'TOURNAMENT_WOMEN_ONLY' |
      translate}}</div>
     <div
-     ng-if="tournament.player_sex_constraint_value == 'man_only'"
+     ng-if="tournament.player_sex_constraint_value == 'men_only'"
      class="col-md-3 col-md-offset-1">{{'TOURNAMENT_MEN_ONLY' |
      translate}}</div>
    </div>

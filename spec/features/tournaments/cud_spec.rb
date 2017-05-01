@@ -23,10 +23,10 @@ def fill_form(tournament)
   fill_in "group-fight-length", with: tournament[:group_match_length]
   fill_in "team-size", with: tournament[:team_size]
 
-  if tournament[:player_sex_constraint] == :no_constraint
+  if tournament[:player_sex_constraint] == "no_constraint"
     choose "button-sex-mixed"
   else
-    if tournament[:player_sex_constraint_value] == :woman_only
+    if tournament[:player_sex_constraint_value] == "women_only"
       choose "button-sex-woman"
     else
       choose "button-sex-man"

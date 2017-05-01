@@ -54,7 +54,7 @@
     "TOURNAMENT_PLAYER_SEX_CONSTRAINT": "Gender restrictions",
     "TOURNAMENT_MEN_ONLY": "Men only",
     "TOURNAMENT_MIXED": "Mixed",
-    "TOURNAMENT_WOMEN": "Women only",
+    "TOURNAMENT_WOMEN_ONLY": "Women only",
     "TOURNAMENT_TEAM_SIZE": "Team size",
     "TOURNAMENT_TEAM_SIZE_PLACEHOLDER": "3"
 }

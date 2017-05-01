@@ -62,8 +62,8 @@ class Tournament < ActiveRecord::Base
   }
 
   enum player_sex_constraint_value: {
-    woman_only: 0,
-    man_only: 1,
+    women_only: 0,
+    men_only: 1,
     all_allowed: 2
   }
 

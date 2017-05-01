@@ -62,7 +62,6 @@ angular
                   $scope.tournament = response;
                   $scope.tournament.date = new Date($scope.tournament.date);
                   $scope.is_admin = response.is_admin;
-                  $scope.tournament.player_sex_constraint = "sex_equal"
                 }, function(httpResponse) {
                   FlashingService.flashRestFailed("{{'GET' | translate}}",
                       "{{'TOURNAMENT' | translate }}", httpResponse);
