@@ -1,27 +1,22 @@
 {
     "CLUBS": "Kluby",
     "HOME": "Strona Domowa",
-
+    "PLAYERS": "Zawodnicy",
     "LANGUAGE": "Język",
-
     "LOG_IN": "Zaloguj",
     "REGISTER": "Zarejestruj",
     "LOG_OUT": "Wyloguj",
-
     "ADD": "Dodaj",
     "EDIT": "Edytuj",
     "DELETE": "Usuń",
     "CANCEL": "Anuluj",
     "SAVE": "Zapisz",
     "INDEX": "Spis",
-
     "HOME_TITLE": "Strona domowa Ippon",
     "HOME_TEXT": "Tu pojawią się linki",
-
     "AUTH_EMAIL": "Email",
     "AUTH_USERNAME": "Nazwa użytkownika",
     "AUTH_PASSWORD": "Hasło",
-
     "CLUB_NAME": "Nazwa",
     "CLUB_NAME_PLACEHOLDER": "Superkai",
     "CLUB_CITY": "Miasto",
