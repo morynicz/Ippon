@@ -67,6 +67,30 @@ feature 'Creating editing and deleting a tournament', js: true do
     expectPageToContainTournament(page, tournament1)
   end
 
+  scenario "Cancel editing existing tournament" do
+    tournament2[:creator] = user
+    tournament = Tournament.create(tournament2)
+    visit "#/tournaments"
+
+    click_on tournament2[:name]
+    click_on "edit-tournament"
+    click_on "cancel-tournament"
+
+    expectPageToContainTournament(page, tournament2)
+  end
+
+  scenario "Cancel creating a tournament" do
+    Tournament.create(tournament1)
+    tournament2[:creator] = user
+    visit "#/tournaments"
+
+    click_on "new-tournament"
+    click_on "cancel-tournament"
+
+    expect(page).to have_content(tournament1[:name])
+    expect(page).to have_content(tournament1[:city])
+  end
+
   scenario "Delete a tournament when user exists" do
     tournament2[:creator] = user
     tournament = Tournament.create(tournament2)

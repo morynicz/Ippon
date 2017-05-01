@@ -265,6 +265,14 @@ angular
                 }
               };
 
+              $scope.cancel = function() {
+                if($scope.tournament.id) {
+                  $state.go('tournaments_show',{tournamentId: $scope.tournament.id});
+                } else {
+                  $state.go('tournaments');
+                }
+              };
+
               $scope["delete"] = function() {
                 tournamentsResource.delete({tournamentId: $scope.tournament.id}, function(response) {
                   $state.go('home');
