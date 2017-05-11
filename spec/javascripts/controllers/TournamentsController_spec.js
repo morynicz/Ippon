@@ -756,6 +756,35 @@ describe(
         "club_id" : 264
       } ];
 
+      var fakeTournaments = [ {
+        name : "Genryoku",
+        team_size : 3,
+        playoff_match_length : 4,
+        group_match_length : 3,
+        player_age_constraint : 0,
+        player_age_constraint_value : 0,
+        player_rank_constraint : 1,
+        player_rank_constraint_value : 5,
+        player_sex_constraint : 0,
+        player_sex_constraint_value : 0,
+        city : "Somewhereville",
+        address : "Somestreet 33",
+        date : "2017-05-04"
+      }, {
+        name : "Czar Par",
+        team_size : 2,
+        playoff_match_length : 4,
+        group_match_length : 3,
+        player_age_constraint : 0,
+        player_age_constraint_value : 0,
+        player_rank_constraint : 1,
+        player_rank_constraint_value : 5,
+        player_sex_constraint : 0,
+        player_sex_constraint_value : 0,
+        city : "Kochankow",
+        address : "Zakochana 15",
+        date : "2019-02-14"
+      } ];
       var setupController = function(stateName, tournamentId) {
         return inject(function($location, $stateParams, $rootScope, $resource,
             $httpBackend, $controller, $state, $templateCache) {
@@ -849,85 +878,69 @@ describe(
 
       var expectFlashToExist = function(method, target, error, severity) {
         var flashes = scope.flashes;
-        for(var i = 0; i < scope.flashes.length; ++i) {
+        for (var i = 0; i < scope.flashes.length; ++i) {
           var hasType = (flashes[i].type === severity);
           var hasMethod = 0 <= flashes[i].text.indexOf(method);
           var hasTarget = 0 <= flashes[i].text.indexOf(target);
           var hasError = 0 <= flashes[i].text.indexOf(error);
-          if( hasType && hasMethod && hasTarget && hasError) {
+          if (hasType && hasMethod && hasTarget && hasError) {
             return;
           }
         }
-        fail("Flash with severity: "+severity+" and text containing: " + method+" "+target+" "+error+ " not found");
+        fail("Flash with severity: " + severity + " and text containing: "
+            + method + " " + target + " " + error + " not found");
       }
 
-      describe('index', function(){
-        var tournaments = [
-          {
-            name: "Genryoku",
-            team_size: 3,
-            playoff_match_length: 4,
-            group_match_length: 3,
-            player_age_constraint: 0,
-            player_age_constraint_value: 0,
-            player_rank_constraint: 1,
-            player_rank_constraint_value: 5,
-            player_sex_constraint: 0,
-            player_sex_constraint_value: 0,
-            city: "Somewhereville",
-            address: "Somestreet 33",
-            date: "2017-05-04"
-          },
-          {
-            name: "Czar Par",
-            team_size: 2,
-            playoff_match_length: 4,
-            group_match_length: 3,
-            player_age_constraint: 0,
-            player_age_constraint_value: 0,
-            player_rank_constraint: 1,
-            player_rank_constraint_value: 5,
-            player_sex_constraint: 0,
-            player_sex_constraint_value: 0,
-            city: "Kochankow",
-            address: "Zakochana 15",
-            date: "2019-02-14"
-          }
-        ];
+      var setupIndex = function() {
+        setupController('tournaments');
+        expectGetTournaments(200, fakeTournaments);
+        httpBackend.flush();
+      }
 
-        beforeEach(function(){
-          setupController('tournaments');
-          expectGetTournaments(200,tournaments);
-          httpBackend.flush();
+      describe('index', function() {
+        beforeEach(function() {
+          setupIndex();
         });
         it('calls the back-end', function() {
-          expect(scope.tournaments).toEqualData(tournaments);
+          expect(scope.tournaments).toEqualData(fakeTournaments);
         });
       });
+
+      var setupShow = function() {
+        setupController('tournaments_show', fakeTournamentId);
+        expectGetTournament(fakeTournamentId, 200, fakeTournament);
+        expectGetGroups(fakeTournamentId, 200, fakeGroups);
+        expectGetTeams(fakeTournamentId, 200, fakeTeams);
+        expectGetParticipants(fakeTournamentId, 200, fakeParticipants, []);
+        fakeTournament.is_admin = false;
+        expectGetPlayoffFights(fakeTournamentId, 200, fakePlayoffFights);
+        httpBackend.flush();
+      }
 
       describe('show', function() {
         describe('tournament is found', function() {
           beforeEach(function() {
-            setupController('tournaments_show', fakeTournamentId);
-            expectGetTournament(fakeTournamentId, 200, fakeTournament);
-            expectGetGroups(fakeTournamentId, 200, fakeGroups);
-            expectGetTeams(fakeTournamentId, 200, fakeTeams);
-            expectGetParticipants(fakeTournamentId, 200, fakeParticipants, []);
-            fakeTournament.is_admin = false;
-            expectGetPlayoffFights(fakeTournamentId, 200, fakePlayoffFights);
+            setupShow();
           });
           it('loads the given tournament', function() {
-            httpBackend.flush();
             expect(scope.tournament.name).toEqualData(fakeTournament.name);
             expect(scope.tournament.city).toEqualData(fakeTournament.city);
-            expect(scope.tournament.address).toEqualData(fakeTournament.address);
-            expect(scope.tournament.playoff_match_lenght).toEqualData(fakeTournament.playoff_match_lenght);
-            expect(scope.tournament.group_match_length).toEqualData(fakeTournament.group_match_length);
-            expect(scope.tournament.player_age_constraint).toEqualData(fakeTournament.player_age_constraint);
-            expect(scope.tournament.player_age_constraint_value).toEqualData(fakeTournament.player_age_constraint_value);
-            expect(scope.tournament.player_rank_constraint).toEqualData(fakeTournament.player_rank_constraint);
-            expect(scope.tournament.player_rank_constraint_value).toEqualData(fakeTournament.player_rank_constraint_value);
-            expect(scope.tournament.player_sex_constraint_value).toEqualData(fakeTournament.player_sex_constraint_value);
+            expect(scope.tournament.address)
+                .toEqualData(fakeTournament.address);
+            expect(scope.tournament.playoff_match_lenght).toEqualData(
+                fakeTournament.playoff_match_lenght);
+            expect(scope.tournament.group_match_length).toEqualData(
+                fakeTournament.group_match_length);
+            expect(scope.tournament.player_age_constraint).toEqualData(
+                fakeTournament.player_age_constraint);
+            expect(scope.tournament.player_age_constraint_value).toEqualData(
+                fakeTournament.player_age_constraint_value);
+            expect(scope.tournament.player_rank_constraint).toEqualData(
+                fakeTournament.player_rank_constraint);
+            expect(scope.tournament.player_rank_constraint_value).toEqualData(
+                fakeTournament.player_rank_constraint_value);
+            expect(scope.tournament.player_sex_constraint_value).toEqualData(
+                fakeTournament.player_sex_constraint_value);
             expect(scope.playoff_fights).toContainDataFromArray(
                 fakePlayoffFights);
             expect(scope.groups).toEqualData(fakeGroups);
@@ -947,115 +960,140 @@ describe(
             fakeTournament.is_admin = false;
             expectGetPlayoffFights(fakeTournamentId, 404);
           });
-          it("doesn't load a tournament", function() {
-            httpBackend.flush();
-            expect(scope.tournament).toEqualData(null);
-            expect(scope.playoff_fights).toEqualData(null);
-            expect(scope.groups).toEqualData(null);
-            expect(scope.participants).toEqualData(null);
-            expect(scope.is_admin).toBe(false);
-            expectFlashToExist('GET','TOURNAMENT','ERROR_FAILED','danger');
-            expectFlashToExist('GET','GROUPS','ERROR_FAILED','danger');
-            expectFlashToExist('GET','TEAMS','ERROR_FAILED','danger');
-            expectFlashToExist('GET','PARTICIPANTS','ERROR_FAILED','danger');
-            expectFlashToExist('GET','PLAYOFF_FIGHTS','ERROR_FAILED','danger');
+          it("doesn't load a tournament",
+              function() {
+                httpBackend.flush();
+                expect(scope.tournament).toEqualData(null);
+                expect(scope.playoff_fights).toEqualData(null);
+                expect(scope.groups).toEqualData(null);
+                expect(scope.participants).toEqualData(null);
+                expect(scope.is_admin).toBe(false);
+                expectFlashToExist('GET', 'TOURNAMENT', 'ERROR_FAILED',
+                    'danger');
+                expectFlashToExist('GET', 'GROUPS', 'ERROR_FAILED', 'danger');
+                expectFlashToExist('GET', 'TEAMS', 'ERROR_FAILED', 'danger');
+                expectFlashToExist('GET', 'PARTICIPANTS', 'ERROR_FAILED',
+                    'danger');
+                expectFlashToExist('GET', 'PLAYOFF_FIGHTS', 'ERROR_FAILED',
+                    'danger');
+              });
+        });
+      });
+
+      describe(
+          'create',
+          function() {
+            var newTournament = {
+              name : "Czar Par",
+              team_size : 3,
+              playoff_match_length : 4,
+              group_match_length : 3,
+              player_age_constraint : 0,
+              player_age_constraint_value : 0,
+              player_rank_constraint : 1,
+              player_rank_constraint_value : 5,
+              player_sex_constraint : 0,
+              player_sex_constraint_value : 0,
+            };
+
+            beforeEach(function() {
+              setupController('tournaments_new', false);
+              var request = new RegExp("tournaments");
+              httpBackend.expectPOST(request).respond(201, newTournament);
+            });
+
+            it(
+                'posts to the backend',
+                function() {
+                  scope.tournament.name = newTournament.name;
+                  scope.tournament.team_size = newTournament.team_size;
+                  scope.tournament.playoff_match_length = newTournament.playoff_match_length;
+                  scope.tournament.group_match_length = newTournament.group_match_length;
+                  scope.tournament.player_age_constraint = newTournament.player_age_constraint;
+                  scope.tournament.player_age_constraint_value = newTournament.player_age_constraint_value;
+                  scope.tournament.player_rank_constraint = newTournament.player_rank_constraint;
+                  scope.tournament.player_rank_constraint_value = newTournament.player_rank_constraint_value;
+                  scope.tournament.player_sex_constraint = newTournament.player_sex_constraint;
+                  scope.tournament.player_sex_constraint_value = newTournament.player_sex_constraint_value;
+
+                  scope.save();
+                  scope.$apply();
+                  httpBackend.flush();
+                  expect('#' + location.path()).toBe(
+                      state.href('tournaments_show'));
+                  expect(state.is('tournaments_show')).toBe(true);
+                });
           });
-        });
-      });
 
-      describe('create', function() {
-        var newTournament = {
-          name: "Czar Par",
-          team_size: 3,
-          playoff_match_length: 4,
-          group_match_length: 3,
-          player_age_constraint: 0,
-          player_age_constraint_value: 0,
-          player_rank_constraint: 1,
-          player_rank_constraint_value: 5,
-          player_sex_constraint: 0,
-          player_sex_constraint_value: 0,
-        };
+      describe(
+          'update',
+          function() {
+            var updatedTournament = {
+              name : "Czar Par",
+              team_size : 3,
+              playoff_match_length : 4,
+              group_match_length : 3,
+              player_age_constraint : 0,
+              player_age_constraint_value : 0,
+              player_rank_constraint : 1,
+              player_rank_constraint_value : 5,
+              player_sex_constraint : 0,
+              player_sex_constraint_value : 0,
+              city : "Somewhereville",
+              address : "Somestreet 33",
+              date : "2017-05-04"
+            };
 
-        beforeEach(function() {
-          setupController('tournaments_new', false);
-          var request = new RegExp("tournaments");
-          httpBackend.expectPOST(request).respond(201, newTournament);
-        });
+            beforeEach(function() {
+              setupController('tournaments_edit', fakeTournamentId);
+              expectGetTournament(fakeTournamentId, 200, fakeTournament);
+              httpBackend.flush();
+              var request = new RegExp("tournaments/");
+              httpBackend.expectPUT(request).respond(204);
+            });
 
-        it('posts to the backend', function() {
-          scope.tournament.name = newTournament.name;
-          scope.tournament.team_size = newTournament.team_size;
-          scope.tournament.playoff_match_length = newTournament.playoff_match_length;
-          scope.tournament.group_match_length = newTournament.group_match_length;
-          scope.tournament.player_age_constraint = newTournament.player_age_constraint;
-          scope.tournament.player_age_constraint_value = newTournament.player_age_constraint_value;
-          scope.tournament.player_rank_constraint = newTournament.player_rank_constraint;
-          scope.tournament.player_rank_constraint_value = newTournament.player_rank_constraint_value;
-          scope.tournament.player_sex_constraint = newTournament.player_sex_constraint;
-          scope.tournament.player_sex_constraint_value = newTournament.player_sex_constraint_value;
+            it(
+                'posts to the backend',
+                function() {
+                  scope.tournament.name = updatedTournament.name;
+                  scope.tournament.team_size = updatedTournament.team_size;
+                  scope.tournament.playoff_match_length = updatedTournament.playoff_match_length;
+                  scope.tournament.group_match_length = updatedTournament.group_match_length;
+                  scope.tournament.player_age_constraint = updatedTournament.player_age_constraint;
+                  scope.tournament.player_age_constraint_value = updatedTournament.player_age_constraint_value;
+                  scope.tournament.player_rank_constraint = updatedTournament.player_rank_constraint;
+                  scope.tournament.player_rank_constraint_value = updatedTournament.player_rank_constraint_value;
+                  scope.tournament.player_sex_constraint = updatedTournament.player_sex_constraint;
+                  scope.tournament.player_sex_constraint_value = updatedTournament.player_sex_constraint_value;
+                  scope.save();
+                  httpBackend.flush();
+                  expect('#' + location.path()).toBe(
+                      state.href('tournaments_show', {
+                        tournamentId : scope.tournament.id
+                      }));
+                  expect(state.is('tournaments_show')).toBe(true);
 
-          scope.save();
-          scope.$apply();
-          httpBackend.flush();
-          expect('#' + location.path()).toBe(state.href('tournaments_show'));
-          expect(state.is('tournaments_show')).toBe(true);
-        });
-      });
-
-      describe('update', function() {
-        var updatedTournament = {
-            name: "Czar Par",
-            team_size: 3,
-            playoff_match_length: 4,
-            group_match_length: 3,
-            player_age_constraint: 0,
-            player_age_constraint_value: 0,
-            player_rank_constraint: 1,
-            player_rank_constraint_value: 5,
-            player_sex_constraint: 0,
-            player_sex_constraint_value: 0,
-            city: "Somewhereville",
-            address: "Somestreet 33",
-            date: "2017-05-04"
-          };
-
-        beforeEach(function() {
-          setupController('tournaments_edit', fakeTournamentId);
-          expectGetTournament(fakeTournamentId, 200, fakeTournament);
-          httpBackend.flush();
-          var request = new RegExp("tournaments/");
-          httpBackend.expectPUT(request).respond(204);
-        });
-
-        it('posts to the backend', function() {
-          scope.tournament.name = updatedTournament.name;
-          scope.tournament.team_size = updatedTournament.team_size;
-          scope.tournament.playoff_match_length = updatedTournament.playoff_match_length;
-          scope.tournament.group_match_length = updatedTournament.group_match_length;
-          scope.tournament.player_age_constraint = updatedTournament.player_age_constraint;
-          scope.tournament.player_age_constraint_value = updatedTournament.player_age_constraint_value;
-          scope.tournament.player_rank_constraint = updatedTournament.player_rank_constraint;
-          scope.tournament.player_rank_constraint_value = updatedTournament.player_rank_constraint_value;
-          scope.tournament.player_sex_constraint = updatedTournament.player_sex_constraint;
-          scope.tournament.player_sex_constraint_value = updatedTournament.player_sex_constraint_value;
-          scope.save();
-          httpBackend.flush();
-          expect('#'+location.path()).toBe(state.href('tournaments_show',{tournamentId: scope.tournament.id}));
-          expect(state.is('tournaments_show')).toBe(true);
-
-          expect(scope.tournament.name).toBe(updatedTournament.name);
-          expect(scope.tournament.team_size).toBe(updatedTournament.team_size);
-          expect(scope.tournament.playoff_match_length).toBe(updatedTournament.playoff_match_length);
-          expect(scope.tournament.group_match_length).toBe(updatedTournament.group_match_length);
-          expect(scope.tournament.player_age_constraint).toBe(updatedTournament.player_age_constraint);
-          expect(scope.tournament.player_age_constraint_value).toBe(updatedTournament.player_age_constraint_value);
-          expect(scope.tournament.player_rank_constraint).toBe(updatedTournament.player_rank_constraint);
-          expect(scope.tournament.player_rank_constraint_value).toBe(updatedTournament.player_rank_constraint_value);
-          expect(scope.tournament.player_sex_constraint).toBe(updatedTournament.player_sex_constraint);
-          expect(scope.tournament.player_sex_constraint_value).toBe(updatedTournament.player_sex_constraint_value);
-        });
-      });
+                  expect(scope.tournament.name).toBe(updatedTournament.name);
+                  expect(scope.tournament.team_size).toBe(
+                      updatedTournament.team_size);
+                  expect(scope.tournament.playoff_match_length).toBe(
+                      updatedTournament.playoff_match_length);
+                  expect(scope.tournament.group_match_length).toBe(
+                      updatedTournament.group_match_length);
+                  expect(scope.tournament.player_age_constraint).toBe(
+                      updatedTournament.player_age_constraint);
+                  expect(scope.tournament.player_age_constraint_value).toBe(
+                      updatedTournament.player_age_constraint_value);
+                  expect(scope.tournament.player_rank_constraint).toBe(
+                      updatedTournament.player_rank_constraint);
+                  expect(scope.tournament.player_rank_constraint_value).toBe(
+                      updatedTournament.player_rank_constraint_value);
+                  expect(scope.tournament.player_sex_constraint).toBe(
+                      updatedTournament.player_sex_constraint);
+                  expect(scope.tournament.player_sex_constraint_value).toBe(
+                      updatedTournament.player_sex_constraint_value);
+                });
+          });
 
       describe('delete', function() {
         beforeEach(function() {
@@ -1075,7 +1113,55 @@ describe(
           scope["delete"]();
           scope.$apply();
           httpBackend.flush();
-          expect('#'+ location.path()).toBe(state.href('home'));
+          expect('#' + location.path()).toBe(state.href('home'));
+        });
+      });
+
+      describe('showTeam', function() {
+        beforeEach(function() {
+          setupShow();
+          spyOn(state, 'go');
+          scope.showTeam(fakeTeamId);
+        });
+
+        it('goes to selected team', function() {
+          expect(state.go).toHaveBeenCalledWith('teams_show', {
+            teamId : fakeTeamId,
+            tournamentId : fakeTournamentId,
+            backFcn : scope.returnFunction
+          });
+        });
+      });
+
+      describe('returnFunction', function() {
+        beforeEach(function() {
+          setupIndex();
+          scope.tournament.id = fakeTournamentId;
+          spyOn(state, 'go');
+          scope.returnFunction();
+        });
+
+        it('goes back to original tournament', function() {
+          expect(state.go).toHaveBeenCalledWith('tournaments_show', {
+            tournamentId : fakeTournamentId
+          });
+        });
+      });
+
+      describe('showPlayer', function() {
+        beforeEach(function() {
+          setupShow();
+          spyOn(state, 'go');
+          scope.showPlayer(fakePlayerId);
+        });
+
+        it('goes to selected player', function() {
+          expect(state.go).toHaveBeenCalledWith('players_show', {
+            playerId : fakePlayerId,
+            tournamentId : fakeTournamentId,
+            backFcn : scope.returnFunction
+          });
+          scope.$apply();
         });
       });
     });

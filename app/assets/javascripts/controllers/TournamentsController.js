@@ -367,4 +367,17 @@ angular
                   default: return rank;
                 }
               }
+
+              $scope.returnFunction = function() {
+                $state.go('tournaments_show', {tournamentId: $scope.tournament.id});
+              }
+
+              $scope.showTeam = function(teamId) {
+                $state.go('teams_show', {teamId: teamId, tournamentId: $scope.tournament.id, backFcn: $scope.returnFunction});
+              }
+
+              $scope.showPlayer = function(playerId) {
+                $state.go('players_show', {playerId: playerId, tournamentId: $scope.tournament.id, backFcn: $scope.returnFunction});
+              }
+
             } ]);
