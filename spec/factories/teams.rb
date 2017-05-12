@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :team do
-    name {Faker::Lorem.word}
+    sequence(:name) {|n| "Team #{n}"}
     tournament
 
     factory :team_with_players do
