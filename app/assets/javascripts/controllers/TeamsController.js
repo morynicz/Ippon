@@ -82,15 +82,17 @@ angular.module('ippon').controller('TeamsController',[
       });
     }
 
+    $scope.backFcn = null
     if($stateParams.teamId && ($state.is('teams_show') || $state.is('teams_edit'))) {
       if($state.is('teams_edit')) {
         getTeam($stateParams.teamId, getAvailablePlayers);
       } else {
         getTeam($stateParams.teamId);
+        $scope.backFcn = $stateParams.backFcn;
       }
     } else {
       $scope.team = {};
-      $scope.tournament_id = $stateParams.tournament_id;
+      $scope.team.tournament_id = $stateParams.tournamentId;
     }
 
     $scope.save = function() {
@@ -136,8 +138,18 @@ angular.module('ippon').controller('TeamsController',[
     $scope.cancel = function() {
       if($scope.team.id) {
         $state.go('teams_show',{teamId: $scope.team.id});
-      } else if ($scope.tournament.id) {
-        $state.go('tournaments_edit', {tournament_id: $scope.tournament.id});
+      } else if ($scope.team && $scope.team.tournament_id) {
+        $state.go('tournaments_show', {tournamentId: $scope.team.tournament_id});
+      } else {
+        $state.go('home');
+      }
+    };
+
+    $scope.back = function() {
+      if ($scope.backFcn) {
+        $scope.backFcn();
+      } else if ($scope.team && $scope.team.tournament_id) {
+        $state.go('tournaments_show', {tournamentId: $scope.team.tournament_id});
       } else {
         $state.go('home');
       }

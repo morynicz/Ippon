@@ -84,7 +84,10 @@ angular.module('ippon').config([
     .state('teams_show',{
       url: '/teams/:teamId',
       templateUrl: 'Teams/_show.html',
-      controller: 'TeamsController'
+      controller: 'TeamsController',
+      params: {
+        backFcn: null
+      }
     })
     .state('teams_edit', {
       url: '/teams/:teamId/edit',

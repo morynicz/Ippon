@@ -311,4 +311,43 @@ describe('TeamsController', function() {
         expect(angular.equals(scope.players, players)).toBe(true);
     });
   });
+
+  describe('back', function() {
+    beforeEach(function() {
+        setupController('teams_show', fakeTeamId);
+        expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
+        httpBackend.flush();
+        spyOn(state, 'go');
+    });
+
+    describe('when back function is present', function() {
+      beforeEach(function() {
+        scope.backFcn = function() {}
+        spyOn(scope, 'backFcn');
+      });
+
+      it('calls the back function', function() {
+        scope.back();
+        expect(scope.backFcn).toHaveBeenCalled();
+      });
+    });
+
+    describe('when there is no backFcn but the tournament id is known', function () {
+      it('goes back to tournament of the team', function() {
+        scope.back();
+        expect(state.go).toHaveBeenCalledWith('tournaments_show', {tournamentId: fakeTournamentId});
+      });
+    });
+
+    describe('when there is no data available about the tournament', function() {
+      beforeEach(function () {
+        scope.team.tournament_id = null;
+      });
+
+      it('goes to home', function() {
+        scope.back();
+        expect(state.go).toHaveBeenCalledWith('home');
+      });
+    });
+  });
 });
