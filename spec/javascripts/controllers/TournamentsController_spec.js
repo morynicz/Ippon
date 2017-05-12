@@ -1127,7 +1127,6 @@ describe(
         it('goes to selected team', function() {
           expect(state.go).toHaveBeenCalledWith('teams_show', {
             teamId : fakeTeamId,
-            tournamentId : fakeTournamentId,
             backFcn : scope.returnFunction
           });
         });
@@ -1158,7 +1157,6 @@ describe(
         it('goes to selected player', function() {
           expect(state.go).toHaveBeenCalledWith('players_show', {
             playerId : fakePlayerId,
-            tournamentId : fakeTournamentId,
             backFcn : scope.returnFunction
           });
           scope.$apply();

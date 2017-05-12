@@ -373,11 +373,11 @@ angular
               }
 
               $scope.showTeam = function(teamId) {
-                $state.go('teams_show', {teamId: teamId, tournamentId: $scope.tournament.id, backFcn: $scope.returnFunction});
+                $state.go('teams_show', {teamId: teamId, backFcn: $scope.returnFunction});
               }
 
               $scope.showPlayer = function(playerId) {
-                $state.go('players_show', {playerId: playerId, tournamentId: $scope.tournament.id, backFcn: $scope.returnFunction});
+                $state.go('players_show', {playerId: playerId, backFcn: $scope.returnFunction});
               }
 
             } ]);
