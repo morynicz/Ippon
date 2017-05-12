@@ -104,11 +104,11 @@
   </ul>
  </section>
  <section
-  class="row"
+  class="row" id="teams-list"
   ng-if="teams.length">
   <div class="h3">{{'TOURNAMENT_TEAMS'|translate}}</div>
   <ul class="list-unstyled">
-   <li ng-repeat="el in teams"><ippon-team-brief element="el">
+   <li ng-repeat="el in teams"><ippon-team-brief element="el" view-team-fcn="showTeam" view-player-fcn="showPlayer">
     </ippon-team></li>
   </ul>
  </section>

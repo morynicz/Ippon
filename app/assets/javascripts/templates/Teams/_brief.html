@@ -5,10 +5,10 @@
   <a
    class="col-md-4"
    href=""
-   ng-click="view_team(participant.id)"> {{element.team.name}}</a>
+   ng-click="viewTeam(element.team.id)"> {{element.team.name}}</a>
  </h1>
  <ul class="list-unstyled">
   <li ng-repeat="player in element.players"><ippon-player-line
-    player="player"></ippon-player>
+    player="player" view-player-fcn="viewPlayer"></ippon-player>
    </h1>
 </section>
