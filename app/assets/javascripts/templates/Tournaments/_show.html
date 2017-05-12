@@ -89,13 +89,13 @@
   </div>
  </section>
  <section
-  class="row"
+  class="row" id="playoffs-list"
   ng-if="playoff_fights.length">
   <div class="h3">{{'TOURNAMENT_PLAYOFF_FIGHTS'|translate}}</div>
   <ippon-playoff-tree levels="leveled_playoffs"></ippon-playoff-tree>
  </section>
  <section
-  class="row"
+  class="row" id="groups-list"
   ng-if="groups.length">
   <div class="h3">{{'TOURNAMENT_GROUPS'|translate}}</div>
   <ul class="list-unstyled">
