@@ -15,7 +15,7 @@ describe('ClubsController', function() {
     description: "They are far from being real"
   };
 
-  var setupController = function(clubExists, clubId, results, stateName) {
+  var setupController = function(clubExists, clubId, results, stateName, stateData = null) {
     return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
       scope = $rootScope.$new();
       location = $location;
@@ -29,7 +29,11 @@ describe('ClubsController', function() {
       $templateCache.put('Clubs/_show.html','');
       $templateCache.put('Clubs/_form.html','');
 
-      state.go(stateName);
+      if(stateData === null) {
+        state.go(stateName);
+      } else {
+        state.go(stateName, stateData);
+      }
       $rootScope.$apply();
       var request = null;
 
@@ -177,7 +181,7 @@ describe('ClubsController', function() {
     };
 
     beforeEach(function() {
-      setupController(true, 42,false,'clubs_edit');
+      setupController(true, 42,false,'clubs_edit', {clubId: 42});
       httpBackend.flush();
       var request = new RegExp("clubs/");
       httpBackend.expectPUT(request).respond(204);
@@ -196,7 +200,7 @@ describe('ClubsController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,42,false,'clubs_show');
+      setupController(true,42,false,'clubs_show', {clubId: 42});
       setupPlayers(42,null);
       setupAdmins(42,null,[]);
       httpBackend.flush();
