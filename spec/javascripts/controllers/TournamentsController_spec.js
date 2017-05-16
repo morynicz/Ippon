@@ -785,7 +785,7 @@ describe(
         address : "Zakochana 15",
         date : "2019-02-14"
       } ];
-      var setupController = function(stateName, tournamentId) {
+      var setupController = function(stateName, tournamentId, stateData) {
         return inject(function($location, $stateParams, $rootScope, $resource,
             $httpBackend, $controller, $state, $templateCache) {
           scope = $rootScope.$new();
@@ -800,7 +800,11 @@ describe(
           $templateCache.put('Tournaments/_form.html', '');
           $templateCache.put('Tournaments/_index.html', '');
 
-          state.go(stateName);
+          if(stateData) {
+            state.go(stateName, stateData);
+          } else {
+            state.go(stateName);
+          }
           $rootScope.$apply();
 
           if (tournamentId) {
@@ -907,7 +911,7 @@ describe(
       });
 
       var setupShow = function() {
-        setupController('tournaments_show', fakeTournamentId);
+        setupController('tournaments_show', fakeTournamentId, {tournamentId: fakeTournamentId});
         expectGetTournament(fakeTournamentId, 200, fakeTournament);
         expectGetGroups(fakeTournamentId, 200, fakeGroups);
         expectGetTeams(fakeTournamentId, 200, fakeTeams);
@@ -952,7 +956,7 @@ describe(
 
         describe('tournament is not found', function() {
           beforeEach(function() {
-            setupController('tournaments_show', fakeTournamentId);
+            setupController('tournaments_show', fakeTournamentId, {tournamentId: fakeTournamentId});
             expectGetTournament(fakeTournamentId, 404);
             expectGetGroups(fakeTournamentId, 404);
             expectGetTeams(fakeTournamentId, 404);
@@ -984,6 +988,7 @@ describe(
           'create',
           function() {
             var newTournament = {
+              id : fakeTournamentId,
               name : "Czar Par",
               team_size : 3,
               playoff_match_length : 4,
@@ -1045,7 +1050,7 @@ describe(
             };
 
             beforeEach(function() {
-              setupController('tournaments_edit', fakeTournamentId);
+              setupController('tournaments_edit', fakeTournamentId, {tournamentId: fakeTournamentId});
               expectGetTournament(fakeTournamentId, 200, fakeTournament);
               httpBackend.flush();
               var request = new RegExp("tournaments/");
@@ -1097,7 +1102,7 @@ describe(
 
       describe('delete', function() {
         beforeEach(function() {
-          setupController('tournaments_show', fakeTournamentId);
+          setupController('tournaments_show', fakeTournamentId, {tournamentId: fakeTournamentId});
           expectGetTournament(fakeTournamentId, 200, fakeTournament);
           expectGetGroups(fakeTournamentId, 200, fakeGroups);
           expectGetTeams(fakeTournamentId, 200, fakeTeams);

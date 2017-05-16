@@ -124,7 +124,7 @@ describe('ClubsController', function() {
         }
       ];
       beforeEach(function() {
-        setupController(true,42,false,'clubs_show');
+        setupController(true,42,false,'clubs_show', {clubId: 42});
         setupPlayers(42,players);
         setupAdmins(42,admins,[]);
       });
@@ -138,7 +138,7 @@ describe('ClubsController', function() {
     });
 
     describe('club is not found', function() {
-      beforeEach(setupController(false,42,false,'clubs_show'));
+      beforeEach(setupController(false,42,false,'clubs_show', {clubId: 42}));
       it('loads given club', function() {
         httpBackend.flush();
         expect(scope.club).toBe(null);

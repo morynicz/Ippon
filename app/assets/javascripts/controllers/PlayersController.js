@@ -144,7 +144,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth, FlashingServi
 
   $scope.cancel = function() {
     if($scope.player.id) {
-      $state.go('players_show',{playerId: $scope.player.id, , backFcn: null});
+      $state.go('players_show',{playerId: $scope.player.id, backFcn: null});
     } else {
       $state.go('players');
     }

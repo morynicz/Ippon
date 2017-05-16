@@ -200,7 +200,7 @@ describe('PlayersController', function() {
     });
 
     describe('player is not found', function() {
-      beforeEach(setupController(false, fakePlayerId,false,'players_show'),  {playerId: fakePlayerId});
+      beforeEach(setupController(false, fakePlayerId,false,'players_show', {playerId: fakePlayerId}));
       it("doesn't load a player", function() {
         httpBackend.flush();
         expect(scope.player).toBe(null);

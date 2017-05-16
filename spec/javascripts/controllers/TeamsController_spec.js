@@ -140,6 +140,7 @@ describe('TeamsController', function() {
 
   describe('create', function() {
     var newTeam = {
+      id: fakeTeamId,
       name: "Teemo",
       required_size: 3,
       tournament_id: 15
@@ -319,7 +320,7 @@ describe('TeamsController', function() {
 
   describe('back', function() {
     beforeEach(function() {
-        setupController('teams_show', fakeTeamId);
+        setupController('teams_show', fakeTeamId, {teamId: fakeTeamId});
         expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
         httpBackend.flush();
         spyOn(state, 'go');
