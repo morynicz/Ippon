@@ -69,7 +69,7 @@ describe('TeamsController', function() {
     httpBackend.expectGET(request).respond(404, null);
   }
 
-  var setupController = function(stateName, teamId) {
+  var setupController = function(stateName, teamId, stateData = null) {
     return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
       scope = $rootScope.$new();
       location = $location;
@@ -82,7 +82,12 @@ describe('TeamsController', function() {
       $templateCache.put('Teams/_show.html','');
       $templateCache.put('Teams/_form.html','');
 
-      state.go(stateName);
+      if(stateData) {
+        state.go(stateName, stateData);
+      } else {
+        state.go(stateName);
+      }
+
       $rootScope.$apply();
 
       if (teamId) {
@@ -107,7 +112,7 @@ describe('TeamsController', function() {
   describe('show',function(){
     describe('team is found', function() {
       beforeEach(function() {
-        setupController('teams_show', fakeTeamId);
+        setupController('teams_show', fakeTeamId, {teamId: fakeTeamId});
         expectGetTeam(fakeTeamId, false, fakeTeam, [fakePlayer]);
       });
       it('loads the given team', function() {
@@ -120,7 +125,7 @@ describe('TeamsController', function() {
 
     describe('team is not found', function() {
       beforeEach(function() {
-        setupController('teams_show', fakeTeamId);
+        setupController('teams_show', fakeTeamId, {teamId: fakeTeamId});
         expectTeamNotFound(fakeTeamId);
       });
       it("doesn't load a team", function() {
@@ -186,7 +191,7 @@ describe('TeamsController', function() {
       }];
 
     beforeEach(function() {
-      setupController('teams_edit', fakeTeamId);
+      setupController('teams_edit', fakeTeamId, {teamId: fakeTeamId});
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
       expectUnassignedTournamentPlayers(fakeTournamentId, fakePlayers);
       httpBackend.flush();
@@ -211,7 +216,7 @@ describe('TeamsController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController('teams_show', fakeTeamId);
+      setupController('teams_show', fakeTeamId, {teamId: fakeTeamId});
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
       httpBackend.flush();
       var request = new RegExp("teams/" + scope.team.id);
@@ -250,7 +255,7 @@ describe('TeamsController', function() {
     ];
 
     beforeEach(function() {
-      setupController('teams_edit', fakeTeamId);
+      setupController('teams_edit', fakeTeamId, {teamId: fakeTeamId});
       expectGetTeam(fakeTeamId, false, fakeTeam, []);
       expectUnassignedTournamentPlayers(fakeTournamentId, players);
       httpBackend.flush();
@@ -293,7 +298,7 @@ describe('TeamsController', function() {
     ];
 
     beforeEach(function() {
-      setupController('teams_edit', fakeTeamId);
+      setupController('teams_edit', fakeTeamId, {teamId: fakeTeamId});
       expectGetTeam(fakeTeamId, true, fakeTeam, [fakePlayer]);
       expectUnassignedTournamentPlayers(fakeTournamentId, fakePlayers);
       httpBackend.flush();
