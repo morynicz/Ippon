@@ -69,7 +69,10 @@ angular.module('ippon').config([
     .state('players_show',{
       url: '/players/:playerId',
       templateUrl: 'Players/_show.html',
-      controller: 'PlayersController'
+      controller: 'PlayersController',
+      params: {
+        backFcn: null
+      }
     })
     .state('players_edit', {
       url: '/players/:playerId/edit',

@@ -114,7 +114,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth, FlashingServi
   }
 
   $scope.view = function(playerId) {
-    $state.go("players_show",{playerId: playerId})
+    $state.go("players_show",{playerId: playerId, backFcn: null})
   }
 
   $scope.edit = function() {
@@ -144,7 +144,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth, FlashingServi
 
   $scope.cancel = function() {
     if($scope.player.id) {
-      $state.go('players_show',{playerId: $scope.player.id});
+      $state.go('players_show',{playerId: $scope.player.id, , backFcn: null});
     } else {
       $state.go('players');
     }

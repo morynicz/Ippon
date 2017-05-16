@@ -41,7 +41,7 @@ describe('PlayersController', function() {
     }
   ];
 
-  var setupController = function(playerExists, playerId, results, stateName) {
+  var setupController = function(playerExists, playerId, results, stateName, stateData = null) {
     return inject(function($location, $stateParams, $rootScope, $resource, $httpBackend, $controller, $state, $templateCache) {
       scope = $rootScope.$new();
       location = $location;
@@ -55,7 +55,11 @@ describe('PlayersController', function() {
       $templateCache.put('Players/_show.html','');
       $templateCache.put('Players/_form.html','');
 
-      state.go(stateName);
+      if(stateData) {
+        state.go(stateName, stateData);
+      } else {
+        state.go(stateName);
+      }
       $rootScope.$apply();
       var request = null;
 
@@ -177,7 +181,7 @@ describe('PlayersController', function() {
   describe('show',function(){
     describe('player is found', function() {
       beforeEach(function() {
-        setupController(true,fakePlayerId,false,'players_show');
+        setupController(true,fakePlayerId,false,'players_show', {playerId: fakePlayerId});
         setupClub(fakeClubId,fakeClub);
         setupIsAdminForClub(fakeClubId, false)
       });
@@ -196,7 +200,7 @@ describe('PlayersController', function() {
     });
 
     describe('player is not found', function() {
-      beforeEach(setupController(false, fakePlayerId,false,'players_show'));
+      beforeEach(setupController(false, fakePlayerId,false,'players_show'),  {playerId: fakePlayerId});
       it("doesn't load a player", function() {
         httpBackend.flush();
         expect(scope.player).toBe(null);
@@ -251,7 +255,7 @@ describe('PlayersController', function() {
     };
 
     beforeEach(function() {
-      setupController(true, fakePlayerId,false,'players_edit');
+      setupController(true, fakePlayerId,false,'players_edit',  {playerId: fakePlayerId});
       setupClubs(clubs);
       setupClub(fakeClubId, fakeClub);
       httpBackend.flush();
@@ -275,7 +279,7 @@ describe('PlayersController', function() {
 
   describe('delete', function() {
     beforeEach(function() {
-      setupController(true,fakePlayerId,false,'players_show');
+      setupController(true,fakePlayerId,false,'players_show',  {playerId: fakePlayerId});
       setupClub(fakeClubId,fakeClub);
       setupIsAdminForClub(fakeClubId, true)
       httpBackend.flush();
