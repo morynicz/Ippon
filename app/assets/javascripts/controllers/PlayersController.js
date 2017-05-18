@@ -61,6 +61,7 @@ function($scope, $stateParams, $location, $resource, $state, Auth, FlashingServi
       }, function(player) {
         $scope.player = player;
         $scope.player.birthday = new Date($scope.player.birthday);
+        $scope.backFcn = $stateParams.backFcn;
         club.get({clubId: player.club_id}, function(club) {
           $scope.player.club = club;
         }, function(httpResponse) {

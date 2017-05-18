@@ -7,6 +7,7 @@ describe('PlayersController', function() {
   var httpBackend = null;
   var fakePlayerId = 42;
   var fakeClubId = 77;
+  var fakeBackFcn = function(){};
   var state;
 
   var fakePlayer = {
@@ -183,7 +184,8 @@ describe('PlayersController', function() {
       beforeEach(function() {
         setupController(true,fakePlayerId,false,'players_show', {playerId: fakePlayerId});
         setupClub(fakeClubId,fakeClub);
-        setupIsAdminForClub(fakeClubId, false)
+        setupIsAdminForClub(fakeClubId, false);
+        stateParams.backFcn = fakeBackFcn;
       });
       it('loads the given player', function() {
         httpBackend.flush();
@@ -196,6 +198,7 @@ describe('PlayersController', function() {
         expect(scope.player.rank).toEqualData(composedPlayer.rank);
         expect(scope.player.club).toEqualData(composedPlayer.club);
         expect(scope.player.club_id).toEqualData(composedPlayer.club_id);
+        expect(scope.backFcn, fakeBackFcn);
       });
     });
 
