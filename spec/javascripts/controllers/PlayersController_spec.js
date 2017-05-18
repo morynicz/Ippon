@@ -294,4 +294,44 @@ describe('PlayersController', function() {
       expect('#'+ location.path()).toBe(state.href('players'));
     });
   });
+
+  describe('back', function() {
+    beforeEach(function() {
+        setupController(true, fakePlayerId, false, 'players_show', {playerId: fakePlayerId});
+        setupClub(fakeClubId,fakeClub);
+        setupIsAdminForClub(fakeClubId, false)
+        httpBackend.flush();
+        spyOn(state, 'go');
+    });
+
+    describe('when back function is present', function() {
+      beforeEach(function() {
+        scope.backFcn = function() {}
+        spyOn(scope, 'backFcn');
+      });
+
+      it('calls the back function', function() {
+        scope.back();
+        expect(scope.backFcn).toHaveBeenCalled();
+      });
+    });
+
+    describe('when there is no backFcn but the club id is known', function () {
+      it('goes back to club of the player', function() {
+        scope.back();
+        expect(state.go).toHaveBeenCalledWith('clubs_show', {clubId: fakeClubId});
+      });
+    });
+
+    describe('when there is no data available about the club', function() {
+      beforeEach(function () {
+        scope.player.club_id = null;
+      });
+
+      it('goes to home', function() {
+        scope.back();
+        expect(state.go).toHaveBeenCalledWith('home');
+      });
+    });
+  });
 });

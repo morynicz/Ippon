@@ -191,4 +191,14 @@ function($scope, $stateParams, $location, $resource, $state, Auth, FlashingServi
       default: return rank;
     }
   }
+
+  $scope.back = function() {
+    if ($scope.backFcn) {
+      $scope.backFcn();
+    } else if ($scope.player && $scope.player.club_id) {
+      $state.go('clubs_show', {clubId: $scope.player.club_id});
+    } else {
+      $state.go('home');
+    }
+  };
 }]);
